@@ -1,62 +1,115 @@
 ---
-title: 'PyEEM: A Python library for the preprocessing, correction, deconvolution and analysis of Excitation Emission Matrices (EEMs).'
+title: 'Gala: A Python package for galactic dynamics'
 tags:
- - python
- - fluorescence
- - spectroscopy
- - excitation emission matrix
- - environmental monitoring
+  - Python
+  - astronomy
+  - dynamics
+  - galactic dynamics
+  - milky way
 authors:
- - name: Drew Meyers
-   affiliation: 1
- - name: Qinmin Zheng
-   affiliation: 2
- - name: Fabio Duarte
-   affiliation: "2, 3"
- - name: Harold H Hemond
-   affiliation: 1
- - name: Carlo Ratti
-   affiliation: 2  
- - name: Andrew J Whittle
-   affiliation: 1
+  - name: Adrian M. Price-Whelan^[Custom footnotes for e.g. denoting who the corresspoinding author is can be included like this.]
+    orcid: 0000-0003-0872-7098
+    affiliation: "1, 2" # (Multiple affiliations must be quoted)
+  - name: Author Without ORCID
+    affiliation: 2
+  - name: Author with no affiliation
+    affiliation: 3
 affiliations:
- - name: Department of Civil and Environmental Engineering, Massachusetts Institute of Technology
+ - name: Lyman Spitzer, Jr. Fellow, Princeton University
    index: 1
- - name: Senseable City Lab, Massachusetts Institute of Technology
+ - name: Institution Name
    index: 2
- - name: Pontifícia Universidade Católica do Paraná, Brazil
+ - name: Independent Researcher
    index: 3
-date: 2020-07-08
+date: 13 August 2017
 bibliography: paper.bib
+
+# Optional fields if submitting to a AAS journal too, see this blog post:
+# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
+aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
+aas-journal: Astrophysical Journal <- The name of the AAS journal.
 ---
-
-# Statement of Need
-
-- A clear Statement of Need that illustrates the research purpose of the software...
-
-Fluorescence Excitation and Emission Matrix Spectroscopy (EEMs) is a popular analytical technique in environmental monitoring. In particular, it has been applied extensively to investigate the composition and concentration of dissolved organic matter (DOM) in aquatic systems [@Coble1990; @McKnight2001]. Historically, EEMs have been combined with multi-way techniques such as PCA, ICA, and PARAFAC in order to decompose chemical mixtures [sources]. More recently, machine learning approaches such as convolutional neural networks (CNNs) and autoencoders have been applied to EEMs for source sepearation of chemical mixtures [sources]. However, before these source separation techniques can be performed, several preprocessing and correction steps must be applied to the raw EEMs [sources]. In order to achieve comparability between studies, standard methods to apply these corrections have been developed [@R.Murphy2010; ]. These standard methods have been implemented in Matlab and R packages [sources]. However until PyEEM, no Python package existed which implemented these standard correction steps. Furthermore, the Matlab and R implementations impose metadata schemas on users which limit their ability to track several important metrics corresponding with each measurement set. By providing a Python implementation, researchers will now be able to more effectively leverage Python's large scienfitic computing ecosystem when working with EEMs. In addition to the implementation of the preprocessing and correction steps, PyEEM also provides researchers with the ability to create augmented mixture and single source training data from a small set of calibration EEM measurements. The augmentation technique relies on the fact that fluorescnce spectra are linearly additive, according to Beer's law [source]. This augmentation technique was first described in Rutherford et al., in which it was used to train a CNN to predict the concentration of single sources of pollutants in spectral mixtures [source]. Additionally, augmented and synthetic data has shown promise in improving the performace of deep learning models in several fields [sources]. PyEEM presents the first open source implementation of such an augmentation technique for EEMs. PyEEM also provides visualization toolbox useful in the interpretation of EEMs.
 
 # Summary
 
-- A summary describing the high-level functionality and purpose of the software for a diverse, non-specialist audience...
-- Description of how the software enables some new research challenges to be addressed or makes addressing research challenges significantly better (e.g., faster, easier, simpler)...
-- Description of how the software is feature-complete (i.e. no half-baked solutions) and designed for maintainable extension (not one-off modifications of existing tools)...
+The forces on stars, galaxies, and dark matter under external gravitational
+fields lead to the dynamical evolution of structures in the universe. The orbits
+of these bodies are therefore key to understanding the formation, history, and
+future state of galaxies. The field of "galactic dynamics," which aims to model
+the gravitating components of galaxies to study their structure and evolution,
+is now well-established, commonly taught, and frequently used in astronomy.
+Aside from toy problems and demonstrations, the majority of problems require
+efficient numerical tools, many of which require the same base code (e.g., for
+performing numerical orbit integration).
 
-PyEEM is a python library for the preprocessing, correction, deconvolution and analysis of Excitation Emission Matrices (EEMs)...
+# Statement of need 
 
-- Supported instruments, example datasets
-- Metadata schema
-- Preprocessing, corrections, and filtering: 
-  - Cropping
-  - Blank subtraction
-  - Dcattering removal
-  - Inner-filter effect correction
-  - Raman normalization
-- Augmentation
-- Visualization
+`Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
+enables wrapping low-level languages (e.g., C) for speed without losing
+flexibility or ease-of-use in the user-interface. The API for `Gala` was
+designed to provide a class-based and user-friendly interface to fast (C or
+Cython-optimized) implementations of common operations such as gravitational
+potential and force evaluation, orbit integration, dynamical transformations,
+and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
+interfaces well with the implementations of physical units and astronomical
+coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
+`astropy.coordinates`).
+
+`Gala` was designed to be used by both astronomical researchers and by
+students in courses on gravitational dynamics or astronomy. It has already been
+used in a number of scientific publications [@Pearson:2017] and has also been
+used in graduate courses on Galactic dynamics to, e.g., provide interactive
+visualizations of textbook material [@Binney:2008]. The combination of speed,
+design, and support for Astropy functionality in `Gala` will enable exciting
+scientific explorations of forthcoming data releases from the *Gaia* mission
+[@gaia] by students and experts alike.
+
+# Mathematics
+
+Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
+
+Double dollars make self-standing equations:
+
+$$\Theta(x) = \left\{\begin{array}{l}
+0\textrm{ if } x < 0\cr
+1\textrm{ else}
+\end{array}\right.$$
+
+You can also use plain \LaTeX for equations
+\begin{equation}\label{eq:fourier}
+\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
+\end{equation}
+and refer to \autoref{eq:fourier} from text.
+
+# Citations
+
+Citations to entries in paper.bib should be in
+[rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
+format.
+
+If you want to cite a software repository URL (e.g. something on GitHub without a preferred
+citation) then you can do it with the example BibTeX entry below for @fidgit.
+
+For a quick reference, the following citation commands can be used:
+- `@author:2001`  ->  "Author et al. (2001)"
+- `[@author:2001]` -> "(Author et al., 2001)"
+- `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
+
+# Figures
+
+Figures can be included like this:
+![Caption for example figure.\label{fig:example}](figure.png)
+and referenced from text using \autoref{fig:example}.
+
+Fenced code blocks are rendered with syntax highlighting:
+```python
+for n in range(10):
+    yield f(n)
+```	
 
 # Acknowledgements
 
-We acknowledge contributions from...
+We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
+Oh, and support from Kathryn Johnston during the genesis of this project.
 
 # References
