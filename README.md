@@ -1,3 +1,4 @@
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/drewmee/PyEEMA/blob/master/LICENSE)
 [![CircleCI](https://circleci.com/gh/drewmee/PyEEMA.svg?style=shield&circle-token=ccdb16078dcb8ee4e4c9b923f547fc7cb2742aae)](https://app.circleci.com/pipelines/github/drewmee/PyEEMA)
 
 # PyEEMA
