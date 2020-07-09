@@ -1,2 +1,2 @@
-Instruments subpackage (pyeema.instruments)
+Instruments subpackage (pyeem.instruments)
 ===========================================

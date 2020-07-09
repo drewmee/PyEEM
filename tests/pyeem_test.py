@@ -1,28 +1,28 @@
 import unittest
-import pyeema
+import pyeem
 import os
 
 
 class TestLoad(unittest.TestCase):
     def testInsufficientArgs(self):
         data_dir = None
-        self.assertRaises(Exception, pyeema.datasets.Load, data_dir)
+        self.assertRaises(Exception, pyeem.datasets.Load, data_dir)
 
     def testNonExistentDataDirPath(self):
         data_dir = "some non-existent path"
-        self.assertRaises(FileNotFoundError, pyeema.datasets.Load, data_dir)
+        self.assertRaises(FileNotFoundError, pyeem.datasets.Load, data_dir)
 
     '''
     def testValidDataDirPath(self):
         try:
             data_dir = "data/mock/"
-            pyeema.datasets.Load(data_dir)
+            pyeem.datasets.Load(data_dir)
         except Exception:
             self.fail("Load() raised Exception unexpectedly!")
     
     def testHdf5Creation(self):
         data_dir = "data/mock/"
-        load = pyeema.datasets.Load(data_dir)
+        load = pyeem.datasets.Load(data_dir)
         required_subdirs = ['corrections', 'processed', 'raw_sample_sets']
         assert set(list(load.hdf5_root.keys())) == set(required_subdirs)
     '''

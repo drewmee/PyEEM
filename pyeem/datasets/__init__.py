@@ -1,5 +1,5 @@
 """
-.. currentmodule:: pyeema.datasets
+.. currentmodule:: pyeem.datasets
 
 User API
 ========

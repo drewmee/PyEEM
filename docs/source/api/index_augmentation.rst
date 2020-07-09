@@ -1,2 +1,2 @@
-Augmentation subpackage (pyeema.augmentation)
+Augmentation subpackage (pyeem.augmentation)
 =============================================

@@ -1,10 +1,10 @@
 
 ======
-PyEEMA
+PyEEM
 ======
 
-PyEEMA is a Python library for the parsing, correction, deconvolution and 
-analysis of Excitation Emission Matrices (EEMs). Currently, PyEEMA has the 
+PyEEM is a Python library for the preprocessing, filtering, correction, deconvolution and 
+analysis of Excitation Emission Matrices (EEMs). Currently, PyEEM has the 
 following main features - please check out the IPython Tutorials for examples:
 
 * Feature #1
@@ -13,7 +13,7 @@ Technical features:
 
 * Code is implemented in Python (supports 3.5/3.6 and 3.7).
 * Runs on Linux (64 bit), Windows (32 or 64 bit) or MacOS (64 bit).
-* Code is hosted at `GitHub <https://github.com/drewmee/PyEEMA/>`_ under the MIT license.
+* Code is hosted at `GitHub <https://github.com/drewmee/PyEEM/>`_ under the MIT license.
   Please post issues or reports there.
 
 Installation

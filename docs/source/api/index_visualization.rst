@@ -1,2 +1,2 @@
-Visualization subpackage (pyeema.visualization)
+Visualization subpackage (pyeem.visualization)
 ===============================================

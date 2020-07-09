@@ -3,7 +3,6 @@ import operator
 import numpy as np
 import pandas as pd
 import h5py
-import dask.dataframe as dd
 from ..instruments import _supported, Aqualog, Fluorolog, Cary
 import warnings
 from tables.exceptions import NaturalNameWarning

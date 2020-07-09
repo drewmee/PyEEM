@@ -250,7 +250,7 @@ def routine(meta_df, hdf, intermediate_store=True,
             blank_abs_name = np.nan
 
         # Absorbance baseline correction
-        # pyeema.absorbance_baseline()
+        # pyeem.absorbance_baseline()
 
         if 'sample_eem' not in sample_set.index.get_level_values('scan_type'):
             continue
@@ -303,7 +303,7 @@ def routine(meta_df, hdf, intermediate_store=True,
             ]))
 
             # Absorbance baseline correction
-            # pyeema.absorbance_baseline()
+            # pyeem.absorbance_baseline()
 
             # Subtract blank from sample
             eem = subtract_blank(eem, blank_eem)
@@ -327,7 +327,7 @@ def routine(meta_df, hdf, intermediate_store=True,
             ]))
 
             # inner-filter effect correction
-            # pyeema.ife_correction()
+            # pyeem.ife_correction()
 
             # Knockout regions of EEM to simulate only having a few
             # discrete excitation wavelengths.
@@ -339,8 +339,8 @@ def routine(meta_df, hdf, intermediate_store=True,
             ]))
             '''
             # gaussian smoothing
-            #eem = pyeema.gaussian_smoothing(eem, sig=2, trun=4)
-            # eem = pyeema.plot_data(eem, sig=2, trun=4)
+            #eem = pyeem.gaussian_smoothing(eem, sig=2, trun=4)
+            # eem = pyeem.plot_data(eem, sig=2, trun=4)
 
             sample_abs_name = sample_name.rsplit(".dat", 1)[0] + "_abs.dat"
             if sample_abs_name != row['filename']:

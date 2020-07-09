@@ -1,2 +1,2 @@
-Preprocessing subpackage (pyeema.preprocessing)
+Preprocessing subpackage (pyeem.preprocessing)
 ===============================================

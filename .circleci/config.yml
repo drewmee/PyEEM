@@ -12,7 +12,7 @@ jobs:
       - python/install-deps
       - python/save-cache
       - run:
-          command: python -m unittest -v tests/pyeema_test.py
+          command: python -m unittest -v tests/pyeem_test.py
           name: Test
 
 workflows:

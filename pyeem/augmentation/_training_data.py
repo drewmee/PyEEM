@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 
-# This should be rolled into pyeema.analysis.models
+# This should be rolled into pyeem.analysis.models
 # Since it's model specific
 def create_train_data(aug_ss, aug_mix):
     train_arr = np.concatenate([aug_ss, aug_mix])

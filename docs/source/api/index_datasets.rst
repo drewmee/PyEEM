@@ -1,2 +1,2 @@
-Datasets subpackage (pyeema.datasets)
-=====================================
+Datasets subpackage (pyeem.datasets)
+====================================

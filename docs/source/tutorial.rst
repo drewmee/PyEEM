@@ -1,3 +1,3 @@
 
-Learn PyEEMA
-============
+Tutorial
+========

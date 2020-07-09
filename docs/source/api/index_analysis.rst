@@ -1,2 +1,2 @@
-Analysis subpackage (pyeema.analysis)
+Analysis subpackage (pyeem.analysis)
 =====================================

@@ -1,7 +1,7 @@
 =============
 Documentation
 =============
-PyEEMA is a Python library and can be used through python or ipython.
+PyEEM is a Python library and can be used through python or ipython.
 See Tutorials for examples and getting started. The API (Application 
 Programming Interface) is currently divided into the following subpackages:
 

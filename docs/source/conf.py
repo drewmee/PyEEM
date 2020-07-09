@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('../../'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'PyEEMA'
+project = 'PyEEM'
 copyright = '2020, Drew Meyers'
 author = 'Drew Meyers'
 
@@ -64,4 +64,4 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-html_logo = '_static/pyeema.png'
+html_logo = '_static/pyeem.png'

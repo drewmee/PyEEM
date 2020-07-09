@@ -11,3 +11,5 @@ __all__ = ['datasets',
            'augmentation',
            'visualization',
            'analysis']
+
+__version__ = "1.0.0"
