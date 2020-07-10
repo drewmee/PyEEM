@@ -13,39 +13,7 @@ pyeem.datasets.Load
 
    .. autosummary::
    
-      ~Load.__delattr__
-      ~Load.__dir__
-      ~Load.__eq__
-      ~Load.__format__
-      ~Load.__ge__
-      ~Load.__getattribute__
-      ~Load.__gt__
-      ~Load.__hash__
       ~Load.__init__
-      ~Load.__init_subclass__
-      ~Load.__le__
-      ~Load.__lt__
-      ~Load.__ne__
-      ~Load.__new__
-      ~Load.__reduce__
-      ~Load.__reduce_ex__
-      ~Load.__repr__
-      ~Load.__setattr__
-      ~Load.__sizeof__
-      ~Load.__str__
-      ~Load.__subclasshook__
-      ~Load._load_aqualog_abs
-      ~Load._load_aqualog_eem
-      ~Load._load_blank_raman
-      ~Load._load_cary_abs
-      ~Load._load_cary_eem
-      ~Load._load_fluorolog_eem
-      ~Load._load_fluorolog_raman
-      ~Load._load_metadata_raman
-      ~Load._process_sample_set
-      ~Load._process_scan_type
-      ~Load._process_scan_type_group
-      ~Load._qc_sample_set
       ~Load.calibration
       ~Load.metadata
       ~Load.sample_sets
@@ -59,10 +27,6 @@ pyeem.datasets.Load
 
    .. autosummary::
    
-      ~Load.__dict__
-      ~Load.__doc__
-      ~Load.__module__
-      ~Load.__weakref__
       ~Load.data_dir
    
    

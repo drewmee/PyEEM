@@ -13,27 +13,7 @@ pyeem.instruments.Cary
 
    .. autosummary::
    
-      ~Cary.__delattr__
-      ~Cary.__dir__
-      ~Cary.__eq__
-      ~Cary.__format__
-      ~Cary.__ge__
-      ~Cary.__getattribute__
-      ~Cary.__gt__
-      ~Cary.__hash__
       ~Cary.__init__
-      ~Cary.__init_subclass__
-      ~Cary.__le__
-      ~Cary.__lt__
-      ~Cary.__ne__
-      ~Cary.__new__
-      ~Cary.__reduce__
-      ~Cary.__reduce_ex__
-      ~Cary.__repr__
-      ~Cary.__setattr__
-      ~Cary.__sizeof__
-      ~Cary.__str__
-      ~Cary.__subclasshook__
       ~Cary.load_absorbance
       ~Cary.load_eem
       ~Cary.load_spectral_corrections
@@ -47,10 +27,6 @@ pyeem.instruments.Cary
 
    .. autosummary::
    
-      ~Cary.__dict__
-      ~Cary.__doc__
-      ~Cary.__module__
-      ~Cary.__weakref__
       ~Cary.manufacturer
       ~Cary.name
       ~Cary.supported_models

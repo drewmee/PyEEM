@@ -1,11 +1,14 @@
 import os
 import operator
+import warnings
+import boto3
+from botocore import UNSIGNED
+from botocore.client import Config
 import numpy as np
 import pandas as pd
-from ..instruments import _supported, Aqualog, Fluorolog, Cary
-import warnings
 from tables.exceptions import NaturalNameWarning
 from pandas.errors import PerformanceWarning
+from ..instruments import _supported
 
 warnings.simplefilter(action="ignore", category=NaturalNameWarning)
 warnings.simplefilter(action="ignore", category=PerformanceWarning)
@@ -462,17 +465,30 @@ class Load:
         return self.hdf
 
 
-def load_dreem():
+def download_S3_dir(demo_data_dir, bucket_dir):
+    bucket_name = "pyeem-demo-datasets"
+    s3_resource = boto3.resource("s3", config=Config(signature_version=UNSIGNED))
+    bucket = s3_resource.Bucket(bucket_name)
+    for obj in bucket.objects.filter(Prefix=bucket_dir):
+        path = os.path.join(*[demo_data_dir, obj.key])
+        if not os.path.exists(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+        bucket.download_file(obj.key, path)
+
+
+def load_dreem(demo_data_dir):
     """load_dreem summary
 
     Returns:
         [type]: [description]
     """
-    module_path = os.path.dirname(__file__)
-    base_dir = os.path.join(module_path, "data")
-    demo_dir = os.path.join(base_dir, "drEEM")
+    dataset_name = "drEEM"
+    demo_data_dir = os.path.join(os.getcwd(), demo_data_dir)
+    dataset_dir = os.path.join(demo_data_dir, dataset_name)
+    if not os.path.isdir(dataset_dir):
+        download_S3_dir(demo_data_dir, dataset_name)
 
-    load = Load(data_dir=demo_dir)
+    load = Load(data_dir=dataset_dir)
     meta_df = load.metadata()
     hdf = load.sample_sets(
         raman_instrument="fluorolog",
@@ -483,17 +499,19 @@ def load_dreem():
     return load
 
 
-def load_rutherford():
+def load_rutherford(demo_data_dir):
     """load_rutherford summary
 
     Returns:
         [type]: [description]
     """
-    module_path = os.path.dirname(__file__)
-    base_dir = os.path.join(module_path, "data")
-    demo_dir = os.path.join(base_dir, "rutherford")
+    dataset_name = "rutherford"
+    demo_data_dir = os.path.join(os.getcwd(), demo_data_dir)
+    dataset_dir = os.path.join(demo_data_dir, dataset_name)
+    if not os.path.isdir(dataset_dir):
+        download_S3_dir(demo_data_dir, dataset_name)
 
-    load = Load(data_dir=demo_dir)
+    load = Load(data_dir=dataset_dir)
     calibration_sources = ["cigarette", "diesel", "wood_smoke"]
     meta_df = load.metadata(sources=calibration_sources)
     cal_df = load.calibration(sources=calibration_sources)

@@ -40,6 +40,14 @@ Tutorials
 
    tutorial
 
+Development
+===========
+.. toctree::
+   :maxdepth: 2
+
+   CHANGELOG
+   DEVELOPMENT
+
 Indices and tables
 ==================
 

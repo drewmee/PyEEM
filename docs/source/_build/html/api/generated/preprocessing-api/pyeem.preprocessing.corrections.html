@@ -189,31 +189,28 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">__save_intermediate</span></code>()</p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">absorbance_baseline_correction</span></code>(abs_df[, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">absorbance_baseline_correction</span></code>(abs_df[, …])</p></td>
 <td><p>Correct the instrumental baseline drift in absorbance data by subtracting the mean of the absorbance at higher wavelengths (Li and Hur 2017).</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dilution</span></code>(eem, dilution_factor)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">dilution</span></code>(eem, dilution_factor)</p></td>
 <td><p>I don’t think this is right</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ife_correction</span></code>(eem_df, abs_df, cuvl[, unit])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ife_correction</span></code>(eem_df, abs_df, cuvl[, unit])</p></td>
 <td><p><a class="reference external" href="https://github.com/PMassicotte/eemR/blob/7f6843b1490237922dabea8da49d21a724018048/R/eem_inner_filter_effect.R">https://github.com/PMassicotte/eemR/blob/7f6843b1490237922dabea8da49d21a724018048/R/eem_inner_filter_effect.R</a></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pseudo_pivot</span></code>(meta_df)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">pseudo_pivot</span></code>(meta_df)</p></td>
 <td><p>Think about using melt()</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">raman_normalization</span></code>(eem_df, blank_df)</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">raman_normalization</span></code>(eem_df, blank_df)</p></td>
 <td><p>Raman normaization - element-wise division of the eem spectra by area under the ramam peak.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_scatter_bands</span></code>(eem_df)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">remove_scatter_bands</span></code>(eem_df)</p></td>
 <td><p>Function for removing Raleigh and Raman scatter by excising values in the areas where scatter is expected and replacing the missing values using 2d interpolation.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">routine</span></code>(meta_df, hdf[, intermediate_store, …])</p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">routine</span></code>(meta_df, hdf[, intermediate_store, …])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">subtract_blank</span></code>(sample_df, blank_df)</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">subtract_blank</span></code>(sample_df, blank_df)</p></td>
 <td><p>[summary]</p></td>
 </tr>
 </tbody>

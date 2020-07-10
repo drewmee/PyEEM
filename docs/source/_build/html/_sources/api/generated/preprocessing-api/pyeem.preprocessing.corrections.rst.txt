@@ -13,7 +13,6 @@ pyeem.preprocessing.corrections
 
    .. autosummary::
    
-      __save_intermediate
       absorbance_baseline_correction
       dilution
       ife_correction

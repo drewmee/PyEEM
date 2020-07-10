@@ -38,7 +38,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Documentation" href="api/index.html" />
-    <link rel="prev" title="PyEEM" href="index.html" /> 
+    <link rel="prev" title="PyEEM - Fluorescence Excitation-Emission Matrix (EEM) Spectroscopy" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -91,7 +91,13 @@
             
             
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-directly-from-pypi-best-option">Install directly from pypi (best option)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-from-github-using-pip">Install from GitHub using <cite>pip</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#clone-repository-and-install-from-github">Clone Repository and Install from GitHub</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-from-source">Install from Source</a></li>
+</ul>
+</li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">Documentation</a></li>
@@ -165,6 +171,45 @@
             
   <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>There are several ways to install the package from source depending on your
+local development environment and familiarity with installing python libraries.
+If you are new to python (and don’t have <cite>git</cite> installed), install using the
+<cite>Install from Source</cite> option.</p>
+<div class="section" id="install-directly-from-pypi-best-option">
+<h2>Install directly from pypi (best option)<a class="headerlink" href="#install-directly-from-pypi-best-option" title="Permalink to this headline">¶</a></h2>
+<p>Installing directly from pypi using pip is the easiest way forward and will
+automagically install any dependencies that aren’t already installed.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install pyeem <span class="o">[</span>--upgrade<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-from-github-using-pip">
+<h2>Install from GitHub using <cite>pip</cite><a class="headerlink" href="#install-from-github-using-pip" title="Permalink to this headline">¶</a></h2>
+<p>Note: must have git installed</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install --upgrade git+git://github.com/drewmee/PyEEM.git
+</pre></div>
+</div>
+</div>
+<div class="section" id="clone-repository-and-install-from-github">
+<h2>Clone Repository and Install from GitHub<a class="headerlink" href="#clone-repository-and-install-from-github" title="Permalink to this headline">¶</a></h2>
+<p>If you plan on contributing to <code class="docutils literal notranslate"><span class="pre">pyeem</span></code>, you will probably want to fork the
+library, and then clone it to your local environment. You can then install from
+source directly.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/drewmee/pyeem.git
+$ <span class="nb">cd</span> pyeem/
+$ python3 setup.py install
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-from-source">
+<h2>Install from Source<a class="headerlink" href="#install-from-source" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ wget https://github.com/drewmee/pyeem/archive/master.zip
+$ unzip master.zip
+$ <span class="nb">cd</span> pyeem-master/
+$ python3 setup.py install
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -178,7 +223,7 @@
         <a href="api/index.html" class="btn btn-neutral float-right" title="Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral float-left" title="PyEEM" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="PyEEM - Fluorescence Excitation-Emission Matrix (EEM) Spectroscopy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
