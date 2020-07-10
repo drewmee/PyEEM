@@ -1,0 +1,58 @@
+pyeem.instruments.Aqualog
+=========================
+
+.. currentmodule:: pyeem.instruments
+
+.. autoclass:: Aqualog
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Aqualog.__delattr__
+      ~Aqualog.__dir__
+      ~Aqualog.__eq__
+      ~Aqualog.__format__
+      ~Aqualog.__ge__
+      ~Aqualog.__getattribute__
+      ~Aqualog.__gt__
+      ~Aqualog.__hash__
+      ~Aqualog.__init__
+      ~Aqualog.__init_subclass__
+      ~Aqualog.__le__
+      ~Aqualog.__lt__
+      ~Aqualog.__ne__
+      ~Aqualog.__new__
+      ~Aqualog.__reduce__
+      ~Aqualog.__reduce_ex__
+      ~Aqualog.__repr__
+      ~Aqualog.__setattr__
+      ~Aqualog.__sizeof__
+      ~Aqualog.__str__
+      ~Aqualog.__subclasshook__
+      ~Aqualog.load_absorbance
+      ~Aqualog.load_eem
+      ~Aqualog.load_spectral_corrections
+      ~Aqualog.load_water_raman
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Aqualog.__dict__
+      ~Aqualog.__doc__
+      ~Aqualog.__module__
+      ~Aqualog.__weakref__
+      ~Aqualog.manufacturer
+      ~Aqualog.name
+      ~Aqualog.supported_models
+   
+   

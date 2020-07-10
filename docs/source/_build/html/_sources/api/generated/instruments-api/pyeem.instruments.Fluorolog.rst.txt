@@ -1,0 +1,58 @@
+pyeem.instruments.Fluorolog
+===========================
+
+.. currentmodule:: pyeem.instruments
+
+.. autoclass:: Fluorolog
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Fluorolog.__delattr__
+      ~Fluorolog.__dir__
+      ~Fluorolog.__eq__
+      ~Fluorolog.__format__
+      ~Fluorolog.__ge__
+      ~Fluorolog.__getattribute__
+      ~Fluorolog.__gt__
+      ~Fluorolog.__hash__
+      ~Fluorolog.__init__
+      ~Fluorolog.__init_subclass__
+      ~Fluorolog.__le__
+      ~Fluorolog.__lt__
+      ~Fluorolog.__ne__
+      ~Fluorolog.__new__
+      ~Fluorolog.__reduce__
+      ~Fluorolog.__reduce_ex__
+      ~Fluorolog.__repr__
+      ~Fluorolog.__setattr__
+      ~Fluorolog.__sizeof__
+      ~Fluorolog.__str__
+      ~Fluorolog.__subclasshook__
+      ~Fluorolog.load_absorbance
+      ~Fluorolog.load_eem
+      ~Fluorolog.load_spectral_corrections
+      ~Fluorolog.load_water_raman
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Fluorolog.__dict__
+      ~Fluorolog.__doc__
+      ~Fluorolog.__module__
+      ~Fluorolog.__weakref__
+      ~Fluorolog.manufacturer
+      ~Fluorolog.name
+      ~Fluorolog.supported_models
+   
+   

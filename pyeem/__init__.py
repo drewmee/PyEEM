@@ -5,11 +5,13 @@ from . import augmentation
 from . import visualization
 from . import analysis
 
-__all__ = ['datasets',
-           'instruments',
-           'preprocessing',
-           'augmentation',
-           'visualization',
-           'analysis']
+__all__ = [
+    "datasets",
+    "instruments",
+    "preprocessing",
+    "augmentation",
+    "visualization",
+    "analysis",
+]
 
 __version__ = "1.0.0"

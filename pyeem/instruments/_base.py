@@ -1,8 +1,17 @@
-import numpy as np
 import pandas as pd
 
 
 class Aqualog:
+    """[summary]
+
+    Raises:
+        NotImplementedError: [description]
+        NotImplementedError: [description]
+
+    Returns:
+        [type]: [description]
+    """
+
     manufacturer = "Horiba"
     name = "aqualog"
     supported_models = ["Aqualog-880-C"]
@@ -13,7 +22,7 @@ class Aqualog:
 
     @staticmethod
     def load_eem(filename):
-        eem = pd.read_csv(filename, sep='\t', index_col=0)
+        eem = pd.read_csv(filename, sep="\t", index_col=0)
         eem.columns = eem.columns.astype(float)
         eem.index.name = "emission_wavelength"
         eem = eem.sort_index(axis=0)
@@ -22,12 +31,11 @@ class Aqualog:
 
     @staticmethod
     def load_absorbance(filename):
-        absorb = pd.read_csv(filename, sep='\t',
-                             index_col=0, header=0, skiprows=[1, 2])
+        absorb = pd.read_csv(filename, sep="\t", index_col=0, header=0, skiprows=[1, 2])
         absorb.index.name = "wavelength"
         absorb = absorb.sort_index()
-        absorb = absorb[['Abs']]
-        absorb.rename(columns={'Abs': 'absorbance'}, inplace=True)
+        absorb = absorb[["Abs"]]
+        absorb.rename(columns={"Abs": "absorbance"}, inplace=True)
         return absorb
 
     @staticmethod
@@ -40,6 +48,15 @@ class Aqualog:
 
 
 class Fluorolog:
+    """[summary]
+
+    Raises:
+        NotImplementedError: [description]
+
+    Returns:
+        [type]: [description]
+    """
+
     manufacturer = "Horiba"
     name = "fluorolog"
     supported_models = ["SPEX Fluorolog-3"]
@@ -58,10 +75,13 @@ class Fluorolog:
 
     @staticmethod
     def load_water_raman(filename):
-        water_raman = pd.read_csv(filename, sep=',',
-                                  index_col=0, skiprows=1,
-                                  names=["emission_wavelength",
-                                         "intensity"])
+        water_raman = pd.read_csv(
+            filename,
+            sep=",",
+            index_col=0,
+            skiprows=1,
+            names=["emission_wavelength", "intensity"],
+        )
         water_raman = water_raman.sort_index()
         return water_raman
 
@@ -71,6 +91,14 @@ class Fluorolog:
 
 
 class Cary:
+    """[summary]
+
+    Raises:
+        NotImplementedError: [description]
+        NotImplementedError: [description]
+        NotImplementedError: [description]
+    """
+
     manufacturer = "Agilent"
     name = "cary"
     supported_models = ["Cary 4E"]
@@ -88,7 +116,7 @@ class Cary:
         return
 
     @staticmethod
-    def load_water_raman(self, filename):
+    def load_water_raman(filename):
         raise NotImplementedError()
 
     @staticmethod
@@ -105,11 +133,11 @@ def _get_supported_instruments():
                 "manufacturer": i.manufacturer,
                 "name": i.name,
                 "supported_models": j,
-                "object": i
+                "object": i,
             }
             df = df.append(d, ignore_index=True)
-    df.set_index(['manufacturer', 'supported_models'], inplace=True)
-    df_display = df.drop(columns=['object'])
+    df.set_index(["manufacturer", "supported_models"], inplace=True)
+    df_display = df.drop(columns=["object"])
     return df_display, df
 
 

@@ -1,6 +1,6 @@
 import unittest
-import pyeem
 import os
+import pyeem
 
 
 class TestLoad(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestLoad(unittest.TestCase):
         data_dir = "some non-existent path"
         self.assertRaises(FileNotFoundError, pyeem.datasets.Load, data_dir)
 
-    '''
+    """
     def testValidDataDirPath(self):
         try:
             data_dir = "data/mock/"
@@ -25,7 +25,7 @@ class TestLoad(unittest.TestCase):
         load = pyeem.datasets.Load(data_dir)
         required_subdirs = ['corrections', 'processed', 'raw_sample_sets']
         assert set(list(load.hdf5_root.keys())) == set(required_subdirs)
-    '''
+    """
 
     def testNonExistentMetadataPath(self):
         return
@@ -48,5 +48,5 @@ class Testpreprocessing(unittest.TestCase):
         assert 1 == 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

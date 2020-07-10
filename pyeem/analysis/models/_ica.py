@@ -1,6 +1,7 @@
 def perform_ICA(S):
-    #display(S.shape)
+    # display(S.shape)
     from scipy import signal
+
     np.random.seed(0)
     n_samples = 2000
     time = np.linspace(0, 8, n_samples)
@@ -34,11 +35,13 @@ def perform_ICA(S):
     plt.figure()
 
     models = [X, S, S_, H]
-    names = ['Observations (mixed signal)',
-            'True Sources',
-            'ICA recovered signals',
-            'PCA recovered signals']
-    colors = ['red', 'steelblue', 'orange']
+    names = [
+        "Observations (mixed signal)",
+        "True Sources",
+        "ICA recovered signals",
+        "PCA recovered signals",
+    ]
+    colors = ["red", "steelblue", "orange"]
 
     for ii, (model, name) in enumerate(zip(models, names), 1):
         plt.subplot(4, 1, ii)

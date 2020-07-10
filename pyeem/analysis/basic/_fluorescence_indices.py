@@ -1,6 +1,7 @@
 from scipy.ndimage.filters import maximum_filter
 from scipy.ndimage.morphology import generate_binary_structure, binary_erosion
 
+
 def abs_pick_peaks():
     return
 
@@ -11,6 +12,7 @@ def spectral_slopes():
 
 def spectral_slope_ratio():
     return
+
 
 # Fluorescence
 
@@ -65,13 +67,14 @@ def find_peaks(eem):
     # In order to isolate the peaks we must remove the background from the mask.
 
     # we create the mask of the background
-    background = (eem == 0)
+    background = eem == 0
 
     # a little technicality: we must erode the background in order to
     # successfully subtract it form local_max, otherwise a line will
     # appear along the background border (artifact of the local maximum filter)
     eroded_background = binary_erosion(
-        background, structure=neighborhood, border_value=1)
+        background, structure=neighborhood, border_value=1
+    )
 
     # we obtain the final mask, containing only peaks,
     # by removing the background from the local_max mask (xor operation)

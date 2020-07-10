@@ -1,6 +1,7 @@
-class RutherfordNet():
+class RutherfordNet:
     """Summary
     """
+
     def __init__(self):
         return
 
@@ -16,17 +17,17 @@ class RutherfordNet():
         return
 
 
-
 def rutherfordnet(X, y):
     NAME = "rutherford-net-{}".format(int(time.time()))
-    tensorboard = TensorBoard(log_dir='logs/{}'.format(NAME))
+    tensorboard = TensorBoard(log_dir="logs/{}".format(NAME))
 
     model = Sequential()
 
     # Convolution layers
     # first layer
-    model.add(Conv2D(20, (5, 5), padding="same", input_shape=[142, 139, 1],
-                     activation="elu"))
+    model.add(
+        Conv2D(20, (5, 5), padding="same", input_shape=[142, 139, 1], activation="elu")
+    )
     model.add(MaxPooling2D(pool_size=(3, 3)))
     model.add(Dropout(0.2))
 
@@ -46,21 +47,27 @@ def rutherfordnet(X, y):
     model.add(Dropout(0.2))
     model.add(Dense(256, activation="elu"))
     model.add(Dropout(0.2))
-    model.add(Dense(256, activation='elu'))
+    model.add(Dense(256, activation="elu"))
 
     # Output layer
     model.add(Dropout(0.2))
-    model.add(Dense(3, activation='linear'))
+    model.add(Dense(3, activation="linear"))
 
-    model.compile(loss="mean_squared_error",
-                  optimizer="adam",
-                  metrics=["accuracy"])
+    model.compile(loss="mean_squared_error", optimizer="adam", metrics=["accuracy"])
 
     print(model.summary())
-    tf.keras.utils.plot_model(model, show_shapes=True,
-                              show_layer_names=True, to_file='model.png')
+    tf.keras.utils.plot_model(
+        model, show_shapes=True, show_layer_names=True, to_file="model.png"
+    )
 
-    model.fit(X, y, batch_size=32, epochs=10, validation_split=0.3,
-              shuffle=True, callbacks=[tensorboard])
-    model.save('rutherford-net.h5')
+    model.fit(
+        X,
+        y,
+        batch_size=32,
+        epochs=10,
+        validation_split=0.3,
+        shuffle=True,
+        callbacks=[tensorboard],
+    )
+    model.save("rutherford-net.h5")
     return model

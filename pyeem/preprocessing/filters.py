@@ -10,14 +10,10 @@ def crop(eem_df, crop_dims):
         [type] -- [description]
     """
     #  Rows (axis=0) are Emission wavelengths
-    eem_df = eem_df.truncate(before=em_range[0],
-                             after=em_range[1],
-                             axis=0)
+    eem_df = eem_df.truncate(before=em_range[0], after=em_range[1], axis=0)
 
     # Columns (axis=1) are Excitation wavelengths
-    eem_df = eem_df.truncate(before=ex_range[0],
-                             after=ex_range[1],
-                             axis=1)
+    eem_df = eem_df.truncate(before=ex_range[0], after=ex_range[1], axis=1)
 
     return eem_df
 
@@ -35,7 +31,7 @@ def simulate_discrete_excitations(eem_df, ex_wl):
     eem_tdf = eem_df.transpose()
     ilocs = []
     for wl in ex_wl:
-        ilocs.append(eem_tdf.index.get_loc(wl, method='nearest'))
+        ilocs.append(eem_tdf.index.get_loc(wl, method="nearest"))
     eem_df = eem_tdf.iloc[ilocs].transpose()
     return eem_df
 

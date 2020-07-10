@@ -1,10 +1,13 @@
 from tensorly.decomposition import parafac
 
-class PARAFAC():
+
+class PARAFAC:
     """[summary]
     """
+
     def __init__(self):
         return
+
 
 def perform_parafac(X, rank):
     # Specify the tensor, and the rank (np. of factors)

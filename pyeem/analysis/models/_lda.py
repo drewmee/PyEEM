@@ -1,11 +1,12 @@
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
 
+
 def perform_lda(X1, y1, target_names):
     iris = sklearn_datasets.load_iris()
 
-    #X = iris.data
-    #y = iris.target
-    #target_names = iris.target_names
+    # X = iris.data
+    # y = iris.target
+    # target_names = iris.target_names
 
     # print(X.shape)
     # print(y.shape)
@@ -24,18 +25,22 @@ def perform_lda(X1, y1, target_names):
     print(lda.scalings_)
 
     plt.figure()
-    colors = ['navy', 'turquoise', 'darkorange']
+    colors = ["navy", "turquoise", "darkorange"]
     lw = 2
     for color, i, target_name in zip(colors, [0, 1, 2], target_names):
-        plt.scatter(X_r2[y == i, 0], X_r2[y == i, 1], alpha=.8, color=color,
-                    label=target_name)
-    plt.legend(loc='best', shadow=False, scatterpoints=1)
-    plt.title('LDA of IRIS dataset')
+        plt.scatter(
+            X_r2[y == i, 0], X_r2[y == i, 1], alpha=0.8, color=color, label=target_name
+        )
+    plt.legend(loc="best", shadow=False, scatterpoints=1)
+    plt.title("LDA of IRIS dataset")
     plt.show()
 
     def pretty_scalings(lda, X, out=False):
-        ret = pd.DataFrame(lda.scalings_, index=X.columns, columns=[
-                           "LD"+str(i+1) for i in range(lda.scalings_.shape[1])])
+        ret = pd.DataFrame(
+            lda.scalings_,
+            index=X.columns,
+            columns=["LD" + str(i + 1) for i in range(lda.scalings_.shape[1])],
+        )
         if out:
             print("Coefficients of linear discriminants:")
             print(ret)
@@ -43,7 +48,7 @@ def perform_lda(X1, y1, target_names):
 
     pretty_scalings_ = pretty_scalings(lda, X, out=True)
 
-    '''
+    """
     #https://stackoverflow.com/questions/13973096/how-do-i-get-the-components-for-lda-in-scikit-learn
     def myplot(score,coeff,labels=None):
         xs = score[:,0]
@@ -65,5 +70,5 @@ def perform_lda(X1, y1, target_names):
     #Call the function. 
     myplot(X_r2[:,0:2], lda.scalings_) 
     plt.show()
-    '''
+    """
     return

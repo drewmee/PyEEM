@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Datasets subpackage (pyeem.datasets) &mdash; PyEEM 1.0.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/msmb.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/js/versions.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pyeem.datasets.Load" href="generated/datasets-api/pyeem.datasets.Load.html" />
+    <link rel="prev" title="pyeem.instruments.Cary" href="generated/instruments-api/pyeem.instruments.Cary.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html">
+          
+
+          
+            
+            <img src="../_static/pyeem.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../INSTALL.html">Installation</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="index_instruments.html">Instruments subpackage (pyeem.instruments)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Datasets subpackage (pyeem.datasets)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/datasets-api/pyeem.datasets.Load.html">pyeem.datasets.Load</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/datasets-api/pyeem.datasets.load_dreem.html">pyeem.datasets.load_dreem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/datasets-api/pyeem.datasets.load_rutherford.html">pyeem.datasets.load_rutherford</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index_preprocessing.html">Preprocessing subpackage (pyeem.preprocessing)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index_augmentation.html">Augmentation subpackage (pyeem.augmentation)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index_analysis.html">Analysis subpackage (pyeem.analysis)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index_visualization.html">Visualization subpackage (pyeem.visualization)</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Tutorial</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyEEM</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html">Documentation</a> &raquo;</li>
+        
+      <li>Datasets subpackage (pyeem.datasets)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api/index_datasets.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="datasets-subpackage-pyeem-datasets">
+<h1>Datasets subpackage (pyeem.datasets)<a class="headerlink" href="#datasets-subpackage-pyeem-datasets" title="Permalink to this headline">¶</a></h1>
+<p>The <em>datasets</em> package provides functions to load demo and custom datasets.</p>
+<span class="target" id="module-pyeem.datasets"></span><table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/datasets-api/pyeem.datasets.Load.html#pyeem.datasets.Load" title="pyeem.datasets.Load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Load</span></code></a>(data_dir)</p></td>
+<td><p>Load class summary</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/datasets-api/pyeem.datasets.load_dreem.html#pyeem.datasets.load_dreem" title="pyeem.datasets.load_dreem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_dreem</span></code></a>()</p></td>
+<td><p>load_dreem summary</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/datasets-api/pyeem.datasets.load_rutherford.html#pyeem.datasets.load_rutherford" title="pyeem.datasets.load_rutherford"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_rutherford</span></code></a>()</p></td>
+<td><p>load_rutherford summary</p></td>
+</tr>
+</tbody>
+</table>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="generated/datasets-api/pyeem.datasets.Load.html" class="btn btn-neutral float-right" title="pyeem.datasets.Load" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="generated/instruments-api/pyeem.instruments.Cary.html" class="btn btn-neutral float-left" title="pyeem.instruments.Cary" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Drew Meyers
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  <script>
+    var versions_json_url = ''
+</script>
+
+<div class="rst-versions" data-toggle="rst-versions" role="note"
+     aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"></span>
+        1.0.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+
+    <div class="rst-other-versions">
+        <dl id="versionselector">
+            <dt>Other Versions</dt>
+        </dl>
+
+    </div>
+</div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

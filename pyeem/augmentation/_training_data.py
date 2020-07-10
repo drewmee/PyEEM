@@ -1,4 +1,3 @@
-
 import numpy as np
 import pandas as pd
 
@@ -19,16 +18,15 @@ def create_train_data(aug_ss, aug_mix):
 
 def create_test_data():
     test_arr = []
-    for name, group in meta_df.groupby('Type'):
-        if 'Test' not in name:
+    for name, group in meta_df.groupby("Type"):
+        if "Test" not in name:
             continue
 
         for row_index, row in group.iterrows():
             fname = poststardom_dir + row.File_Name + ".csv"
             data = pd.read_csv(fname, index_col=0)
             data.columns = data.columns.map(int)
-            data = data.truncate(before=246, after=573,
-                                 axis=0)  # rows:emission
+            data = data.truncate(before=246, after=573, axis=0)  # rows:emission
             data = data.truncate(before=224, axis=1)  # column:excitation
             data = data.to_numpy()
             # width=142; height=139
