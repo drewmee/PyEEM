@@ -67,7 +67,6 @@ ptyprocess==0.6.0
 py==1.9.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
--e git+https://github.com/drewmee/PyEEMA.git@80b34be217e7ecf01e0c2aa5c370313abcce2d13#egg=pyeem
 Pygments==2.6.1
 pylint==2.5.3
 pyparsing==2.4.7

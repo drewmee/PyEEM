@@ -1,11 +1,8 @@
 version: 2.1
 
-orbs:
-  python: circleci/python@0.2.1
-
 jobs:
   build:
-    working_directory: ~/your_thing
+    working_directory: ~/PyEEM
     docker:
       - image: themattrix/tox
     steps:
