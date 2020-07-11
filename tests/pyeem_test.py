@@ -1,16 +1,18 @@
-import unittest
+import pytest
 import os
 import pyeem
 
 
-class TestLoad(unittest.TestCase):
+class TestLoad:
     def testInsufficientArgs(self):
         data_dir = None
-        self.assertRaises(Exception, pyeem.datasets.Load, data_dir)
+        with pytest.raises(Exception):
+            pyeem.datasets.Load(data_dir)
 
     def testNonExistentDataDirPath(self):
         data_dir = "some non-existent path"
-        self.assertRaises(FileNotFoundError, pyeem.datasets.Load, data_dir)
+        with pytest.raises(FileNotFoundError):
+            pyeem.datasets.Load(data_dir)
 
     """
     def testValidDataDirPath(self):
@@ -43,10 +45,6 @@ class TestLoad(unittest.TestCase):
         return
 
 
-class Testpreprocessing(unittest.TestCase):
+class Testpreprocessing:
     def testCrop(self):
         assert 1 == 1
-
-
-if __name__ == "__main__":
-    unittest.main()

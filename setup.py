@@ -15,22 +15,22 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/drewmee/PyEEM",
     license="MIT",
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=["tests*"]),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    test_suite='tests',
-    python_requires='>=3.6',
+    test_suite="tests",
+    python_requires=">=3.6",
     install_requires=[
-        'tensorflow',
-        'pandas',
-        'h5py',
-        'tables',
-        'matplotlib',
-        'tensorly',
-        'keras',
+        "tensorflow",
+        "pandas",
+        "h5py",
+        "tables",
+        "matplotlib",
+        "tensorly",
+        "keras",
     ],
-
 )
+
