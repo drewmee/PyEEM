@@ -28,9 +28,16 @@ Documentation
 =============
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   api/index.rst
+   subpackages/datasets/index
+   subpackages/instruments/index
+   subpackages/preprocessing/index
+   subpackages/preprocessing/corrections/index
+   subpackages/preprocessing/filters/index
+   subpackages/augmentation/index
+   subpackages/visualization/index
+   subpackages/analysis/index
 
 Tutorials
 =========

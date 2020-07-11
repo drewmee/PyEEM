@@ -141,4 +141,4 @@ cython_debug/
 .vscode
 
 # Temporary data for demo datasets
-tmp_data/
+examples/demo_data/

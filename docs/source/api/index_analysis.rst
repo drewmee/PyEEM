@@ -1,8 +1,0 @@
-Analysis subpackage (pyeem.analysis)
-====================================
-The *analysis* package provides...
-
-.. automodule:: pyeem.analysis
-
-.. toctree::
-   :maxdepth: 1

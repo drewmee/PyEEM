@@ -1,8 +1,0 @@
-Preprocessing subpackage (pyeem.preprocessing)
-==============================================
-The *preprocessing* package provides...
-
-.. automodule:: pyeem.preprocessing
-
-.. toctree::
-   :maxdepth: 1

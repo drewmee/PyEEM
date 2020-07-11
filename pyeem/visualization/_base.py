@@ -13,6 +13,9 @@ rc("font", family="serif")
 
 
 class Visualizations:
+    """[summary]
+    """
+
     def __init__(self):
         self.font = "helvetica"
         self.viz_dir = ""
@@ -29,6 +32,11 @@ class Visualizations:
         self.cbar_fontsize = 18
 
     def calibration_curve(self, cal_df):
+        """[summary]
+
+        Args:
+            cal_df ([type]): [description]
+        """
         fig, ax = plt.subplots(figsize=self.figsize)
 
         for index, row in cal_df.iterrows():
@@ -42,6 +50,12 @@ class Visualizations:
         return
 
     def contour_plot(self, eem, title):
+        """[summary]
+
+        Args:
+            eem ([type]): [description]
+            title ([type]): [description]
+        """
         fig, ax = plt.subplots(figsize=self.figsize)
         cf = ax.contourf(
             eem.columns.to_numpy(), eem.index.to_numpy(), eem.to_numpy(), cmap=self.cmap
@@ -56,6 +70,12 @@ class Visualizations:
         plt.show()
 
     def combined_surface_contour_plot(self, eem, title):
+        """[summary]
+
+        Args:
+            eem ([type]): [description]
+            title ([type]): [description]
+        """
         fig = plt.figure(figsize=self.figsize)
         ax = Axes3D(fig)
 
@@ -99,6 +119,13 @@ class Visualizations:
         plt.show()
 
     def single_source_animation(self, source_name, eem_df, plot_type="contour"):
+        """[summary]
+
+        Args:
+            source_name ([type]): [description]
+            eem_df ([type]): [description]
+            plot_type (str, optional): [description]. Defaults to "contour".
+        """
         fig, ax = plt.subplots(figsize=self.figsize)
         plt.xlabel(self.eem_xlabel, fontsize=self.axis_fontsize)
         plt.ylabel(self.eem_ylabel, fontsize=self.axis_fontsize)
@@ -145,6 +172,12 @@ class Visualizations:
         animation.save(source_name + ".mp4", dpi=self.dpi)
 
     def mix_animation(self, sources, mix_df):
+        """[summary]
+
+        Args:
+            sources ([type]): [description]
+            mix_df ([type]): [description]
+        """
         fig = plt.figure(figsize=(8, 8))
         gs = gridspec.GridSpec(1, 2, width_ratios=[4, 1])
         eem_ax = plt.subplot(gs[0])
@@ -192,7 +225,11 @@ class Visualizations:
         animation.save("mix.mp4", dpi=self.dpi)
 
     def surface_plot(self):
+        """[summary]
+        """
         return
 
     def contour_animation(self):
+        """[summary]
+        """
         return

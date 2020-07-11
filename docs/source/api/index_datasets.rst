@@ -1,8 +1,0 @@
-Datasets subpackage (pyeem.datasets)
-====================================
-The *datasets* package provides functions to load demo and custom datasets.
-
-.. automodule:: pyeem.datasets
-
-.. toctree::
-   :maxdepth: 1

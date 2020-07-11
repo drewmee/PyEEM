@@ -1,8 +1,0 @@
-Augmentation subpackage (pyeem.augmentation)
-============================================
-The *augmentation* package provides...
-
-.. automodule:: pyeem.augmentation
-
-.. toctree::
-   :maxdepth: 1

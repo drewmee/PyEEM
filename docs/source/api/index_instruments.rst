@@ -1,8 +1,0 @@
-Instruments subpackage (pyeem.instruments)
-==========================================
-The *instruments* package provides...
-
-.. automodule:: pyeem.instruments
-
-.. toctree::
-   :maxdepth: 1

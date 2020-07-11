@@ -1,8 +1,0 @@
-Visualization subpackage (pyeem.visualization)
-==============================================
-The *visualization* package provides...
-
-.. automodule:: pyeem.visualization
-
-.. toctree::
-   :maxdepth: 1
