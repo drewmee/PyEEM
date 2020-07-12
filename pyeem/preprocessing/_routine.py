@@ -20,6 +20,28 @@ def routine(
     raman_source="water_raman",
     smoothing=False,
 ):
+    """[summary]
+
+    Args:
+        meta_df ([type]): [description]
+        hdf ([type]): [description]
+        intermediate_store (bool, optional): [description]. Defaults to True.
+        spectral_corrections (bool, optional): [description]. Defaults to False.
+        crop_dims ([type], optional): [description]. Defaults to None.
+        blank_subtract (bool, optional): [description]. Defaults to True.
+        ife_correction (bool, optional): [description]. Defaults to True.
+        scatter_removal (bool, optional): [description]. Defaults to True.
+        scatter_fill (str, optional): [description]. Defaults to "interp".
+        raman_norm (bool, optional): [description]. Defaults to True.
+        raman_source (str, optional): [description]. Defaults to "water_raman".
+        smoothing (bool, optional): [description]. Defaults to False.
+
+    Raises:
+        exception: [description]
+        exception: [description]
+        exception: [description]
+    """
+
     # These should be defined in their respective functions
     # raman_sources = ['water_raman', 'blank', 'metadata']
     # scatter_fill = ['interp', 'zeros', None]

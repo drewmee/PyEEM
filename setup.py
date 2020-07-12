@@ -22,7 +22,6 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     test_suite="tests",
-    python_requires=">=3.6",
     install_requires=[
         "tensorflow",
         "pandas",
