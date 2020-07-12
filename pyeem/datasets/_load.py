@@ -10,6 +10,7 @@ from tables.exceptions import NaturalNameWarning
 from pandas.errors import PerformanceWarning
 from ..instruments import _supported
 
+# TODO - debug the following warnings...
 warnings.simplefilter(action="ignore", category=NaturalNameWarning)
 warnings.simplefilter(action="ignore", category=PerformanceWarning)
 

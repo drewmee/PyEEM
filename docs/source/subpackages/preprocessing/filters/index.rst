@@ -1,4 +1,4 @@
-Filters (pyeem.preprocessing.filters
+Filters (pyeem.preprocessing.filters)
 =========================================
 The *preprocessing.filters* package provides...
 

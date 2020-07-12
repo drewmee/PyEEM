@@ -1,3 +1,6 @@
+from scipy.ndimage import gaussian_filter
+
+
 def crop(eem_df, crop_dims):
     """[summary]
 

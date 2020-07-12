@@ -1,7 +1,5 @@
 import scipy.interpolate
-from scipy.ndimage import gaussian_filter
 from scipy.integrate import trapz
-from scipy.ndimage import gaussian_filter
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -12,8 +10,6 @@ def spectral_correction(em_corr, ex_cor):
     return
 """
 
-# TODO = Probably can go without this
-
 
 def absorbance_baseline_correction(abs_df, wl_range=(680, 700)):
     """Correct the instrumental baseline drift in absorbance
@@ -23,6 +19,7 @@ def absorbance_baseline_correction(abs_df, wl_range=(680, 700)):
     Arguments:
         wl_range {[type]} -- [description]
     """
+    # TODO = Probably can go without this
     mean_abs = abs_df.loc[wl_range[0] : wl_range[1]].mean()
     abs_df = abs_df - mean_abs
     return abs_df
@@ -130,8 +127,7 @@ def remove_scatter_bands(eem_df):
 
 
 def ife_correction(eem_df, abs_df, cuvl, unit="absorbance"):
-    """https://github.com/PMassicotte/eemR/blob/7f6843b1490237922dabea8da49d21a724018048/R/eem_inner_filter_effect.R
-
+    """Summary
     Arguments:
         eem_df {[type]} -- [description]
         abs_df {[type]} -- [description]
@@ -144,8 +140,6 @@ def ife_correction(eem_df, abs_df, cuvl, unit="absorbance"):
 
 
 def raman_normalization(eem_df, blank_df):
-    # TODO - The Raman area is calculated using the  baseline-corrected
-    # peak boundary definition (Murphy and others, 2011)
     """Raman normaization - element-wise division of the eem spectra by 
     area under the ramam peak. See reference Murphy et al. "scan_type 
     of Dissolved Organic Matter Fluorescence in Aquatic Environments: 
@@ -159,6 +153,9 @@ def raman_normalization(eem_df, blank_df):
     Returns:
         [type] -- Raman normalized EEM spectrum in Raman Units (R.U.)
     """
+    # TODO - The Raman area is calculated using the  baseline-corrected
+    # peak boundary definition (Murphy and others, 2011)
+
     a = 371  # lower limit
     b = 428  # upper limit
     raman_peak_area = trapz(blank_df[350].loc[a:b])
@@ -167,7 +164,7 @@ def raman_normalization(eem_df, blank_df):
 
 
 def dilution(eem, dilution_factor):
-    """I don't think this is right
+    """Dilution summary
 
     Arguments:
         eem {[type]} -- [description]
@@ -181,8 +178,7 @@ def dilution(eem, dilution_factor):
 
 
 def pseudo_pivot(meta_df):
-    """
-    Think about using melt()
+    """Think about using melt()
 
     DataFrame.pivot_table
     Generalization of pivot that can handle duplicate values for one index/column pair.
@@ -238,6 +234,27 @@ def routine(
     raman_source="water_raman",
     smoothing=False,
 ):
+    """[summary]
+
+    Args:
+        meta_df ([type]): [description]
+        hdf ([type]): [description]
+        intermediate_store (bool, optional): [description]. Defaults to True.
+        spectral_corrections (bool, optional): [description]. Defaults to False.
+        crop_dims ([type], optional): [description]. Defaults to None.
+        blank_subtract (bool, optional): [description]. Defaults to True.
+        ife_correction (bool, optional): [description]. Defaults to True.
+        scatter_removal (bool, optional): [description]. Defaults to True.
+        scatter_fill (str, optional): [description]. Defaults to "interp".
+        raman_norm (bool, optional): [description]. Defaults to True.
+        raman_source (str, optional): [description]. Defaults to "water_raman".
+        smoothing (bool, optional): [description]. Defaults to False.
+
+    Raises:
+        exception: [description]
+        exception: [description]
+        exception: [description]
+    """
 
     # These should be defined in their respective functions
     # raman_sources = ['water_raman', 'blank', 'metadata']

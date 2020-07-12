@@ -3,7 +3,6 @@ from . import instruments
 from . import preprocessing
 from . import augmentation
 from . import visualization
-from . import analysis
 
 __all__ = [
     "datasets",
@@ -11,7 +10,6 @@ __all__ = [
     "preprocessing",
     "augmentation",
     "visualization",
-    "analysis",
 ]
 
 __version__ = "1.0.0"

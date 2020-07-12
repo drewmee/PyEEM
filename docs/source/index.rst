@@ -36,6 +36,7 @@ Documentation
    subpackages/preprocessing/corrections/index
    subpackages/preprocessing/filters/index
    subpackages/augmentation/index
+   subpackages/visualization/index
 
 Tutorials
 =========

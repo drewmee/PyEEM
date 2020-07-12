@@ -23,9 +23,6 @@ setuptools.setup(
     ],
     test_suite="tests",
     install_requires=[
-        "tensorly",
-        "tensorflow==2.2.0",
-        "keras",
         "numpy",
         "pandas",
         "h5py",
@@ -35,6 +32,5 @@ setuptools.setup(
         "celluloid",
         "urllib3",
         "boto3",
-        "scipy==1.4.1",
     ],
 )
