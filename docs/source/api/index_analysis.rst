@@ -1,2 +1,0 @@
-Analysis subpackage (pyeema.analysis)
-=====================================

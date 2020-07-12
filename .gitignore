@@ -136,3 +136,9 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# VS Code
+.vscode
+
+# Temporary data for demo datasets
+examples/demo_data/
