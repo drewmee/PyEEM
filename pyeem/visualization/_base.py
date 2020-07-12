@@ -5,7 +5,6 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.mplot3d import Axes3D
 from celluloid import Camera
 import seaborn as sns
-from tqdm import tqdm
 import numpy as np
 from matplotlib import rc
 
@@ -195,7 +194,7 @@ class Visualizations:
         ).to_numpy()
         extent = [excitation[0], excitation[-1], emission[0], emission[-1]]
 
-        for conc_set, g in tqdm(mix_df.groupby(level=list(sources))):
+        for conc_set, g in mix_df.groupby(level=list(sources)):
             title = dict(zip(sources, conc_set))
             g.index = g.index.droplevel(["diesel", "cigarette", "wood_smoke"])
 
