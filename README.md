@@ -1,21 +1,14 @@
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/drewmee/PyEEM/blob/master/LICENSE)
 [![CircleCI](https://circleci.com/gh/drewmee/PyEEM.svg?style=shield&circle-token=ccdb16078dcb8ee4e4c9b923f547fc7cb2742aae)](https://app.circleci.com/pipelines/github/drewmee/PyEEM)
 [![Read the Docs](https://readthedocs.org/projects/drewmee-demo/badge/?version=latest)](https://www.youtube.com/watch?v=oHg5SJYRHA0)
+<!--- Badge for supported python versions https://img.shields.io/pypi/pyversions/pyeem -->
+<!--- Badge for PyPI package https://img.shields.io/pypi/v/pyeem -->
+<!--- Badge for codecov -->
+
 
 # PyEEM
 
 Python library for the preprocessing, correction, deconvolution and analysis of Excitation Emission Matrices (EEMs). Full documentation can be found [here](https://www.youtube.com/watch?v=oHg5SJYRHA0).
-
-
-## Dependencies for Local Development
-
-If you wish to build the local documentation or run unittests, there are a few additional dependencies that are required including:
-
-  * sphinx
-  * sphinx_rtd_theme
-
-The complete list can be found in `requirements-dev.txt`.
-
 
 ## Installation
 
@@ -23,6 +16,11 @@ Install via pip:
 
     $ pip install pyeem [--upgrade]
 
+## Dependencies for Local Development
+
+If you wish to build the local documentation or run unittests, there are a few additional dependencies that are required including:
+
+pip install -e ".[docs, tests]"
 
 ## License
 
@@ -35,7 +33,6 @@ Install via pip:
   You can also build the documentation by navigating to the `docs` directory and issuing the command:
 
     $ make html
-
 
 ## Sample Script / Getting Started
 

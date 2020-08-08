@@ -1,8 +1,8 @@
 from .corrections import (
-    absorbance_baseline_correction,
+    _get_steps,
+    blank_subtraction,
     dilution,
+    inner_filter_effect,
     raman_normalization,
-    ife_correction,
-    remove_scatter_bands,
-    subtract_blank,
+    scatter_removal,
 )

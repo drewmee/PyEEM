@@ -1,105 +1,120 @@
 # %%
+import os
+import pickle
+
 import matplotlib.pyplot as plt
-import tensorflow as tf
+import numpy as np
+import pandas as pd
 from scipy import stats
 
-# import seaborn as sns
-import pandas as pd
-import numpy as np
-import time
 import pyeem
 
 #%%
-# Check out the supported instruments
-display(pyeem.instruments.supported)
 
-# Load the Rutherford et al. dataset and check out the metadata
-demo_dataset = pyeem.datasets.load_rutherford("demo_data/")
-display(demo_dataset.meta_df)
-display(demo_dataset.hdf)
+# 1 Plots & Animations of preprocessing
+# 2 Refactor preprocessing routine
+# 3 Finalize preprocessing steps (Raman!!!)
+# 4 Refactor dataset.load() and create tests
+# 5 DOCSTRINGS!
+# 6 Rutherford model - training data, train, analyze
+# 8 Paper
+# 7 Contact rutherford
 
-# Load the drEEM dataset and check out the metadata
-# demo_dataset = pyeem.datasets.load_dreem("demo_data/")
-# display(demo_dataset.meta_df)
-#%%
+# Download a demo dataset from S3
+demo_data_dir = pyeem.datasets.download_demo(
+    "examples/demo_data", demo_name="rutherford"
+)
+
+
+# demo_data_dir = "examples/demo_data/rutherford"
+cal_sources = {"cigarette": "ug/ml", "diesel": "ug/ml", "wood_smoke": "ug/ml"}
+dataset = pyeem.datasets.Load(
+    data_dir=demo_data_dir,
+    raman_instrument=None,
+    absorbance_instrument="aqualog",
+    eem_instrument="aqualog",
+    calibration_sources=cal_sources,
+)
+"""
+demo_data_dir = "examples/demo_data/drEEM"
+dataset = pyeem.datasets.Load(
+    data_dir=demo_data_dir,
+    raman_instrument="fluorolog",
+    eem_instrument="fluorolog",
+    absorbance_instrument="cary_4e",
+    progress_bar=True,
+)
+"""
 # Run the preprocessing routine which includes several
 # filtering and correction steps.
-crop_dimensions = {"emission_bounds": (246, 573), "excitation_bounds": (224, np.inf)}
-pyeem.preprocessing.routine(
-    demo_dataset.meta_df,
-    demo_dataset.hdf,
-    crop_dims=crop_dimensions,
-    raman_source="metadata",
+routine_df = pyeem.preprocessing.create_routine(
+    crop=True,
+    discrete_wavelengths=False,
+    gaussian_smoothing=False,
+    blank_subtraction=True,
+    inner_filter_effect=True,
+    raman_normalization=True,
+    scatter_removal=True,
+    dilution=False,
 )
-#%%
-# Visualize each step of the corrections.
-# pyeem.visualization.corrections()
+# discrete_ex_wl = [225, 240, 275, 290, 300, 425]
+crop_dimensions = {"emission_bounds": (246, 573), "excitation_bounds": (224, np.inf)}
+routine_results_df = pyeem.preprocessing.perform_routine(
+    dataset,
+    routine_df,
+    crop_dims=crop_dimensions,
+    raman_source_type="metadata",
+    progress_bar=True,
+)
+routine_results_df
+# pyeem.plots.plot_preprocessing(dataset, routine_results_df, animate=False)
 
-# Visualize the water raman peak characterization
-# pyeem.visualization.water_raman()
+# Visualize Raman peak characterization
+# pyeem.plots.raman_peak_characterization()
+
+# Time-series analysis of various fluorescence indices
+# pyeem.plots.timeseries(dataset, timeframe=() metric="")
+
+# Download as zip or R or matlab data files
+# dataset.download()
+
+# Perfrom calibration if there are any sources.
+cal_df = pyeem.preprocessing.calibration(dataset, routine_results_df)
+# cal_df.to_pickle("cal_df.pkl")
+# cal_df = pd.read_pickle("cal_df.pkl")
 
 # Visualize the calibration functions
-# pyeem.visualization.calibration()
+pyeem.plots.plot_calibration_curves(dataset, cal_df)
+#%%
+# Visualize the calibration spectra
+# pyeem.plots.plot_calibration_spectra(cal_df)
 
-# Run the augmentation routine which includes creating prototypical
-# spectra from the calibration. These spectra are then scaled across
-# a concentration range and mixed together to create a large number of
-# single source and mixture spectra.
-# pyeem.augmentation.routine()
+# Get the calibration summary information
+pyeem.preprocessing.calibration_summary_info(cal_df)
 
-# Visualize the augmented spectra
-# pyeem.visualization.augmentations()
 
-# pyeem.analysis.basic.
-# pyeem.analysis.timeseries.
-# pyeem.analysis.models.rutherfordnet()
-# pyeem.analysis.models.pca()
-# pyeem.analysis.models.lda()
-# pyeem.analysis.models.parafac()
-# %%
-sources = np.sort(meta_df["prototypical_source"].dropna().unique())
-
-proto_groups = (
-    meta_df[meta_df["prototypical_source"].notna()]
-    .sort_values("prototypical_source")
-    .groupby("prototypical_source")
+results_df = pyeem.augmentation.create_prototypical_spectra(dataset, cal_df)
+pyeem.plots.augmentations.plot_prototypical_spectra(
+    dataset, results_df, plot_type="surface"
 )
-# %%
-for source_name, group in proto_groups:
-    # This can be put into augment.py for the functions
-    # proto_spectra/single_source/mixture to  use
-    c = cal_df[cal_df["source"] == source_name]
-    proto_eem = pyeem.prototypical_spectra(source_name, group, c, hdf)
 
-    display(proto_eem)
-    break
-    # These calls should not be here, put into a function within
-    # visualizations.py... something like parse(df_type="proto/ss/mix")
-    conc = proto_eem.index.get_level_values("proto_conc").unique().item()
-    source = proto_eem.index.get_level_values("source").unique().item()
-    proto_eem.index = proto_eem.index.droplevel(["source", "proto_conc"])
 
-    plt_title = "Prototypical Spectrum: {0}\n".format(source_name)
-    plt_title += "Concentration (ug/ml): {0}".format(conc)
-    pyeem.Visualizations().contour_plot(proto_eem, plt_title)
-    pyeem.Visualizations().combined_surface_contour_plot(proto_eem, plt_title)
-
-    s = pyeem.single_sources(
-        source_name, sources, c, hdf, conc_range=(0, 5), num_spectra=1000
-    )
-
-    # pyeem.Visualizations().single_source_animation(source_name, s)
-
-# %%
-# m = pyeem.mixtures(sources, cal_df, hdf, conc_range=(0, 5), num_steps=15)
-m = pyeem.mixtures(
-    sources, cal_df, hdf, conc_range=(0.01, 6.3), num_steps=15, scale="logarithmic"
+results_df = pyeem.augmentation.create_single_source_spectra(
+    dataset, cal_df, conc_range=(0, 5), num_spectra=100
 )
-# pyeem.Visualizations().mix_animation(sources, m)
+"""
+results_df = pyeem.plots.augmentations.plot_single_source_spectra(
+    dataset, results_df, conc_range=(0.01, 6.3), num_steps=15, scale="logarithmic"
+)
+"""
+results_df = pyeem.augmentation.create_mixtures(
+    dataset, cal_df, conc_range=(0.01, 6.3), num_steps=15
+)
+# pyeem.plots.augmentations.plot_mixture_spectra(dataset, results_df)
 
-t1 = time.time()
-total = t1 - t0
-print(total)
+# rutherford_net = pyeem.analysis.models.RutherfordNet()
+# rutherford_net.create_training_data(dataset)
+# rutherford_net.train()
 
 # %%
 sources = list(np.sort(meta_df["prototypical_source"].dropna().unique()))
