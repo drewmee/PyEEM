@@ -13,7 +13,7 @@ import pyeem
 
 # 1 Plots & Animations of preprocessing
 # 2 Refactor preprocessing routine
-# 3 Finalize preprocessing steps (Raman!!!)
+# 3 Finalize preprocessing steps (Raman, QS units, spectral corrections)
 # 4 Refactor dataset.load() and create tests
 # 5 DOCSTRINGS!
 # 6 Rutherford model - training data, train, analyze
@@ -34,6 +34,7 @@ dataset = pyeem.datasets.Load(
     absorbance_instrument="aqualog",
     eem_instrument="aqualog",
     calibration_sources=cal_sources,
+    mode="w",
 )
 """
 demo_data_dir = "examples/demo_data/drEEM"
@@ -57,16 +58,76 @@ routine_df = pyeem.preprocessing.create_routine(
     scatter_removal=True,
     dilution=False,
 )
+
 # discrete_ex_wl = [225, 240, 275, 290, 300, 425]
-crop_dimensions = {"emission_bounds": (246, 573), "excitation_bounds": (224, np.inf)}
+crop_dimensions = {
+    "emission_bounds": (246, 573),
+    "excitation_bounds": (224, float("inf")),
+}
 routine_results_df = pyeem.preprocessing.perform_routine(
     dataset,
     routine_df,
     crop_dims=crop_dimensions,
     raman_source_type="metadata",
+    fill="interp",
     progress_bar=True,
 )
-routine_results_df
+
+
+i = 0
+for name, group in routine_results_df.groupby(level=["sample_set", "name"]):
+    sample_set = name[0]
+    sample_name = name[1]
+    kwargs = {}
+    axes = pyeem.plots.plot_preprocessing(
+        dataset,
+        routine_results_df,
+        sample_set=sample_set,
+        sample_name=sample_name,
+        plot_type="surface_contour",
+        fig_kws={"dpi": 200},
+    )
+    plt.show()
+    i += 1
+    if i == 2:
+        break
+
+cal_df = pyeem.preprocessing.calibration(dataset, routine_results_df)
+cal_summary_df = pyeem.preprocessing.calibration_summary_info(cal_df)
+axes = pyeem.plots.plot_calibration_curves(dataset, cal_df)
+plt.show()
+
+proto_results_df = pyeem.augmentation.create_prototypical_spectra(dataset, cal_df)
+axes = pyeem.plots.plot_prototypical_spectra(
+    dataset, proto_results_df, plot_type="contour"
+)
+plt.show()
+
+ss_results_df = pyeem.augmentation.create_single_source_spectra(
+    dataset, cal_df, conc_range=(0, 5), num_spectra=100
+)
+
+source = "wood_smoke"
+anim = pyeem.plots.single_source_animation(
+    dataset,
+    ss_results_df,
+    source=source,
+    plot_type="contour",
+    fig_kws={"dpi": 175},
+    animate_kwargs={"interval": 100, "blit": True},
+)
+
+mix_results_df = pyeem.augmentation.create_mixtures(
+    dataset, cal_df, conc_range=(0.01, 6.3), num_steps=5
+)
+anim = pyeem.plots.mixture_animation(
+    dataset,
+    mix_results_df,
+    plot_type="imshow",
+    fig_kws={"dpi": 175},
+    animate_kwargs={"interval": 100, "blit": True},
+)
+
 # pyeem.plots.plot_preprocessing(dataset, routine_results_df, animate=False)
 
 # Visualize Raman peak characterization

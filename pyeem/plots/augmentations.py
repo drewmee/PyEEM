@@ -1,30 +1,103 @@
+import warnings
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from celluloid import Camera
 
-from .base import (
-    cbar_fontsize,
-    cbar_label,
-    combined_surface_contour_plot,
-    contour_plot,
-    eem_xlabel,
-    eem_ylabel,
-    units,
-)
-
-dpi = 100
+from .base import _get_subplot_dims, colorbar, eem_plot
 
 
-def plot_prototypical_spectra(dataset, results_df, plot_type="contour"):
+def plot_prototypical_spectra(
+    dataset,
+    results_df,
+    plot_type="imshow",
+    fig=None,
+    fig_kws={},
+    plot_kws={},
+    cbar_kws={},
+    **kwargs
+):
+
+    nspectra = len(results_df.index.unique())
+    nrows, ncols = _get_subplot_dims(nspectra)
+    nplots = nrows * ncols
+
+    # Set the fig_kws as a mapping of default and kwargs
+    default_fig_kws = dict(
+        tight_layout={"h_pad": 5, "w_pad": 0.05}, figsize=(ncols ** 2, nrows * ncols)
+    )
+    # Set the fig_kws
+    fig_kws = dict(default_fig_kws, **fig_kws)
+    fig = plt.figure(**fig_kws)
+
+    projection = None
+    if plot_type in ["surface", "surface_contour"]:
+        projection = "3d"
+
+    axes = []
+    for i in range(1, ncols * nrows + 1):
+        ax = fig.add_subplot(nrows, ncols, i, projection=projection)
+        axes.append(ax)
+
+    for i in range(nspectra, nplots):
+        axes[i].axis("off")
+        axes[i].set_visible(False)
+        # axes[i].remove()
+
+    ax_idx = 0
     for index, row in results_df.iterrows():
         proto_eem_df = pd.read_hdf(dataset.hdf, key=row["hdf_path"])
-        if plot_type == "contour":
-            contour_plot(proto_eem_df)
-        elif plot_type == "surface":
-            combined_surface_contour_plot(proto_eem_df)
+        source_name = proto_eem_df.index.get_level_values("source").unique().item()
+        proto_conc = proto_eem_df.index.get_level_values("proto_conc").unique().item()
+        source_units = (
+            proto_eem_df.index.get_level_values("source_units").unique().item()
+        )
+        intensity_units = (
+            proto_eem_df.index.get_level_values("intensity_units").unique().item()
+        )
+
+        title = "Prototypical Spectrum: {0}\n".format(source_name.title())
+        title += "Concentration: {0} {1}".format(proto_conc, source_units)
+
+        idx_names = proto_eem_df.index.names
+        drop_idx_names = [
+            idx_name for idx_name in idx_names if idx_name != "emission_wavelength"
+        ]
+        proto_eem_df = proto_eem_df.reset_index(level=drop_idx_names, drop=True)
+
+        eem_plot(
+            proto_eem_df,
+            plot_type=plot_type,
+            intensity_units=intensity_units,
+            title=title,
+            ax=axes[ax_idx],
+            fig_kws=fig_kws,
+            plot_kws=plot_kws,
+            cbar_kws=cbar_kws,
+            **kwargs
+        )
+
+        ax_idx += 1
+
+    pad = kwargs.get("tight_layout_pad", 1.08)
+    h_pad = kwargs.get("tight_layout_hpad", None)
+    w_pad = kwargs.get("tight_layout_wpad", None)
+    rect = kwargs.get("tight_layout_rect", None)
+    if plot_type in ["surface", "surface_contour"]:
+        w_pad = kwargs.get("tight_layout_wpad", 25)
+    plt.tight_layout(pad=pad, h_pad=h_pad, w_pad=w_pad, rect=rect)
+    return axes
 
 
-def single_source_animation(dataset, ss_results_df, source, plot_type="contour"):
+def single_source_animation(
+    dataset,
+    ss_results_df,
+    source,
+    plot_type="contour",
+    fig_kws={},
+    cbar_kws={},
+    animate_kwargs={},
+):
     """[summary]
 
     Args:
@@ -34,11 +107,23 @@ def single_source_animation(dataset, ss_results_df, source, plot_type="contour")
     """
 
     source_results_df = ss_results_df.xs(source, level="source")
+    intensity_units = (
+        ss_results_df.index.get_level_values(level="intensity_units").unique().item()
+    )
 
-    fig, ax = plt.subplots(figsize=(8, 8))
-    plt.xlabel(eem_xlabel)
-    plt.ylabel(eem_ylabel)
-    plt.tick_params(axis="both", which="major")
+    # Set the default figure kws
+    default_fig_kws = dict()
+    fig_kws = dict(default_fig_kws, **fig_kws)
+    fig = plt.figure(**fig_kws)
+
+    projection = None
+    if plot_type in ["surface", "surface_contour"]:
+        warnings.warn(
+            "3D animation may take a considerable amount of time to complete."
+        )
+        projection = "3d"
+
+    ax = plt.gca(projection=projection)
 
     camera = Camera(fig)
 
@@ -52,92 +137,146 @@ def single_source_animation(dataset, ss_results_df, source, plot_type="contour")
         drop_indices = list(eem_df.index.names)
         drop_indices.remove("emission_wavelength")
         eem_df.index = eem_df.index.droplevel(drop_indices)
-        excitation_wavelengths = eem_df.columns.to_numpy()
-        emission_wavelengths = eem_df.index.to_numpy()
-        extent = [
-            excitation_wavelengths[0],
-            excitation_wavelengths[-1],
-            emission_wavelengths[0],
-            emission_wavelengths[-1],
-        ]
-        hmap = ax.imshow(
-            eem_df, vmin=min_val, vmax=max_val, origin="lower", extent=extent,
+
+        hmap = eem_plot(
+            eem_df,
+            plot_type=plot_type,
+            intensity_units="intensity_units",
+            include_cbar=False,
+            title=None,
+            ax=ax,
+            plot_kws={"vmin": min_val, "vmax": max_val},
+            zlim_min=min_val,
+            zlim_max=max_val,
         )
+        hmap.set_clim(min_val, max_val)
+
         concentration = round(concentration, 2)
         source = source.replace("_", " ")
         title = "Augmented Single Source Spectra:\n"
-        title += "{0}: {1}ug/ml".format(source.title(), concentration)
-        ax.text(0, 1.05, title, transform=ax.transAxes, fontsize=16)
+        title += "{0}: {1} ug/ml".format(source.title(), concentration)
+        if plot_type in ["surface", "surface_contour"]:
+            ax.text2D(0.05, 0.95, title, transform=ax.transAxes, fontsize=12)
+        else:
+            ax.text(0, 1.05, title, transform=ax.transAxes, fontsize=12)
         camera.snap()
 
-    cbar = fig.colorbar(hmap, ax=ax)
-    cbar.set_label(cbar_label, size=cbar_fontsize)
-    cbar.ax.tick_params(labelsize=14)
+    if plot_type in ["surface", "surface_contour"]:
+        shrink = cbar_kws.get("shrink", 0.5)
+        label_size = cbar_kws.get("size", 12)
+        tick_params_labelsize = kwargs.get("labelsize", 11)
+        cbar = plt.colorbar(hmap, ax=ax, shrink=shrink)
+        cbar.set_label(intensity_units, size=label_size)
+        cbar.ax.ticklabel_format(
+            style="scientific", scilimits=(-2, 3), useMathText=True
+        )
+        cbar.ax.tick_params(labelsize=tick_params_labelsize)
+    else:
+        cbar = colorbar(hmap, intensity_units, cbar_kws=cbar_kws)
+
+    plt.tight_layout()
+
     # For the saved animation the duration is going to be frames * (1 / fps) (in seconds)
     # For the display animation the duration is going to be frames * interval / 1000 (in seconds)
-    animation = camera.animate()
+    animation = camera.animate(**animate_kwargs)
     return animation
 
 
-def mix_animation(dataset, mix_results_df):
+def mixture_animation(
+    dataset,
+    mix_results_df,
+    plot_type="contour",
+    fig_kws={},
+    cbar_kws={},
+    animate_kwargs={},
+):
     """[summary]
 
     Args:
-        sources ([type]): [description]
-        mix_df ([type]): [description]
+        source_name ([type]): [description]
+        eem_df ([type]): [description]
+        plot_type (str, optional): [description]. Defaults to "contour".
     """
 
-    hdf_path = mix_results_df.index.get_level_values("hdf_path").unique().item()
-    aug_mix_df = pd.read_hdf(dataset.hdf, key=hdf_path)
-    sources = mix_results_df.columns.to_list()
+    # Set the default figure kws
+    default_fig_kws = dict()
+    fig_kws = dict(default_fig_kws, **fig_kws)
+    fig = plt.figure(**fig_kws)
 
-    """
-    fig = plt.figure()
-    gs = gridspec.GridSpec(nrows=5, ncols=2, width_ratios=[1, 1],
-                           wspace=0.3, figure=fig)
-    eem_ax = plt.subplot(gs[:, 0])
-    bar_ax = plt.subplot(gs[2, 1])
-    bar_ax.set_ylim([0, 5])
-    """
+    projection = None
+    if plot_type in ["surface", "surface_contour"]:
+        warnings.warn(
+            "3D animation may take a considerable amount of time to complete."
+        )
+        projection = "3d"
 
-    fig, ax = plt.subplots(figsize=(8, 8))
-    plt.xlabel(eem_xlabel)
-    plt.ylabel(eem_ylabel)
-    plt.tick_params(axis="both", which="major")
+    ax = plt.gca(projection=projection)
 
     camera = Camera(fig)
 
-    eem_np = aug_mix_df.to_numpy()
-    min_val = eem_np.min()
-    max_val = eem_np.max()
+    hdf_path = mix_results_df.index.get_level_values("hdf_path").unique().item()
+    mix_df = pd.read_hdf(dataset.hdf, key=hdf_path)
 
-    excitation = aug_mix_df.columns.to_numpy()
-    emission = aug_mix_df.index.droplevel(sources + ["hdf_path", "source"]).to_numpy()
-    extent = [excitation[0], excitation[-1], emission[0], emission[-1]]
+    sources = list(dataset.calibration_sources.keys())
+    source_units = (
+        mix_results_df.index.get_level_values(level="source_units").unique().item()
+    )
+    intensity_units = (
+        mix_results_df.index.get_level_values(level="intensity_units").unique().item()
+    )
 
-    for concentrations, g in aug_mix_df.groupby(level=list(sources)):
+    mix_df = pd.read_hdf(dataset.hdf, key=hdf_path)
+    mix_np = mix_df.to_numpy()
+    min_val = mix_np.min()
+    max_val = mix_np.max()
+
+    for concentrations, eem_df in mix_df.groupby(level=sources):
+        drop_indices = list(eem_df.index.names)
+        drop_indices.remove("emission_wavelength")
+        eem_df.index = eem_df.index.droplevel(drop_indices)
+
+        hmap = eem_plot(
+            eem_df,
+            plot_type=plot_type,
+            intensity_units="intensity_units",
+            include_cbar=False,
+            title=None,
+            ax=ax,
+            plot_kws={"vmin": min_val, "vmax": max_val},
+            zlim_min=min_val,
+            zlim_max=max_val,
+        )
+        hmap.set_clim(min_val, max_val)
+
         rounded_conc = [str(round(conc, 2)) for conc in concentrations]
         title = "Augmented Mixture Spectra:\n"
         for key, value in dict(zip(sources, rounded_conc)).items():
             title += "%s: %s, " % (key.replace("_", " ").title(), value)
-        title = title.rsplit(",", 1)[0] + " ug/ml"
+        title = title.rsplit(",", 1)[0]
+        title += " %s" % source_units
 
-        g.index = g.index.droplevel(sources + ["hdf_path", "source"])
-        ax.text(0, 1.05, title, transform=ax.transAxes, fontsize=16)
-        hmap = ax.imshow(
-            g,
-            cmap="viridis",
-            vmin=min_val,
-            vmax=max_val,
-            origin="lower",
-            extent=extent,
-        )
-        # bar_ax.bar(sources, concentrations, color='midnightblue')
+        if plot_type in ["surface", "surface_contour"]:
+            ax.text2D(0.05, 0.95, title, transform=ax.transAxes, fontsize=12)
+        else:
+            ax.text(-0.3, 1.05, title, transform=ax.transAxes, fontsize=12)
         camera.snap()
 
-    cbar = fig.colorbar(hmap, ax=ax)
-    cbar.set_label(cbar_label, size=cbar_fontsize)
-    cbar.ax.tick_params(labelsize=14)
+    if plot_type in ["surface", "surface_contour"]:
+        shrink = cbar_kws.get("shrink", 0.5)
+        label_size = cbar_kws.get("size", 12)
+        tick_params_labelsize = kwargs.get("labelsize", 11)
+        cbar = plt.colorbar(hmap, ax=ax, shrink=shrink)
+        cbar.set_label(intensity_units, size=label_size)
+        cbar.ax.ticklabel_format(
+            style="scientific", scilimits=(-2, 3), useMathText=True
+        )
+        cbar.ax.tick_params(labelsize=tick_params_labelsize)
+    else:
+        cbar = colorbar(hmap, intensity_units, cbar_kws=cbar_kws)
 
-    animation = camera.animate()
+    plt.tight_layout()
+
+    # For the saved animation the duration is going to be frames * (1 / fps) (in seconds)
+    # For the display animation the duration is going to be frames * interval / 1000 (in seconds)
+    animation = camera.animate(**animate_kwargs)
     return animation

@@ -24,15 +24,6 @@ def _get_steps():
 def create_prototypical_spectra(dataset, cal_df, **kwargs):
     aug_steps_df = _get_steps()
 
-    results_columns = [
-        "source",
-        "concentration",
-        "hdf_path",
-    ]
-    results_df = pd.DataFrame(columns=results_columns)
-    results_index = "source"
-    results_df.set_index(results_index, inplace=True)
-
     results_rows = []
     for source_name, group in cal_df.groupby(level="source", as_index=False):
         proto_eem_df = prototypical_spectrum(dataset, group, aug_steps_df)
@@ -40,13 +31,13 @@ def create_prototypical_spectra(dataset, cal_df, **kwargs):
         result = dict(zip(list(new_indices.names), list(new_indices.item())))
         results_rows.append(result)
 
-    row_df = pd.DataFrame(results_rows)
-    row_df.set_index(results_index, inplace=True)
-    results_df = pd.concat([results_df, row_df])
+    results_df = pd.DataFrame(results_rows)
+    results_index = "source"
+    results_df.set_index(results_index, inplace=True)
     return results_df
 
 
-def create_single_source_spectra(dataset, cal_df, **kwargs):
+def create_single_source_spectra(dataset, cal_df, conc_range, num_spectra):
     aug_steps_df = _get_steps()
     aug_ss_dfs = []
     for source_name, group in tqdm(cal_df.groupby(level="source", as_index=False)):
@@ -55,8 +46,8 @@ def create_single_source_spectra(dataset, cal_df, **kwargs):
             group,
             cal_df,
             aug_steps_df,
-            conc_range=kwargs.get("conc_range", None),
-            num_spectra=kwargs.get("num_spectra", None),
+            conc_range=conc_range,
+            num_spectra=num_spectra,
         )
         ss_df = (
             ss_df.index.droplevel(["emission_wavelength"])
@@ -64,7 +55,9 @@ def create_single_source_spectra(dataset, cal_df, **kwargs):
             .to_frame()
             .reset_index(drop=True)
         )
-        ss_df.set_index(["hdf_path", "source"], inplace=True)
+        ss_df.set_index(
+            ["source", "source_units", "intensity_units", "hdf_path"], inplace=True
+        )
         aug_ss_dfs.append(ss_df)
 
     aug_ss_df = pd.concat(aug_ss_dfs)
@@ -74,8 +67,18 @@ def create_single_source_spectra(dataset, cal_df, **kwargs):
 def create_mixtures(
     dataset, cal_df, conc_range, num_steps, scale="logarithmic", **kwargs
 ):
-    aug_steps_df = _get_steps()
+    if cal_df.index.get_level_values("source_units").nunique() != 1:
+        raise Exception(
+            "Sources are must reported in the same units in order create augmented mixtures."
+        )
+
     sources = cal_df.index.get_level_values(level="source").unique().to_list()
+    source_units = cal_df.index.get_level_values("source_units").unique().item()
+    intensity_units = (
+        cal_df.index.get_level_values(level="intensity_units").unique().item()
+    )
+
+    aug_steps_df = _get_steps()
 
     hdf_path = aug_steps_df[aug_steps_df["step_name"] == "mixtures"]["hdf_path"].item()
 
@@ -135,12 +138,17 @@ def create_mixtures(
         mix_eem = mix_eem.assign(**dict(zip(sources, conc_set)))
         mix_eem["hdf_path"] = hdf_path
         mix_eem["source"] = "mixture"
-        new_indices = ["source", "hdf_path"] + sources
+        mix_eem["source_units"] = source_units
+        mix_eem["intensity_units"] = intensity_units
+        new_indices = [
+            "source",
+            "source_units",
+            "intensity_units",
+            "hdf_path",
+        ] + sources
         mix_eem.set_index(new_indices, append=True, inplace=True)
-        # new_indices = np.insert(new_indices, 0, ["source", "hdf_path"], axis=0)
         new_indices = np.append(new_indices, ("emission_wavelength"))
         mix_eem = mix_eem.reorder_levels(new_indices)
-        # mix_eem.rename(index={proto_hdf_path: hdf_path},inplace=True)
         aug.append(mix_eem)
 
     aug_mix_df = pd.concat(aug)
@@ -151,5 +159,7 @@ def create_mixtures(
         .to_frame()
         .reset_index(drop=True)
     )
-    aug_mix_df.set_index(["hdf_path", "source"], inplace=True)
+    aug_mix_df.set_index(
+        ["source", "source_units", "intensity_units", "hdf_path"], inplace=True
+    )
     return aug_mix_df

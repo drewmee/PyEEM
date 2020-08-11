@@ -1,76 +1,142 @@
 import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 import numpy as np
 from celluloid import Camera
 from matplotlib.ticker import MultipleLocator
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.mplot3d import Axes3D
 
-units = "nm"
-eem_xlabel = "Excitation " + r"$\lambda$" + " ({0})".format(units)
-eem_ylabel = "Emission " + r"$\lambda$" + " ({0})".format(units)
-cbar_label = "Normalized Intensity (Raman Units, R.U.)"
-cbar_fontsize = 18
+
+def _get_subplot_dims(n):
+    ncols = 4
+    if n % ncols:
+        nplots = n + (ncols - n % ncols)
+    else:
+        nplots = n
+
+    nrows = int(nplots / ncols)
+    return nrows, ncols
 
 
-def contour_plot(eem, ax=None, plot_kws={}, fig_kws={}, **kwargs):
-    """[summary]
+def colorbar(mappable, units, cbar_kws={}):
+    last_axes = plt.gca()
+    ax = mappable.axes
+    fig = ax.figure
+    divider = make_axes_locatable(ax)
 
-    Args:
-        eem ([type]): [description]
-        title ([type]): [description]
-    """
-    fig, ax = plt.subplots()
-    cf = ax.contourf(
-        eem.columns.to_numpy(),
-        eem.index.get_level_values("emission_wavelength").to_numpy(),
-        eem.to_numpy(),
+    cbar_ax_size = cbar_kws.get("cbar_ax_size", "8%")
+    cbar_ax_pad = cbar_kws.get("cbar_ax_pad", 0.05)
+    cax = divider.append_axes("right", size=cbar_ax_size, pad=cbar_ax_pad)
+    cbar = fig.colorbar(mappable, cax=cax)
+
+    cbar_tick_params_labelsize = cbar_kws.get("cbar_tick_params_labelsize", 11)
+    cbar.ax.tick_params(labelsize=cbar_tick_params_labelsize)
+    cbar.formatter.set_powerlimits((-2, 3))
+    plt.sca(last_axes)
+
+    cbar_label_size = cbar_kws.get("cbar_label_size", 12)
+    cbar_labelpad = cbar_kws.get("cbar_labelpad", 5)
+    cbar.set_label(units, size=cbar_label_size, labelpad=cbar_labelpad)
+    return cbar
+
+
+def _eem_contour(
+    eem, ax, intensity_units, include_cbar, plot_kws={}, cbar_kws={}, **kwargs
+):
+    # Set the default plot kws
+    # contourf doesn't take aspect as a kwarg...
+    # so we have to remove it and pass it seperately
+    # via set_aspect(). Clunky but oh well.
+    default_aspect = "equal"
+    aspect = plot_kws.get("aspect", default_aspect)
+    contour_kws = plot_kws.copy()
+    contour_kws.pop("aspect", None)
+    default_contour_kws = dict()
+    contour_kws = dict(default_contour_kws, **contour_kws)
+
+    fl = eem.to_numpy()
+    excitation = eem.columns.to_numpy()
+    emission = eem.index.to_numpy()
+
+    hmap = ax.contourf(excitation, emission, fl, **contour_kws)
+    ax.set_aspect(aspect)
+
+    if include_cbar:
+        cbar = colorbar(hmap, units=intensity_units, cbar_kws=cbar_kws)
+
+    return hmap
+
+
+def _eem_imshow(
+    eem, ax, intensity_units, include_cbar, plot_kws={}, cbar_kws={}, **kwargs
+):
+    excitation = eem.columns.to_numpy()
+    emission = eem.index.to_numpy()
+    default_plot_kws = dict(
+        origin="lower",
+        extent=[excitation[0], excitation[-1], emission[0], emission[-1]],
+        aspect="equal",
     )
-    cbar = fig.colorbar(cf, ax=ax)
-    cbar.set_label(cbar_label, size=cbar_fontsize)
-    cbar.ax.tick_params()
-    """
-    source_name = eem.index.get_level_values("source").unique().item()
-    proto_conc = eem.index.get_level_values("proto_conc").unique().item()
-    title = "Prototypical Spectrum: {0}\n".format(source_name.title())
-    title += "Concentration (ug/ml): {0}".format(proto_conc)
-    plt.title(title)
-    """
-    plt.xlabel(eem_xlabel)
-    plt.ylabel(eem_ylabel)
-    plt.show()
+    plot_kws = dict(default_plot_kws, **plot_kws)
+
+    hmap = ax.imshow(eem, **plot_kws)
+    if include_cbar:
+        cbar = colorbar(hmap, intensity_units, cbar_kws=cbar_kws)
+    return hmap
 
 
-def combined_surface_contour_plot(eem, ax=None, plot_kws={}, fig_kws={}, **kwargs):
-    """[summary]
+def _eem_surface_contour(
+    eem,
+    ax,
+    intensity_units,
+    include_cbar,
+    plot_type="surface",
+    surface_plot_kws={},
+    contour_kws={},
+    cbar_kws={},
+    **kwargs
+):
+    excitation = eem.columns.to_numpy()
+    emission = eem.index.to_numpy()
+    fl = eem.to_numpy()
+    excitation, emission = np.meshgrid(excitation, emission)
 
-    Args:
-        eem ([type]): [description]
-        title ([type]): [description]
-    """
-    fig = plt.figure()
-    ax = Axes3D(fig)
-
-    X = eem.columns.to_numpy()
-    X = np.array(X).astype(float)
-    Y = eem.index.get_level_values("emission_wavelength").to_numpy()
-    Y = np.array(Y).astype(float)
-    Z = eem.to_numpy()
-    X, Y = np.meshgrid(X, Y)
-
-    surf = ax.plot_surface(
-        X, Y, Z, rstride=1, cstride=1, alpha=0.75, cmap="viridis", shade=False
+    hmap = ax.plot_surface(
+        excitation,
+        emission,
+        fl,
+        rstride=1,
+        cstride=1,
+        alpha=0.75,
+        cmap="viridis",
+        shade=False,
+        **surface_plot_kws
     )
-    contourz = (Z.min() - Z.max()) * 0.4
-    z_offset = -5  # this should be proportional to the max Z value, i think?
-    ax.contourf(X, Y, Z, zdir="z", offset=z_offset)
-    ax.set_zlim(Z.min() + z_offset, Z.max())
-    # ax.set_zticks(np.round(np.linspace(Z.min(), Z.max(), num=5), 2))
-    ax.zaxis.set_tick_params(pad=10)
-    ax.ticklabel_format(
-        style="scientific", scilimits=(-3, 4), useMathText=True, axis="z"
-    )
+    zlim_min = kwargs.get("zlim_min", fl.min())
+    zlim_max = kwargs.get("zlim_max", fl.max())
+    z_offset = zlim_max * -2
 
-    ax.view_init(elev=20, azim=135)
+    if plot_type == "surface_contour":
+        ax.contourf(
+            excitation,
+            emission,
+            fl,
+            zdir="z",
+            offset=z_offset,
+            vmin=zlim_min,
+            vmax=zlim_max,
+            **contour_kws
+        )
+        zlim_min += z_offset
+
+    ax.set_zlim(zlim_min, zlim_max)
+    ax.zaxis.set_ticks_position("none")
+    ax.set_zticks([])
+
+    elev = kwargs.get("elev", 20)
+    azim = kwargs.get("azim", 135)
+    ax.view_init(elev=elev, azim=azim)
     ax.xaxis.pane.set_edgecolor("grey")
     ax.yaxis.pane.set_edgecolor("grey")
     ax.zaxis.pane.set_edgecolor("grey")
@@ -78,35 +144,135 @@ def combined_surface_contour_plot(eem, ax=None, plot_kws={}, fig_kws={}, **kwarg
     ax.yaxis.pane.fill = False
     ax.zaxis.pane.fill = False
 
-    ax.xaxis.set_major_locator(MultipleLocator(50))
-    ax.yaxis.set_major_locator(MultipleLocator(50))
+    title = kwargs.get("title", "Excitation Emission Matrix")
+    title_fontsize = kwargs.get("title_fontsize", 14)
+    title_fontweight = kwargs.get("title_fontweight", "bold")
+    title_pad = kwargs.get("pad", 0)
+    ax.set_title(
+        title,
+        wrap=True,
+        fontsize=title_fontsize,
+        fontweight=title_fontweight,
+        pad=title_pad,
+    )
 
-    cbar = fig.colorbar(surf, ax=ax, shrink=0.8)
-    cbar.set_label(cbar_label, size=cbar_fontsize)
-    cbar.ax.ticklabel_format(style="scientific", scilimits=(-3, 4), useMathText=True)
-    cbar.ax.tick_params(labelsize=14)
+    wavelength_units = kwargs.get("wavelength_units", "nm")
+    xlabel = kwargs.get(
+        "xlabel", "Excitation " + r"$\lambda$, %s" % str(wavelength_units)
+    )
+    ylabel = kwargs.get(
+        "ylabel", "Emission " + r"$\lambda$, %s" % str(wavelength_units)
+    )
+    axis_label_fontsize = kwargs.get("axis_label_fontsize", 12)
+    axis_labelpad = kwargs.get("axis_labelpad", 5)
+    ax.set_xlabel(xlabel, fontsize=axis_label_fontsize, labelpad=axis_labelpad)
+    ax.set_ylabel(ylabel, fontsize=axis_label_fontsize, labelpad=axis_labelpad)
 
-    source_name = eem.index.get_level_values("source").unique().item()
-    proto_conc = eem.index.get_level_values("proto_conc").unique().item()
-    title = "Prototypical Spectrum: {0}\n".format(source_name.title())
-    title += "Concentration (ug/ml): {0}".format(proto_conc)
+    tick_params_labelsize = kwargs.get("tick_params_labelsize", 10)
+    ax.tick_params(axis="both", which="major", pad=0, labelsize=tick_params_labelsize)
 
-    plt.title(title)
-    plt.xlabel(eem_xlabel)
-    plt.ylabel(eem_ylabel)
-    plt.show()
+    xaxis_major_maxnlocator = kwargs.get("xaxis_major_maxnlocator", 4)
+    yaxis_major_maxnlocator = kwargs.get("yaxis_major_maxnlocator", 4)
+    ax.xaxis.set_major_locator(ticker.MaxNLocator(xaxis_major_maxnlocator))
+    ax.yaxis.set_major_locator(ticker.MaxNLocator(yaxis_major_maxnlocator))
+
+    if include_cbar:
+        shrink = cbar_kws.get("shrink", 0.5)
+        label_size = cbar_kws.get("size", 12)
+        tick_params_labelsize = kwargs.get("labelsize", 11)
+        cbar = plt.colorbar(hmap, ax=ax, shrink=shrink)
+        cbar.set_label(intensity_units, size=label_size)
+        cbar.ax.ticklabel_format(
+            style="scientific", scilimits=(-2, 3), useMathText=True
+        )
+        cbar.ax.tick_params(labelsize=tick_params_labelsize)
+
+    return hmap
 
 
-def surface_plot():
-    """[summary]
-    """
-    return
+def eem_plot(
+    eem_df,
+    ax=None,
+    plot_type="imshow",
+    intensity_units="unspecified",
+    wavelength_units="nm",
+    aspect="equal",
+    include_cbar=True,
+    fig_kws={},
+    plot_kws={},
+    cbar_kws={},
+    **kwargs
+):
 
+    # Set the default figure kws
+    default_fig_kws = dict()
+    fig_kws = dict(default_fig_kws, **fig_kws)
 
-def contour_animation():
-    """[summary]
-    """
-    return
+    if ax is None:
+        projection = None
+        if plot_type == "surface_contour":
+            projection = "3d"
+        fig = plt.figure(**fig_kws)
+        ax = plt.gca(projection=projection)
+
+    if plot_type == "contour":
+        hmap = _eem_contour(
+            eem_df,
+            ax,
+            intensity_units,
+            include_cbar,
+            plot_kws=plot_kws,
+            cbar_kws=cbar_kws,
+            **kwargs
+        )
+
+    elif plot_type == "imshow":
+        hmap = _eem_imshow(
+            eem_df,
+            ax,
+            intensity_units,
+            include_cbar,
+            plot_kws=plot_kws,
+            cbar_kws=cbar_kws,
+            **kwargs
+        )
+
+    elif plot_type in ["surface", "surface_contour"]:
+        hmap = _eem_surface_contour(
+            eem_df, ax, intensity_units, include_cbar, plot_type=plot_type, **kwargs
+        )
+        return hmap
+
+    else:
+        raise ValueError("plot_type must be imshow, contour, or surface_contour")
+
+    tick_params_labelsize = kwargs.get("tick_params_labelsize", 11)
+    ax.tick_params(axis="both", which="major", labelsize=tick_params_labelsize)
+
+    title = kwargs.get("title", "Excitation Emission Matrix")
+    title_wrap = kwargs.get("title_wrap", True)
+    title_fontsize = kwargs.get("title_fontsize", 14)
+    title_pad = kwargs.get("title_pad", 20)
+    fontweight = kwargs.get("title_fontweight", "bold")
+    ax.set_title(
+        title,
+        wrap=title_wrap,
+        fontsize=title_fontsize,
+        fontweight=fontweight,
+        pad=title_pad,
+    )
+
+    xlabel = kwargs.get(
+        "xlabel", "Excitation " + r"$\lambda$, %s" % str(wavelength_units)
+    )
+    ylabel = kwargs.get(
+        "ylabel", "Emission " + r"$\lambda$, %s" % str(wavelength_units)
+    )
+    axis_label_fontsize = kwargs.get("axis_label_fontsize", 12)
+    axis_labelpad = kwargs.get("axis_labelpad", 5)
+    ax.set_xlabel(xlabel, fontsize=axis_label_fontsize, labelpad=axis_labelpad)
+    ax.set_ylabel(ylabel, fontsize=axis_label_fontsize, labelpad=axis_labelpad)
+    return hmap
 
 
 def plot_absorbance(ax=None, plot_kws={}, fig_kws={}, **kwargs):

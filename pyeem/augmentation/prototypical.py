@@ -24,6 +24,10 @@ def prototypical_spectrum(dataset, source_df, aug_steps_df):
     """
 
     source_name = source_df.index.get_level_values("source").unique().item()
+    source_units = source_df.index.get_level_values("source_units").unique().item()
+    intensity_units = (
+        source_df.index.get_level_values("intensity_units").unique().item()
+    )
 
     proto_eems = []
     for index, row in source_df.iterrows():
@@ -51,11 +55,15 @@ def prototypical_spectrum(dataset, source_df, aug_steps_df):
     ].item()
     hdf_path = os.path.join(hdf_path, source_name)
 
-    new_indices = np.array(["source", "proto_conc", "hdf_path"])
+    new_indices = np.array(
+        ["source", "proto_conc", "source_units", "intensity_units", "hdf_path"]
+    )
     proto_eem = proto_eem.assign(
         **{
             "source": source_name,
             "proto_conc": proto_concentration,
+            "source_units": source_units,
+            "intensity_units": intensity_units,
             "hdf_path": hdf_path,
         }
     )
@@ -82,15 +90,19 @@ def single_source(dataset, source_df, cal_df, aug_steps_df, conc_range, num_spec
     """
     # Get the source's name
     source_name = source_df.index.get_level_values("source").unique().item()
+
     # Get the HDF5 path to the source's prototypical EEM
     proto_hdf_path = aug_steps_df[aug_steps_df["step_name"] == "prototypical"][
         "hdf_path"
     ].item()
     proto_hdf_path = os.path.join(proto_hdf_path, source_name)
+
     # Read in the prototypical EEM
     proto_eem = pd.read_hdf(dataset.hdf, key=proto_hdf_path)
+
     # Get the source's prototypical concentration
     proto_concentration = proto_eem.index.get_level_values("proto_conc").unique().item()
+
     # Remove the concentration index from the dataframe
     proto_eem.reset_index(level=["proto_conc"], drop=True, inplace=True)
 
@@ -107,6 +119,7 @@ def single_source(dataset, source_df, cal_df, aug_steps_df, conc_range, num_spec
         .unique()
         .item()
     )
+
     # Generate the 1D polynomial
     cal_func = np.poly1d([slope, y_intercept])
 
@@ -127,7 +140,7 @@ def single_source(dataset, source_df, cal_df, aug_steps_df, conc_range, num_spec
     for new_concentration in concentration_range:
         scalar = cal_func(new_concentration) / cal_func(proto_concentration)
         ss_eem = proto_eem * scalar
-        label = np.zeros(3)
+        label = np.zeros(len(sources))
         source_index = sources.index(source_name)
         label[source_index] = new_concentration
 
@@ -136,8 +149,13 @@ def single_source(dataset, source_df, cal_df, aug_steps_df, conc_range, num_spec
 
         new_indices = sources
         ss_eem.set_index(new_indices, append=True, inplace=True)
-        new_indices = np.insert(new_indices, 0, ["source", "hdf_path"], axis=0)
-        new_indices = np.append(new_indices, ("emission_wavelength"))
+        new_indices = [
+            "source",
+            "source_units",
+            "intensity_units",
+            "hdf_path",
+        ] + new_indices
+        new_indices.append("emission_wavelength")
         ss_eem = ss_eem.reorder_levels(new_indices)
         ss_eem.rename(index={proto_hdf_path: hdf_path}, inplace=True)
         aug_ss_dfs.append(ss_eem)

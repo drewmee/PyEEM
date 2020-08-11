@@ -49,9 +49,9 @@ def calibration(dataset, routine_results_df, step="complete"):
             .apply(_get_integrated_intensity)
             .values
         )
-        meta_step_df.rename(columns={"units": "measurement_units"}, inplace=True)
+        meta_step_df.rename(columns={"units": "intensity_units"}, inplace=True)
         meta_step_df["measurement_units"] = "Integrated " + meta_step_df[
-            "measurement_units"
+            "intensity_units"
         ].astype(str)
 
         # Reset index in preparation for re-indexing for the cal_df format.
@@ -82,6 +82,7 @@ def calibration(dataset, routine_results_df, step="complete"):
             [
                 "source",
                 "source_units",
+                "intensity_units",
                 "measurement_units",
                 "slope",
                 "intercept",

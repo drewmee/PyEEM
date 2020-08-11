@@ -5,7 +5,7 @@
 font.family: serif
 
 # Figure properties
-figure.figsize: 8.0, 8.0
+figure.figsize: 4.0, 4.0
 figure.titlesize: 20
 figure.titleweight: bold
 
