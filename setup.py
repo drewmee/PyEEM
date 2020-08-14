@@ -1,6 +1,6 @@
 import setuptools
 
-__version__ = "1.0.5"
+__version__ = "1.0.8"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -40,13 +40,15 @@ setuptools.setup(
     ],
     extras_require={
         "docs": [
-            "sphinx>=3.1.2",
+            "sphinx>=3.2.0",
             "sphinx-automodapi>=0.12",
             "sphinx-rtd-theme>=0.5.0",
+            "msmb_theme>=1.2.0",
             "black>=18.9b0",
             "isort>=5.2.2",
         ],
         "tests": ["pytest>=6.0.1", "tox>=3.16.1"],
+        "develop": ["twine>=3.2.0"],
         "jupyter": ["jupyter>=1.0.0", "jupyterlab>=2.2.2"],
     },
     package_data={"pyeem": ["plots/pyeem_base.mplstyle"]},

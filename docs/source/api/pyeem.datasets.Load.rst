@@ -11,23 +11,25 @@ Load
    .. autosummary::
 
       ~Load.data_dir
+      ~Load.metadata_path
+      ~Load.scan_sets_subdir
 
    .. rubric:: Methods Summary
 
    .. autosummary::
 
-      ~Load.calibration
-      ~Load.metadata
-      ~Load.sample_sets
-      ~Load.spectral_correction_files
+      ~Load.load_metadata
+      ~Load.load_sample_sets
+      ~Load.metadata_summary_info
 
    .. rubric:: Attributes Documentation
 
    .. autoattribute:: data_dir
+   .. autoattribute:: metadata_path
+   .. autoattribute:: scan_sets_subdir
 
    .. rubric:: Methods Documentation
 
-   .. automethod:: calibration
-   .. automethod:: metadata
-   .. automethod:: sample_sets
-   .. automethod:: spectral_correction_files
+   .. automethod:: load_metadata
+   .. automethod:: load_sample_sets
+   .. automethod:: metadata_summary_info

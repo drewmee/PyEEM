@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from . import mixtures, prototypical_spectrum, single_source
+from . import prototypical_spectrum, single_source
 
 
 def _get_steps():
@@ -132,6 +132,8 @@ def create_mixtures(
 
             scalar = cal_func(new_concentration) / cal_func(proto_concentration)
             new_eem = proto_eem * scalar
+            # Make sure there are no negative values
+            new_eem.clip(lower=0, inplace=True)
             mix.append(new_eem)
 
         mix_eem = pd.concat(mix).sum(level="emission_wavelength")

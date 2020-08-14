@@ -182,15 +182,15 @@ def scatter_removal(
     Marine Chemistry. 2004
 
     Args:
-        eem_df ([type]): [description]
-        band (str, optional): [description]. Defaults to "both".
-        order (str, optional): [description]. Defaults to "both".
-        excision_width (int, optional): [description]. Defaults to 20.
-        fill (str, optional): [description]. Defaults to "interp".
-        truncate ([type], optional): [description]. Defaults to None.
+        eem_df (DataFrame): Excitation Emission Matrix
+        band (str, optional): The scatter band (Raleigh/Raman) to be removed. Defaults to "both".
+        order (str, optional): The scatter band order (first/second) to be removed. Defaults to "both".
+        excision_width (int, optional): The width of excision that each band will be removed with. Defaults to 20.
+        fill (str, optional): The values which will fill the excised scatter region. Defaults to "interp".
+        truncate (str, optional): The option to remove all values above and/or below the excised bands. Defaults to None.
 
     Returns:
-        [type]: [description]
+        DataFrame: EEM with Raleigh/Raman scatter bands removed.
     """
     fl = eem_df.to_numpy()
     em = eem_df.index.values

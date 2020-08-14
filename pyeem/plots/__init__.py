@@ -8,7 +8,7 @@ from .augmentations import (
     plot_prototypical_spectra,
     single_source_animation,
 )
-from .base import colorbar, eem_plot
+from .base import _colorbar, eem_plot
 from .preprocessing import plot_calibration_curves, plot_preprocessing
 
 pyeem_base_style = resource_filename("pyeem.plots", "pyeem_base.mplstyle")

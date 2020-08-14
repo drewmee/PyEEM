@@ -11,18 +11,13 @@ def prototypical_spectrum(dataset, source_df, aug_steps_df):
     assigned weights between 0 and 1.
 
     Args:
-        source_name (str): [description]
-        source_df (~pandas.DataFrame): [description]
-        cal_df (~pandas.DataFrame): [description]
-        hdf (pandas.io.pytables.HDFStore): [description]
-
-    Raises:
-        Exception: [description]
+        dataset ([type]): [description]
+        source_df (DataFrame): [description]
+        aug_steps_df (DataFrame): [description]
 
     Returns:
         DataFrame: [description]
     """
-
     source_name = source_df.index.get_level_values("source").unique().item()
     source_units = source_df.index.get_level_values("source_units").unique().item()
     intensity_units = (
@@ -78,10 +73,10 @@ def single_source(dataset, source_df, cal_df, aug_steps_df, conc_range, num_spec
     """[summary]
 
     Args:
-        source_name (str): [description]
-        sources ([type]): [description]
-        c ([type]): [description]
-        hdf (pandas.io.pytables.HDFStore): [description]
+        dataset ([type]): [description]
+        source_df ([type]): [description]
+        cal_df ([type]): [description]
+        aug_steps_df ([type]): [description]
         conc_range (tuple of int or float): [description]
         num_spectra (int): [description]
 
@@ -140,6 +135,8 @@ def single_source(dataset, source_df, cal_df, aug_steps_df, conc_range, num_spec
     for new_concentration in concentration_range:
         scalar = cal_func(new_concentration) / cal_func(proto_concentration)
         ss_eem = proto_eem * scalar
+        # Make sure there are no negative values
+        ss_eem.clip(lower=0, inplace=True)
         label = np.zeros(len(sources))
         source_index = sources.index(source_name)
         label[source_index] = new_concentration
@@ -165,6 +162,7 @@ def single_source(dataset, source_df, cal_df, aug_steps_df, conc_range, num_spec
     return aug_ss_df
 
 
+'''
 def mixtures(sources, cal_df, hdf, conc_range, num_steps, scale="linear"):
     """[summary]
 
@@ -237,3 +235,4 @@ def mixtures(sources, cal_df, hdf, conc_range, num_steps, scale="linear"):
     aug_mix_df = pd.concat(aug)
     aug_mix_df.to_hdf(hdf, key=os.path.join("augmented", "mixtures"))
     return aug_mix_df
+'''

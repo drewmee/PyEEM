@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from celluloid import Camera
 
-from .base import _get_subplot_dims, colorbar, eem_plot
+from .base import _get_subplot_dims, _colorbar, eem_plot
 
 
 def plot_prototypical_spectra(
@@ -17,6 +17,20 @@ def plot_prototypical_spectra(
     cbar_kws={},
     **kwargs
 ):
+    """[summary]
+
+    Args:
+        dataset ([type]): [description]
+        results_df ([type]): [description]
+        plot_type (str, optional): [description]. Defaults to "imshow".
+        fig ([type], optional): [description]. Defaults to None.
+        fig_kws (dict, optional): [description]. Defaults to {}.
+        plot_kws (dict, optional): [description]. Defaults to {}.
+        cbar_kws (dict, optional): [description]. Defaults to {}.
+
+    Returns:
+        [type]: [description]
+    """
 
     nspectra = len(results_df.index.unique())
     nrows, ncols = _get_subplot_dims(nspectra)
@@ -93,17 +107,26 @@ def single_source_animation(
     dataset,
     ss_results_df,
     source,
-    plot_type="contour",
+    plot_type="imshow",
     fig_kws={},
+    plot_kws={},
     cbar_kws={},
-    animate_kwargs={},
+    animate_kws={},
+    **kwargs
 ):
     """[summary]
 
     Args:
-        source_name ([type]): [description]
-        eem_df ([type]): [description]
-        plot_type (str, optional): [description]. Defaults to "contour".
+        dataset ([type]): [description]
+        ss_results_df ([type]): [description]
+        source ([type]): [description]
+        plot_type (str, optional): [description]. Defaults to "imshow".
+        fig_kws (dict, optional): [description]. Defaults to {}.
+        cbar_kws (dict, optional): [description]. Defaults to {}.
+        animate_kws (dict, optional): [description]. Defaults to {}.
+
+    Returns:
+        [type]: [description]
     """
 
     source_results_df = ss_results_df.xs(source, level="source")
@@ -119,7 +142,7 @@ def single_source_animation(
     projection = None
     if plot_type in ["surface", "surface_contour"]:
         warnings.warn(
-            "3D animation may take a considerable amount of time to complete."
+            "3D animation may take a considerable amount of time to complete. To speed things up (albeit with decreased resolution), consider increasing the values of the cstride and rstride keyword arguments."
         )
         projection = "3d"
 
@@ -133,6 +156,12 @@ def single_source_animation(
     min_val = ss_np.min()
     max_val = ss_np.max()
 
+    default_plot_kws = dict(vmin=min_val, vmax=max_val)
+    plot_kws = dict(default_fig_kws, **plot_kws)
+
+    default_kwargs = dict(zlim_min=min_val, zlim_max=max_val, title=None)
+    kwargs = dict(default_kwargs, **kwargs)
+
     for concentration, eem_df in ss_df.groupby(source):
         drop_indices = list(eem_df.index.names)
         drop_indices.remove("emission_wavelength")
@@ -140,14 +169,11 @@ def single_source_animation(
 
         hmap = eem_plot(
             eem_df,
-            plot_type=plot_type,
-            intensity_units="intensity_units",
-            include_cbar=False,
-            title=None,
             ax=ax,
-            plot_kws={"vmin": min_val, "vmax": max_val},
-            zlim_min=min_val,
-            zlim_max=max_val,
+            plot_type=plot_type,
+            include_cbar=False,
+            plot_kws=plot_kws,
+            **kwargs
         )
         hmap.set_clim(min_val, max_val)
 
@@ -164,7 +190,7 @@ def single_source_animation(
     if plot_type in ["surface", "surface_contour"]:
         shrink = cbar_kws.get("shrink", 0.5)
         label_size = cbar_kws.get("size", 12)
-        tick_params_labelsize = kwargs.get("labelsize", 11)
+        tick_params_labelsize = cbar_kws.get("labelsize", 11)
         cbar = plt.colorbar(hmap, ax=ax, shrink=shrink)
         cbar.set_label(intensity_units, size=label_size)
         cbar.ax.ticklabel_format(
@@ -172,30 +198,37 @@ def single_source_animation(
         )
         cbar.ax.tick_params(labelsize=tick_params_labelsize)
     else:
-        cbar = colorbar(hmap, intensity_units, cbar_kws=cbar_kws)
+        cbar = _colorbar(hmap, intensity_units, cbar_kws=cbar_kws)
 
     plt.tight_layout()
 
     # For the saved animation the duration is going to be frames * (1 / fps) (in seconds)
     # For the display animation the duration is going to be frames * interval / 1000 (in seconds)
-    animation = camera.animate(**animate_kwargs)
+    animation = camera.animate(**animate_kws)
     return animation
-
 
 def mixture_animation(
     dataset,
     mix_results_df,
-    plot_type="contour",
+    plot_type="imshow",
     fig_kws={},
+    plot_kws={},
     cbar_kws={},
-    animate_kwargs={},
-):
+    animate_kws={},
+    **kwargs
+): 
     """[summary]
 
     Args:
-        source_name ([type]): [description]
-        eem_df ([type]): [description]
-        plot_type (str, optional): [description]. Defaults to "contour".
+        dataset ([type]): [description]
+        mix_results_df ([type]): [description]
+        plot_type (str, optional): [description]. Defaults to "imshow".
+        fig_kws (dict, optional): [description]. Defaults to {}.
+        cbar_kws (dict, optional): [description]. Defaults to {}.
+        animate_kws (dict, optional): [description]. Defaults to {}.
+
+    Returns:
+        [type]: [description]
     """
 
     # Set the default figure kws
@@ -206,7 +239,7 @@ def mixture_animation(
     projection = None
     if plot_type in ["surface", "surface_contour"]:
         warnings.warn(
-            "3D animation may take a considerable amount of time to complete."
+            "3D animation may take a considerable amount of time to complete. To speed things up (albeit with decreased resolution), consider increasing the values of the cstride and rstride keyword arguments."
         )
         projection = "3d"
 
@@ -230,6 +263,12 @@ def mixture_animation(
     min_val = mix_np.min()
     max_val = mix_np.max()
 
+    default_plot_kws = dict(vmin=min_val, vmax=max_val)
+    plot_kws = dict(default_fig_kws, **plot_kws)
+
+    default_kwargs = dict(zlim_min=min_val, zlim_max=max_val, title=None)
+    kwargs = dict(default_kwargs, **kwargs)
+
     for concentrations, eem_df in mix_df.groupby(level=sources):
         drop_indices = list(eem_df.index.names)
         drop_indices.remove("emission_wavelength")
@@ -237,14 +276,11 @@ def mixture_animation(
 
         hmap = eem_plot(
             eem_df,
-            plot_type=plot_type,
-            intensity_units="intensity_units",
-            include_cbar=False,
-            title=None,
             ax=ax,
-            plot_kws={"vmin": min_val, "vmax": max_val},
-            zlim_min=min_val,
-            zlim_max=max_val,
+            plot_type=plot_type,
+            include_cbar=False,
+            plot_kws=plot_kws,
+            **kwargs
         )
         hmap.set_clim(min_val, max_val)
 
@@ -264,7 +300,7 @@ def mixture_animation(
     if plot_type in ["surface", "surface_contour"]:
         shrink = cbar_kws.get("shrink", 0.5)
         label_size = cbar_kws.get("size", 12)
-        tick_params_labelsize = kwargs.get("labelsize", 11)
+        tick_params_labelsize = cbar_kws.get("labelsize", 11)
         cbar = plt.colorbar(hmap, ax=ax, shrink=shrink)
         cbar.set_label(intensity_units, size=label_size)
         cbar.ax.ticklabel_format(
@@ -272,11 +308,11 @@ def mixture_animation(
         )
         cbar.ax.tick_params(labelsize=tick_params_labelsize)
     else:
-        cbar = colorbar(hmap, intensity_units, cbar_kws=cbar_kws)
+        cbar = _colorbar(hmap, intensity_units, cbar_kws=cbar_kws)
 
     plt.tight_layout()
 
     # For the saved animation the duration is going to be frames * (1 / fps) (in seconds)
     # For the display animation the duration is going to be frames * interval / 1000 (in seconds)
-    animation = camera.animate(**animate_kwargs)
+    animation = camera.animate(**animate_kws)
     return animation

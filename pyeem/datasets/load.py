@@ -142,6 +142,8 @@ class Load:
         # Convert calibration sample type columns to boolean
         meta_df[cal_sample_types] = meta_df[cal_sample_types].isin(yes_list)
 
+        """
+        # TODO - Is this correct?
         # Create prototypical_source column
         cols = meta_df[cal_source_names].columns
         ps = meta_df[cols].astype(bool)
@@ -149,11 +151,14 @@ class Load:
             lambda x: "" if x.sum() != 1 else cols[x.values].item(), axis=1,
         )
 
+        # TODO - Is this really needed?
+        # Also, it seems to be broken at the moment...
         # Create test_sources column
         ts = meta_df[cols].astype(bool)
         meta_df["test_sources"] = ts.apply(
             lambda x: [] if x.sum() <= 1 else cols[x.values].to_list(), axis=1,
         )
+        """
         return meta_df
 
     def _qc_metadata(self, meta_df, meta_df_cols):

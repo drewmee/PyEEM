@@ -33,10 +33,8 @@ Documentation
    subpackages/datasets/index
    subpackages/instruments/index
    subpackages/preprocessing/index
-   subpackages/preprocessing/corrections/index
-   subpackages/preprocessing/filters/index
    subpackages/augmentation/index
-   subpackages/visualization/index
+   subpackages/plots/index
 
 Tutorials
 =========

@@ -19,6 +19,23 @@ def plot_preprocessing(
     cbar_kws={},
     **kwargs
 ):
+    """[summary]
+
+    Args:
+        dataset ([type]): [description]
+        routine_results_df ([type]): [description]
+        sample_set ([type]): [description]
+        sample_name ([type], optional): [description]. Defaults to None.
+        include_complete (bool, optional): [description]. Defaults to False.
+        plot_type (str, optional): [description]. Defaults to "imshow".
+        fig ([type], optional): [description]. Defaults to None.
+        fig_kws (dict, optional): [description]. Defaults to {}.
+        plot_kws (dict, optional): [description]. Defaults to {}.
+        cbar_kws (dict, optional): [description]. Defaults to {}.
+
+    Returns:
+        [type]: [description]
+    """
     rr_df = routine_results_df.copy()
     if not include_complete:
         if "complete" in rr_df.index.get_level_values("step_name"):
@@ -98,9 +115,9 @@ def plot_preprocessing(
         eem_df = step_dict["eem_df"]
         eem_plot(
             eem_df,
-            intensity_units=units,
             ax=axes[ax_idx],
             plot_type=plot_type,
+            intensity_units=units,
             plot_kws=plot_kws,
             cbar_kws=cbar_kws,
             title=title,
@@ -121,16 +138,32 @@ def plot_preprocessing(
 
 
 def plot_calibration_curves(
-    dataset, cal_df, subplots=False, fig_kwargs={}, plot_kwargs={}, **kwargs
+    dataset, cal_df, subplots=False, fig_kws={}, **kwargs
 ):
+    """[summary]
+
+    Args:
+        dataset ([type]): [description]
+        cal_df ([type]): [description]
+        subplots (bool, optional): [description]. Defaults to False.
+        fig_kws (dict, optional): [description]. Defaults to {}.
+
+    Returns:
+        [type]: [description]
+    """
     colors = plt.rcParams["axes.prop_cycle"]()
     sources = cal_df.index.get_level_values(level="source").unique()
 
-    # TODO - Just put all subplots on one row
     nsources = sources.nunique()
     nrows, ncols = _get_subplot_dims(nsources)
     nplots = nrows * ncols
-    fig, axes = plt.subplots(1, nsources, figsize=(ncols ** 2, nrows * ncols))
+
+    default_fig_kws = dict(
+        figsize=(ncols ** 2, nrows * ncols), squeeze=False
+    )
+    fig_kws = dict(default_fig_kws, **fig_kws)
+
+    fig, axes = plt.subplots(1, nsources, **fig_kws)
 
     def _get_regression_metric(source_df, metric):
         return source_df.index.get_level_values(level=metric).unique().item()
@@ -182,7 +215,7 @@ def plot_calibration_curves(
             % (
                 formatted_source_str,
                 dataset.instruments_df.eem.item().manufacturer,
-                dataset.instruments_df.eem.item().name.title(),
+                dataset.instruments_df.eem.item().name.replace("_", " ").title(),
             ),
             pad=30,
             fontsize=14,

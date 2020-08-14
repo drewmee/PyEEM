@@ -11,13 +11,12 @@ import pyeem
 
 #%%
 
-# 1 Plots & Animations of preprocessing
+# 1 DOCSTRINGS!
 # 2 Refactor preprocessing routine
 # 3 Finalize preprocessing steps (Raman, QS units, spectral corrections)
 # 4 Refactor dataset.load() and create tests
-# 5 DOCSTRINGS!
-# 6 Rutherford model - training data, train, analyze
-# 8 Paper
+# 5 Rutherford model - training data, train, analyze
+# 6 Paper
 # 7 Contact rutherford
 
 # Download a demo dataset from S3
@@ -114,7 +113,7 @@ anim = pyeem.plots.single_source_animation(
     source=source,
     plot_type="contour",
     fig_kws={"dpi": 175},
-    animate_kwargs={"interval": 100, "blit": True},
+    animate_kws={"interval": 100, "blit": True},
 )
 
 mix_results_df = pyeem.augmentation.create_mixtures(
@@ -125,7 +124,7 @@ anim = pyeem.plots.mixture_animation(
     mix_results_df,
     plot_type="imshow",
     fig_kws={"dpi": 175},
-    animate_kwargs={"interval": 100, "blit": True},
+    animate_kws={"interval": 100, "blit": True},
 )
 
 # pyeem.plots.plot_preprocessing(dataset, routine_results_df, animate=False)

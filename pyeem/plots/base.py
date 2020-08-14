@@ -9,6 +9,14 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 def _get_subplot_dims(n):
+    """[summary]
+
+    Args:
+        n ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     ncols = 4
     if n % ncols:
         nplots = n + (ncols - n % ncols)
@@ -19,7 +27,17 @@ def _get_subplot_dims(n):
     return nrows, ncols
 
 
-def colorbar(mappable, units, cbar_kws={}):
+def _colorbar(mappable, units, cbar_kws={}):
+    """[summary]
+
+    Args:
+        mappable ([type]): [description]
+        units ([type]): [description]
+        cbar_kws (dict, optional): [description]. Defaults to {}.
+
+    Returns:
+        [type]: [description]
+    """
     last_axes = plt.gca()
     ax = mappable.axes
     fig = ax.figure
@@ -44,7 +62,20 @@ def colorbar(mappable, units, cbar_kws={}):
 def _eem_contour(
     eem, ax, intensity_units, include_cbar, plot_kws={}, cbar_kws={}, **kwargs
 ):
-    # Set the default plot kws
+    """[summary]
+
+    Args:
+        eem ([type]): [description]
+        ax ([type]): [description]
+        intensity_units ([type]): [description]
+        include_cbar ([type]): [description]
+        plot_kws (dict, optional): [description]. Defaults to {}.
+        cbar_kws (dict, optional): [description]. Defaults to {}.
+
+    Returns:
+        [type]: [description]
+    """
+    # Set the default plot kws.
     # contourf doesn't take aspect as a kwarg...
     # so we have to remove it and pass it seperately
     # via set_aspect(). Clunky but oh well.
@@ -63,7 +94,7 @@ def _eem_contour(
     ax.set_aspect(aspect)
 
     if include_cbar:
-        cbar = colorbar(hmap, units=intensity_units, cbar_kws=cbar_kws)
+        cbar = _colorbar(hmap, units=intensity_units, cbar_kws=cbar_kws)
 
     return hmap
 
@@ -71,6 +102,19 @@ def _eem_contour(
 def _eem_imshow(
     eem, ax, intensity_units, include_cbar, plot_kws={}, cbar_kws={}, **kwargs
 ):
+    """[summary]
+
+    Args:
+        eem ([type]): [description]
+        ax ([type]): [description]
+        intensity_units ([type]): [description]
+        include_cbar ([type]): [description]
+        plot_kws (dict, optional): [description]. Defaults to {}.
+        cbar_kws (dict, optional): [description]. Defaults to {}.
+
+    Returns:
+        [type]: [description]
+    """
     excitation = eem.columns.to_numpy()
     emission = eem.index.to_numpy()
     default_plot_kws = dict(
@@ -82,7 +126,7 @@ def _eem_imshow(
 
     hmap = ax.imshow(eem, **plot_kws)
     if include_cbar:
-        cbar = colorbar(hmap, intensity_units, cbar_kws=cbar_kws)
+        cbar = _colorbar(hmap, intensity_units, cbar_kws=cbar_kws)
     return hmap
 
 
@@ -93,40 +137,64 @@ def _eem_surface_contour(
     include_cbar,
     plot_type="surface",
     surface_plot_kws={},
-    contour_kws={},
+    contour_plot_kws={},
     cbar_kws={},
     **kwargs
 ):
+    """[summary]
+
+    Args:
+        eem ([type]): [description]
+        ax ([type]): [description]
+        intensity_units ([type]): [description]
+        include_cbar ([type]): [description]
+        plot_type (str, optional): [description]. Defaults to "surface".
+        surface_plot_kws (dict, optional): [description]. Defaults to {}.
+        contour_plot_kws (dict, optional): [description]. Defaults to {}.
+        cbar_kws (dict, optional): [description]. Defaults to {}.
+
+    Returns:
+        [type]: [description]
+    """
     excitation = eem.columns.to_numpy()
     emission = eem.index.to_numpy()
     fl = eem.to_numpy()
     excitation, emission = np.meshgrid(excitation, emission)
 
-    hmap = ax.plot_surface(
-        excitation,
-        emission,
-        fl,
+    default_surface_plot_kws = dict(
         rstride=1,
         cstride=1,
         alpha=0.75,
         cmap="viridis",
         shade=False,
+    )
+    surface_plot_kws = dict(default_surface_plot_kws, **surface_plot_kws)
+
+    hmap = ax.plot_surface(
+        excitation,
+        emission,
+        fl,
         **surface_plot_kws
     )
-    zlim_min = kwargs.get("zlim_min", fl.min())
-    zlim_max = kwargs.get("zlim_max", fl.max())
+
+    zlim_min = kwargs.get("zlim_min", np.nanmin(fl))
+    zlim_max = kwargs.get("zlim_max", np.nanmax(fl))
     z_offset = zlim_max * -2
+
+    default_contour_plot_kws = dict(
+        zdir="z",
+        offset=z_offset,
+        vmin=zlim_min,
+        vmax=zlim_max,
+    )
+    contour_plot_kws = dict(default_contour_plot_kws, **contour_plot_kws)
 
     if plot_type == "surface_contour":
         ax.contourf(
             excitation,
             emission,
             fl,
-            zdir="z",
-            offset=z_offset,
-            vmin=zlim_min,
-            vmax=zlim_max,
-            **contour_kws
+            **contour_plot_kws
         )
         zlim_min += z_offset
 
@@ -194,15 +262,35 @@ def eem_plot(
     eem_df,
     ax=None,
     plot_type="imshow",
-    intensity_units="unspecified",
     wavelength_units="nm",
-    aspect="equal",
+    intensity_units="unspecified",
     include_cbar=True,
+    aspect="equal",
     fig_kws={},
     plot_kws={},
     cbar_kws={},
     **kwargs
 ):
+    """[summary]
+
+    Args:
+        eem_df ([type]): [description]
+        ax ([type], optional): [description]. Defaults to None.
+        plot_type (str, optional): [description]. Defaults to "imshow".
+        intensity_units (str, optional): [description]. Defaults to "unspecified".
+        wavelength_units (str, optional): [description]. Defaults to "nm".
+        aspect (str, optional): [description]. Defaults to "equal".
+        include_cbar (bool, optional): [description]. Defaults to True.
+        fig_kws (dict, optional): [description]. Defaults to {}.
+        plot_kws (dict, optional): [description]. Defaults to {}.
+        cbar_kws (dict, optional): [description]. Defaults to {}.
+
+    Raises:
+        ValueError: [description]
+
+    Returns:
+        [type]: [description]
+    """
 
     # Set the default figure kws
     default_fig_kws = dict()

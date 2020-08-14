@@ -110,19 +110,24 @@ def calibration(dataset, routine_results_df, step="complete"):
 
 
 def calibration_summary_info(cal_df):
+    """[summary]
+
+    Args:
+        cal_df ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     summary_df = pd.DataFrame(
         cal_df.index.unique().values.tolist(), columns=list(cal_df.index.unique().names)
     )
 
     def _get_summary_info(row):
         source_df = cal_df.xs(row["source"], level="source")
-        return (
-            source_df.shape[0],
-            source_df["concentration"].min(),
-            source_df["concentration"].max(),
-        )
+        row["Number of Samples"] = source_df.shape[0]
+        row["Min. Concentration"] = source_df["concentration"].min()
+        row["Max. Concentration"] = source_df["concentration"].max()
+        return row
 
-    summary_df[
-        ["Number of Samples", "Min. Concentration", "Max. Concentration"]
-    ] = summary_df.apply(_get_summary_info, axis=1)
+    summary_df = summary_df.apply(_get_summary_info, axis=1)
     return summary_df
