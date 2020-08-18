@@ -74,9 +74,9 @@ def single_source(dataset, source_df, cal_df, aug_steps_df, conc_range, num_spec
 
     Args:
         dataset ([type]): [description]
-        source_df ([type]): [description]
-        cal_df ([type]): [description]
-        aug_steps_df ([type]): [description]
+        source_df (DataFrame): [description]
+        cal_df (DataFrame): [description]
+        aug_steps_df (DataFrame): [description]
         conc_range (tuple of int or float): [description]
         num_spectra (int): [description]
 
@@ -160,79 +160,3 @@ def single_source(dataset, source_df, cal_df, aug_steps_df, conc_range, num_spec
     aug_ss_df = pd.concat(aug_ss_dfs)
     aug_ss_df.to_hdf(dataset.hdf, key=hdf_path)
     return aug_ss_df
-
-
-'''
-def mixtures(sources, cal_df, hdf, conc_range, num_steps, scale="linear"):
-    """[summary]
-
-    Args:
-        sources ([type]): [description]
-        cal_df (~pandas.DataFrame): [description]
-        hdf (pandas.io.pytables.HDFStore): [description]
-        conc_range (tuple of int or float): [description]
-        num_steps (int): [description]
-        scale (str, optional): [description]. Defaults to "linear".
-
-    Raises:
-        ValueError: [description]
-
-    Returns:
-        DataFrame: [description]
-    """
-    # conc_range=(0.01, 6.3), num_steps=15, scale = logarithmic
-
-    proto_spectra = []
-    for source in sources:
-        proto_eem = pd.read_hdf(
-            hdf, key=os.path.join(*["augmented", "prototypical_spectra", source])
-        )
-        proto_spectra.append(proto_eem)
-    proto_eem_df = pd.concat(proto_spectra)
-
-    if scale == "logarithmic":
-        number_range = np.geomspace(conc_range[0], conc_range[1], num=num_steps)
-    elif scale == "linear":
-        number_range = np.linspace(conc_range[0], conc_range[1], num=num_steps)
-    else:
-        raise ValueError("scale must be 'logarithmic' or 'linear'")
-
-    cartesian_product = [p for p in itertools.product(number_range.tolist(), repeat=3)]
-
-    aug = []
-    for conc_set in cartesian_product:
-        mix = []
-        for index, label in enumerate(zip(sources, conc_set)):
-            source_name = label[0]
-            new_concentration = label[1]
-
-            c = cal_df[cal_df["source"] == source_name]
-            source_cal_coeffs = (
-                c.loc[:, c.columns.str.startswith("cal_func_term")].iloc[0].values
-            )
-            cal_func = np.poly1d(source_cal_coeffs)
-
-            proto_eem = proto_eem_df.xs(source_name, level="source", drop_level=False)
-
-            proto_concentration = (
-                proto_eem.index.get_level_values("proto_conc").unique().item()
-            )
-            proto_eem.reset_index(level=["proto_conc"], drop=True, inplace=True)
-
-            scalar = cal_func(new_concentration) / cal_func(proto_concentration)
-            new_eem = proto_eem * scalar
-            mix.append(new_eem)
-
-        mix_eem = pd.concat(mix).sum(level="emission_wavelength")
-        mix_eem = mix_eem.assign(**dict(zip(sources, conc_set)))
-
-        new_indices = sources
-        mix_eem.set_index(new_indices.tolist(), append=True, inplace=True)
-        new_indices = np.append(new_indices, ("emission_wavelength"))
-        mix_eem = mix_eem.reorder_levels(new_indices)
-        aug.append(mix_eem)
-
-    aug_mix_df = pd.concat(aug)
-    aug_mix_df.to_hdf(hdf, key=os.path.join("augmented", "mixtures"))
-    return aug_mix_df
-'''

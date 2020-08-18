@@ -23,18 +23,18 @@ def plot_preprocessing(
 
     Args:
         dataset ([type]): [description]
-        routine_results_df ([type]): [description]
+        routine_results_df (DataFrame): [description]
         sample_set ([type]): [description]
         sample_name ([type], optional): [description]. Defaults to None.
         include_complete (bool, optional): [description]. Defaults to False.
         plot_type (str, optional): [description]. Defaults to "imshow".
-        fig ([type], optional): [description]. Defaults to None.
+        fig (matplotlib.pyplot.figure, optional): [description]. Defaults to None.
         fig_kws (dict, optional): [description]. Defaults to {}.
         plot_kws (dict, optional): [description]. Defaults to {}.
         cbar_kws (dict, optional): [description]. Defaults to {}.
 
     Returns:
-        [type]: [description]
+        matplotlib.axes.Axes: [description]
     """
     rr_df = routine_results_df.copy()
     if not include_complete:
@@ -137,19 +137,17 @@ def plot_preprocessing(
     return axes
 
 
-def plot_calibration_curves(
-    dataset, cal_df, subplots=False, fig_kws={}, **kwargs
-):
+def plot_calibration_curves(dataset, cal_df, subplots=False, fig_kws={}, **kwargs):
     """[summary]
 
     Args:
         dataset ([type]): [description]
-        cal_df ([type]): [description]
+        cal_df (DataFrame): [description]
         subplots (bool, optional): [description]. Defaults to False.
         fig_kws (dict, optional): [description]. Defaults to {}.
 
     Returns:
-        [type]: [description]
+        matplotlib.axes.Axes: [description]
     """
     colors = plt.rcParams["axes.prop_cycle"]()
     sources = cal_df.index.get_level_values(level="source").unique()
@@ -158,9 +156,7 @@ def plot_calibration_curves(
     nrows, ncols = _get_subplot_dims(nsources)
     nplots = nrows * ncols
 
-    default_fig_kws = dict(
-        figsize=(ncols ** 2, nrows * ncols), squeeze=False
-    )
+    default_fig_kws = dict(figsize=(ncols ** 2, nrows * ncols), squeeze=False)
     fig_kws = dict(default_fig_kws, **fig_kws)
 
     fig, axes = plt.subplots(1, nsources, **fig_kws)

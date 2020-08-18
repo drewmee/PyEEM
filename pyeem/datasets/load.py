@@ -45,6 +45,15 @@ def _metadata_template(calibration_sources=None):
 
 
 def create_metadata_template(filepath, calibration_sources=None):
+    """[summary]
+
+    Args:
+        filepath ([type]): [description]
+        calibration_sources ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        DataFrame: [description]
+    """
     abs_filepath = os.path.abspath(filepath)
     meta_df = _metadata_template(calibration_sources=calibration_sources)
     meta_df.to_csv(abs_filepath, index=False)
@@ -52,6 +61,9 @@ def create_metadata_template(filepath, calibration_sources=None):
 
 
 class Load:
+    """Consider changing name to Dataset
+    """
+
     def __init__(
         self,
         data_dir,
@@ -198,6 +210,11 @@ class Load:
         """
 
     def load_metadata(self):
+        """[summary]
+
+        Returns:
+            DataFrame: [description]
+        """
         template = _metadata_template()
         meta_df_cols = list(template.columns)
 
@@ -231,6 +248,11 @@ class Load:
         return meta_df
 
     def metadata_summary_info(self):
+        """[summary]
+
+        Returns:
+            DataFrame: [description]
+        """
         # self.summary_info["metadata"] = meta_summary_df
         # self.metadata_summary_info = {}
 
@@ -242,23 +264,23 @@ class Load:
 
         summary_dict = {
             "Date Range": str(date_range),
-            "Number of Sample Sets": str(num_sample_sets)
+            "Number of Sample Sets": str(num_sample_sets),
         }
 
         scan_types = {
             "blank_eem": {"Number of blank EEMs": 0},
             "sample_eem": {"Number of sample EEMs": 0},
             "water_raman": {"Number of water raman scans": 0},
-            "absorb": {"Number of absorbance scans": 0}
+            "absorb": {"Number of absorbance scans": 0},
         }
-        
-        scan_type_counts = self.meta_df.groupby(level="scan_type").size() 
+
+        scan_type_counts = self.meta_df.groupby(level="scan_type").size()
         for st, st_dict in scan_types.items():
             key = list(scan_types[st].keys())[0]
             if st in scan_type_counts:
                 scan_types[st][key] = scan_type_counts[st]
             summary_dict[key] = scan_types[st][key]
-        
+
         summary_df = pd.DataFrame(summary_dict, index=[0])
         return summary_df
 
@@ -303,7 +325,9 @@ class Load:
         pass
 
     def _process_scan_type_group(self, scan_type_group):
-        scan_type_group["hdf_path"] = scan_type_group.apply(self._process_scan_type, axis=1)
+        scan_type_group["hdf_path"] = scan_type_group.apply(
+            self._process_scan_type, axis=1
+        )
         return scan_type_group
 
     def _check_unique_scan_types(self):
@@ -383,8 +407,9 @@ class Load:
             self._process_scan_type_group
         )
 
-
     def load_sample_sets(self):
+        """[summary]
+        """
         # Group by sample sets
         if self.progress_bar:
             with std_out_err_redirect_tqdm() as orig_stdout:

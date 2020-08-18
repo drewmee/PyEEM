@@ -28,7 +28,7 @@ class Aqualog:
             filepath ([type]): [description]
 
         Returns:
-            [type]: [description]
+            DataFrame: [description]
         """
         eem_df = pd.read_csv(filepath, sep="\t", index_col=0)
         eem_df.dropna(how="all", axis=1, inplace=True)
@@ -47,7 +47,7 @@ class Aqualog:
             filepath ([type]): [description]
 
         Returns:
-            [type]: [description]
+            DataFrame: [description]
         """
         absorb = pd.read_csv(filepath, sep="\t", index_col=0, header=0, skiprows=[1, 2])
         absorb = absorb[["Abs"]]

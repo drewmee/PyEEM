@@ -20,6 +20,14 @@ class CaryEclipse:
 
     @staticmethod
     def load_eem(filepath):
+        """[summary]
+
+        Args:
+            filepath ([type]): [description]
+
+        Returns:
+            DataFrame: [description]
+        """
         # Read csv, skip the 2nd row which contains repeating
         # columns pairs of "Wavelength (nm)", "Intensity (a.u.)"
         # df = pd.read_csv("sample_3D.csv", skiprows=[1])

@@ -21,7 +21,16 @@ def _get_steps():
     return steps_df
 
 
-def create_prototypical_spectra(dataset, cal_df, **kwargs):
+def create_prototypical_spectra(dataset, cal_df):
+    """[summary]
+
+    Args:
+        dataset ([type]): [description]
+        cal_df (DataFrame): [description]
+
+    Returns:
+        DataFrame: [description]
+    """
     aug_steps_df = _get_steps()
 
     results_rows = []
@@ -38,6 +47,18 @@ def create_prototypical_spectra(dataset, cal_df, **kwargs):
 
 
 def create_single_source_spectra(dataset, cal_df, conc_range, num_spectra):
+    """[summary]
+
+    Args:
+        dataset ([type]): [description]
+        cal_df (DataFrame): [description]
+        conc_range ([type]): [description]
+        num_spectra (int): [description]
+
+    Returns:
+        DataFrame: [description]
+    """
+
     aug_steps_df = _get_steps()
     aug_ss_dfs = []
     for source_name, group in tqdm(cal_df.groupby(level="source", as_index=False)):
@@ -64,9 +85,23 @@ def create_single_source_spectra(dataset, cal_df, conc_range, num_spectra):
     return aug_ss_df
 
 
-def create_mixtures(
-    dataset, cal_df, conc_range, num_steps, scale="logarithmic", **kwargs
-):
+def create_mixtures(dataset, cal_df, conc_range, num_steps, scale="logarithmic"):
+    """[summary]
+
+    Args:
+        dataset ([type]): [description]
+        cal_df (DataFrame): [description]
+        conc_range ([type]): [description]
+        num_steps (int): [description]
+        scale (str, optional): [description]. Defaults to "logarithmic".
+
+    Raises:
+        Exception: [description]
+        ValueError: [description]
+
+    Returns:
+        DataFrame: [description]
+    """
     if cal_df.index.get_level_values("source_units").nunique() != 1:
         raise Exception(
             "Sources are must reported in the same units in order create augmented mixtures."

@@ -12,19 +12,6 @@ def _get_steps():
 
 
 def _QC_crop_dims(crop_dims):
-    """[summary]
-
-    Args:
-        crop_dims (dict of {str : tuple of int or float}): [description]
-
-    Raises:
-        ValueError: [description]
-        ValueError: [description]
-        ValueError: [description]
-        ValueError: [description]
-        ValueError: [description]
-        ValueError: [description]
-    """
     # Make sure the crop_dim argument is a dictionary
     if not isinstance(crop_dims, dict):
         raise ValueError("Argument crop_dims must be of type dict.")
@@ -69,7 +56,7 @@ def crop(eem_df, crop_dims):
     Returns:
         DataFrame: [description]
     """
-    
+
     _QC_crop_dims(crop_dims)
 
     #  Rows (axis=0) are Emission wavelengths

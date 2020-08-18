@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from celluloid import Camera
 
-from .base import _get_subplot_dims, _colorbar, eem_plot
+from .base import _colorbar, _get_subplot_dims, eem_plot
 
 
 def plot_prototypical_spectra(
@@ -17,19 +17,19 @@ def plot_prototypical_spectra(
     cbar_kws={},
     **kwargs
 ):
-    """[summary]
+    """Plot the prototypical spectra from the calibration samples.
 
     Args:
         dataset ([type]): [description]
-        results_df ([type]): [description]
+        results_df (DataFrame): [description]
         plot_type (str, optional): [description]. Defaults to "imshow".
-        fig ([type], optional): [description]. Defaults to None.
+        fig (matplotlib.pyplot.figure, optional): [description]. Defaults to None.
         fig_kws (dict, optional): [description]. Defaults to {}.
         plot_kws (dict, optional): [description]. Defaults to {}.
         cbar_kws (dict, optional): [description]. Defaults to {}.
 
     Returns:
-        [type]: [description]
+        matplotlib.axes.Axes: [description]
     """
 
     nspectra = len(results_df.index.unique())
@@ -114,19 +114,19 @@ def single_source_animation(
     animate_kws={},
     **kwargs
 ):
-    """[summary]
+    """Create an animation of the augmented single source spectra.
 
     Args:
         dataset ([type]): [description]
-        ss_results_df ([type]): [description]
-        source ([type]): [description]
+        ss_results_df (DataFrame): [description]
+        source (str): [description]
         plot_type (str, optional): [description]. Defaults to "imshow".
         fig_kws (dict, optional): [description]. Defaults to {}.
         cbar_kws (dict, optional): [description]. Defaults to {}.
         animate_kws (dict, optional): [description]. Defaults to {}.
 
     Returns:
-        [type]: [description]
+        matplotlib.animation.ArtistAnimation: [description]
     """
 
     source_results_df = ss_results_df.xs(source, level="source")
@@ -207,6 +207,7 @@ def single_source_animation(
     animation = camera.animate(**animate_kws)
     return animation
 
+
 def mixture_animation(
     dataset,
     mix_results_df,
@@ -216,19 +217,19 @@ def mixture_animation(
     cbar_kws={},
     animate_kws={},
     **kwargs
-): 
-    """[summary]
+):
+    """Create an animation of the augmented mixture spectra.
 
     Args:
         dataset ([type]): [description]
-        mix_results_df ([type]): [description]
+        mix_results_df (DataFrame): [description]
         plot_type (str, optional): [description]. Defaults to "imshow".
         fig_kws (dict, optional): [description]. Defaults to {}.
         cbar_kws (dict, optional): [description]. Defaults to {}.
         animate_kws (dict, optional): [description]. Defaults to {}.
 
     Returns:
-        [type]: [description]
+        matplotlib.animation.ArtistAnimation: [description]
     """
 
     # Set the default figure kws

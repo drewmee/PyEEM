@@ -122,12 +122,12 @@ def raman_normalization(eem_df, raman_source_type, raman_source, method="gradien
     Technology.
 
     Args:
-        eem_df (~pandas.DataFrame): [description]
-        blank_df (~pandas.DataFrame): [description]
+        eem_df (DataFrame): [description]
+        blank_df (DataFrame): [description]
         method (str, optional): [description]. Defaults to "gradient".
 
     Returns:
-        ~pandas.DataFrame: Raman normalized EEM spectrum in Raman Units (R.U.)
+        DataFrame: Raman normalized EEM spectrum in Raman Units (R.U.)
     """
     # TODO - The Raman area is calculated using the  baseline-corrected
     # peak boundary definition (Murphy and others, 2011)

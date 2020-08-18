@@ -21,6 +21,14 @@ class Fluorolog:
 
     @staticmethod
     def load_eem(filepath):
+        """[summary]
+
+        Args:
+            filepath ([type]): [description]
+
+        Returns:
+            DataFrame: [description]
+        """
         df = pd.read_csv(filepath, index_col=0, nrows=0)
         df.drop(
             df.columns[df.columns.str.contains("unnamed", case=False)],
@@ -57,7 +65,7 @@ class Fluorolog:
             filepath ([type]): [description]
 
         Returns:
-            [type]: [description]
+            DataFrame: [description]
         """
         water_raman_df = pd.read_csv(
             filepath,

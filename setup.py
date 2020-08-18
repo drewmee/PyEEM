@@ -27,7 +27,7 @@ setuptools.setup(
     ],
     test_suite="tests",
     install_requires=[
-        "numpy>=1.19.0",
+        "numpy>=1.18.5",
         "pandas>=1.0.5",
         "h5py>=2.10.0",
         "tables>=3.6.1",
@@ -36,7 +36,9 @@ setuptools.setup(
         "docutils<0.16,>=0.10" "urllib3>=1.25.9",
         "boto3>=1.14.33",
         "tqdm>=4.48.0",
-        "scipy>=1.5.2",
+        "scipy>=1.4.1",
+        "tensorflow>=2.2.0",
+        "tensorboard>=2.2.1",
     ],
     extras_require={
         "docs": [

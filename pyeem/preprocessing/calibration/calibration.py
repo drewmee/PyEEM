@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
-from pyeem.analysis import fluorescence_regional_integration
+from pyeem.analysis.basic import fluorescence_regional_integration
 
 
 def calibration(dataset, routine_results_df, step="complete"):
@@ -12,11 +12,11 @@ def calibration(dataset, routine_results_df, step="complete"):
 
     Args:
         dataset ([type]): [description]
-        routine_results_df ([type]): [description]
+        routine_results_df (DataFrame): [description]
         step (str, optional): [description]. Defaults to "complete".
 
     Returns:
-        [type]: [description]
+        DataFrame: [description]
     """
     cal_df = pd.DataFrame()
     for source, units in dataset.calibration_sources.items():
@@ -113,10 +113,10 @@ def calibration_summary_info(cal_df):
     """[summary]
 
     Args:
-        cal_df ([type]): [description]
+        cal_df (DataFrame): [description]
 
     Returns:
-        [type]: [description]
+        DataFrame: [description]
     """
     summary_df = pd.DataFrame(
         cal_df.index.unique().values.tolist(), columns=list(cal_df.index.unique().names)

@@ -1,16 +1,6 @@
 from pkg_resources import get_distribution
 
-from . import augmentation, datasets, instruments, preprocessing, plots
-
-"""
-pyeem_base_style = resource_filename(
-    "pyeem.plots.styles", "pyeem_base.mplstyle"
-)
-STYLE_PATH = realpath(join(*[dirname(__file__), "plots/styles/pyeem.mplstyle"]))
-print(os.getcwd())
-print(STYLE_PATH)
-plt.style.use(pyeem_base_style)
-"""
+from . import augmentation, datasets, instruments, plots, preprocessing
 
 __all__ = [
     "datasets",

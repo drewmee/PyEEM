@@ -162,40 +162,23 @@ def _eem_surface_contour(
     excitation, emission = np.meshgrid(excitation, emission)
 
     default_surface_plot_kws = dict(
-        rstride=1,
-        cstride=1,
-        alpha=0.75,
-        cmap="viridis",
-        shade=False,
+        rstride=1, cstride=1, alpha=0.75, cmap="viridis", shade=False,
     )
     surface_plot_kws = dict(default_surface_plot_kws, **surface_plot_kws)
 
-    hmap = ax.plot_surface(
-        excitation,
-        emission,
-        fl,
-        **surface_plot_kws
-    )
+    hmap = ax.plot_surface(excitation, emission, fl, **surface_plot_kws)
 
     zlim_min = kwargs.get("zlim_min", np.nanmin(fl))
     zlim_max = kwargs.get("zlim_max", np.nanmax(fl))
     z_offset = zlim_max * -2
 
     default_contour_plot_kws = dict(
-        zdir="z",
-        offset=z_offset,
-        vmin=zlim_min,
-        vmax=zlim_max,
+        zdir="z", offset=z_offset, vmin=zlim_min, vmax=zlim_max,
     )
     contour_plot_kws = dict(default_contour_plot_kws, **contour_plot_kws)
 
     if plot_type == "surface_contour":
-        ax.contourf(
-            excitation,
-            emission,
-            fl,
-            **contour_plot_kws
-        )
+        ax.contourf(excitation, emission, fl, **contour_plot_kws)
         zlim_min += z_offset
 
     ax.set_zlim(zlim_min, zlim_max)
@@ -274,7 +257,7 @@ def eem_plot(
     """[summary]
 
     Args:
-        eem_df ([type]): [description]
+        eem_df (DataFrame): [description]
         ax ([type], optional): [description]. Defaults to None.
         plot_type (str, optional): [description]. Defaults to "imshow".
         intensity_units (str, optional): [description]. Defaults to "unspecified".

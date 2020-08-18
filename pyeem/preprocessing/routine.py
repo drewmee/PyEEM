@@ -58,7 +58,7 @@ def create_routine(
         dilution (bool, optional): [description]. Defaults to True.
 
     Returns:
-        [type]: [description]
+        DataFrame: [description]
     """
     raw = True
     complete = True

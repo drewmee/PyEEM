@@ -64,6 +64,16 @@ def _download_S3_dir(demo_data_dir, bucket_dir, overwrite):
 
 
 def download_demo(data_dir, demo_name, overwrite=False):
+    """[summary]
+
+    Args:
+        data_dir (str): [description]
+        demo_name (str): [description]
+        overwrite (bool, optional): [description]. Defaults to False.
+
+    Returns:
+        str: [description]
+    """
     global demos
     if demo_name not in demos["demo_name"]:
         ValueError("%s does not exist in demos['demo_name']" % demo_name)
