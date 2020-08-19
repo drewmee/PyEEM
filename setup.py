@@ -1,6 +1,6 @@
 import setuptools
 
-__version__ = "1.0.8"
+__version__ = "0.1.0"
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -26,6 +26,7 @@ setuptools.setup(
         "Topic :: Scientific/Engineering :: Chemistry",
     ],
     test_suite="tests",
+    python_requires='>3.5, <3.8',
     install_requires=[
         "numpy<1.19.0,>=1.18.5",
         "pandas>=1.0.5",
