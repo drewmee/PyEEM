@@ -2,7 +2,7 @@
 
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/drewmee/PyEEM/blob/master/LICENSE)
 [![CircleCI](https://circleci.com/gh/drewmee/PyEEM.svg?style=shield&circle-token=ccdb16078dcb8ee4e4c9b923f547fc7cb2742aae)](https://app.circleci.com/pipelines/github/drewmee/PyEEM)
-[![Read the Docs](https://readthedocs.org/projects/drewmee-demo/badge/?version=latest)](https://www.youtube.com/watch?v=oHg5SJYRHA0)
+[![Read the Docs](https://readthedocs.org/projects/drewmee-demo/badge/?version=latest)](https://pyeem.readthedocs.io/)
 <!--- Badge for supported python versions https://img.shields.io/pypi/pyversions/pyeem -->
 <!--- Badge for PyPI package https://img.shields.io/pypi/v/pyeem -->
 <!--- Badge for codecov -->
@@ -17,7 +17,7 @@ Install via pip:
 
 ## Documentation
 
-  Full documentation can be found [here](https://www.youtube.com/watch?v=oHg5SJYRHA0).
+  Full documentation can be found [here](https://pyeem.readthedocs.io/).
 
 ## Dependencies for Local Development
 
