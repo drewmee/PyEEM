@@ -1,7 +1,21 @@
 version: 2.1
 
+orbs:
+  win: circleci/windows@2.2.0 # The Windows orb give you everything you need to start using the Windows executor.
+
+executors:
+  macos_executor:
+    macos:
+      xcode: 11.3.0
+
 jobs:
-  build:
+  job1:
+    working_directory: ~/PyEEM
+    executor: macos_executor
+    steps:
+      - checkout
+      - run: tox
+  job2:
     working_directory: ~/PyEEM
     docker:
       - image: themattrix/tox
@@ -12,4 +26,5 @@ jobs:
 workflows:
   main:
     jobs:
-      - build
+      - job1
+      - job2
