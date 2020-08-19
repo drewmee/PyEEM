@@ -1,26 +1,26 @@
-Load
-====
+Dataset
+=======
 
 .. currentmodule:: pyeem.datasets
 
-.. autoclass:: Load
+.. autoclass:: Dataset
    :show-inheritance:
 
    .. rubric:: Attributes Summary
 
    .. autosummary::
 
-      ~Load.data_dir
-      ~Load.metadata_path
-      ~Load.scan_sets_subdir
+      ~Dataset.data_dir
+      ~Dataset.metadata_path
+      ~Dataset.scan_sets_subdir
 
    .. rubric:: Methods Summary
 
    .. autosummary::
 
-      ~Load.load_metadata
-      ~Load.load_sample_sets
-      ~Load.metadata_summary_info
+      ~Dataset.load_metadata
+      ~Dataset.load_sample_sets
+      ~Dataset.metadata_summary_info
 
    .. rubric:: Attributes Documentation
 

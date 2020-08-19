@@ -1,6 +1,11 @@
-============
+.. _installation:
+
+:github_url: https://github.com/drewmee/PyEEM
+
+************
 Installation
-============
+************
+
 
 There are several ways to install the package from source depending on your
 local development environment and familiarity with installing python libraries. 

@@ -13,10 +13,21 @@ class Aqualog:
     """
 
     manufacturer = "Horiba"
+    """Docstring for class attribute Aqualog.manufacturer."""
+
     name = "aqualog"
+    """Docstring for class attribute Aqualog.name."""
+
     supported_models = ["Aqualog-880-C"]
+    """Docstring for class attribute Aqualog.supported_models."""
 
     def __init__(self, model, sn=None):
+        """[summary]
+
+        Args:
+            model (str): [description]
+            sn (str or int, optional): [description]. Defaults to None.
+        """
         self.model = model
         self.sn = sn
 
@@ -25,7 +36,7 @@ class Aqualog:
         """[summary]
 
         Args:
-            filepath ([type]): [description]
+            filepath (str): [description]
 
         Returns:
             DataFrame: [description]
@@ -44,7 +55,7 @@ class Aqualog:
         """[summary]
 
         Args:
-            filepath ([type]): [description]
+            filepath (str): [description]
 
         Returns:
             DataFrame: [description]

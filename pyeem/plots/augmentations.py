@@ -20,8 +20,8 @@ def plot_prototypical_spectra(
     """Plot the prototypical spectra from the calibration samples.
 
     Args:
-        dataset ([type]): [description]
-        results_df (DataFrame): [description]
+        dataset (pyeem.datasets.Dataset): [description]
+        results_df (pandas.DataFrame): [description]
         plot_type (str, optional): [description]. Defaults to "imshow".
         fig (matplotlib.pyplot.figure, optional): [description]. Defaults to None.
         fig_kws (dict, optional): [description]. Defaults to {}.
@@ -117,8 +117,8 @@ def single_source_animation(
     """Create an animation of the augmented single source spectra.
 
     Args:
-        dataset ([type]): [description]
-        ss_results_df (DataFrame): [description]
+        dataset (pyeem.datasets.Dataset): [description]
+        ss_results_df (pandas.DataFrame): [description]
         source (str): [description]
         plot_type (str, optional): [description]. Defaults to "imshow".
         fig_kws (dict, optional): [description]. Defaults to {}.
@@ -221,8 +221,8 @@ def mixture_animation(
     """Create an animation of the augmented mixture spectra.
 
     Args:
-        dataset ([type]): [description]
-        mix_results_df (DataFrame): [description]
+        dataset (pyeem.datasets.Dataset): [description]
+        mix_results_df (pandas.DataFrame): [description]
         plot_type (str, optional): [description]. Defaults to "imshow".
         fig_kws (dict, optional): [description]. Defaults to {}.
         cbar_kws (dict, optional): [description]. Defaults to {}.

@@ -11,8 +11,8 @@ def calibration(dataset, routine_results_df, step="complete"):
     """[summary]
 
     Args:
-        dataset ([type]): [description]
-        routine_results_df (DataFrame): [description]
+        dataset (pyeem.datasets.Dataset): [description]
+        routine_results_df (pandas.DataFrame): [description]
         step (str, optional): [description]. Defaults to "complete".
 
     Returns:
@@ -113,7 +113,7 @@ def calibration_summary_info(cal_df):
     """[summary]
 
     Args:
-        cal_df (DataFrame): [description]
+        cal_df (pandas.DataFrame): [description]
 
     Returns:
         DataFrame: [description]

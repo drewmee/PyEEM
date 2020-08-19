@@ -8,13 +8,27 @@ class Cary4E:
         NotImplementedError: [description]
         NotImplementedError: [description]
         NotImplementedError: [description]
+
+    Returns:
+        [type]: [description]
     """
 
     manufacturer = "Agilent"
+    """Docstring for class attribute Cary4E.manufacturer."""
+
     name = "cary_4e"
+    """Docstring for class attribute Cary4E.name."""
+
     supported_models = ["Cary 4E"]
+    """Docstring for class attribute Cary4E.supported_models."""
 
     def __init__(self, model, sn=None):
+        """[summary]
+
+        Args:
+            model (str): [description]
+            sn (str or int, optional): [description]. Defaults to None.
+        """
         self.model = model
         self.sn = sn
 
@@ -31,8 +45,11 @@ class Cary4E:
     def load_absorbance(filepath):
         """[summary]
 
-        Raises:
-            NotImplementedError: [description]
+        Args:
+            filepath ([type]): [description]
+
+        Returns:
+            [type]: [description]
         """
         absorb_df = pd.read_csv(
             filepath,
@@ -49,7 +66,7 @@ class Cary4E:
         """[summary]
 
         Args:
-            filepath ([type]): [description]
+            filepath (str): [description]
 
         Raises:
             NotImplementedError: [description]

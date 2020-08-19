@@ -115,15 +115,15 @@ def inner_filter_effect(
 
 
 def raman_normalization(eem_df, raman_source_type, raman_source, method="gradient"):
-    """Element-wise division of the eem spectra by area under the
+    """Element-wise division of the EEM spectra by area under the
     ramam peak. See reference Murphy et al. Measurement of Dissolved
     Organic Matter Fluorescence in Aquatic Environments:
     An Interlaboratory Comparison" 2010 Environmental Science and
     Technology.
 
     Args:
-        eem_df (DataFrame): [description]
-        blank_df (DataFrame): [description]
+        eem_df (pandas.DataFrame): [description]
+        blank_df (pandas.DataFrame): [description]
         method (str, optional): [description]. Defaults to "gradient".
 
     Returns:
@@ -182,7 +182,7 @@ def scatter_removal(
     Marine Chemistry. 2004
 
     Args:
-        eem_df (DataFrame): Excitation Emission Matrix
+        eem_df (pandas.DataFrame): Excitation Emission Matrix
         band (str, optional): The scatter band (Raleigh/Raman) to be removed. Defaults to "both".
         order (str, optional): The scatter band order (first/second) to be removed. Defaults to "both".
         excision_width (int, optional): The width of excision that each band will be removed with. Defaults to 20.

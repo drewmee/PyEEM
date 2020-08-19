@@ -5,23 +5,23 @@ import pytest
 import pyeem
 
 
-class TestLoad:
+class TestDataset:
     def testInsufficientArgs(self):
         with pytest.raises(Exception):
-            pyeem.datasets.Load()
+            pyeem.datasets.Dataset()
 
     def testNonExistentDataDirPath(self):
         data_dir = "some non-existent path"
         with pytest.raises(FileNotFoundError):
-            pyeem.datasets.Load(data_dir)
+            pyeem.datasets.Dataset(data_dir)
 
     """
     def testValidDataDirPath(self):
         try:
             data_dir = "data/mock/"
-            pyeem.datasets.Load(data_dir)
+            pyeem.datasets.Dataset(data_dir)
         except Exception:
-            self.fail("Load() raised Exception unexpectedly!")
+            self.fail("Dataset() raised Exception unexpectedly!")
     """
 
     def testNonExistentMetadataPath(self):

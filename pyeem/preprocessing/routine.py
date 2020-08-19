@@ -339,7 +339,7 @@ def perform_routine(dataset, routine_df, progress_bar=False, **kwargs):
     """[summary]
 
     Args:
-        crop_dims ([type], optional): [description]. Defaults to None.
+        crop_dims (dict of {str : tuple of (int, float)}, optional): [description]. Defaults to None.
         blank_sub (bool, optional): [description]. Defaults to True.
         ife_corr (bool, optional): [description]. Defaults to True.
         scatter_rem (str, optional): [description]. Defaults to "interp".

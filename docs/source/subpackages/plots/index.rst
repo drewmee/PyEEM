@@ -1,6 +1,6 @@
 Plots subpackage (pyeem.plots)
 ==============================
-The *plots* package provides...
+The *plots* subpackage provides...
 
 .. automodapi:: pyeem.plots
    :no-inheritance-diagram:

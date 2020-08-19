@@ -25,8 +25,8 @@ def create_prototypical_spectra(dataset, cal_df):
     """[summary]
 
     Args:
-        dataset ([type]): [description]
-        cal_df (DataFrame): [description]
+        dataset (pyeem.datasets.Dataset): [description]
+        cal_df (pandas.DataFrame): [description]
 
     Returns:
         DataFrame: [description]
@@ -50,9 +50,9 @@ def create_single_source_spectra(dataset, cal_df, conc_range, num_spectra):
     """[summary]
 
     Args:
-        dataset ([type]): [description]
-        cal_df (DataFrame): [description]
-        conc_range ([type]): [description]
+        dataset (pyeem.datasets.Dataset): [description]
+        cal_df (pandas.DataFrame): [description]
+        conc_range (tuple of (int, float)): [description]
         num_spectra (int): [description]
 
     Returns:
@@ -89,9 +89,9 @@ def create_mixtures(dataset, cal_df, conc_range, num_steps, scale="logarithmic")
     """[summary]
 
     Args:
-        dataset ([type]): [description]
-        cal_df (DataFrame): [description]
-        conc_range ([type]): [description]
+        dataset (pyeem.datasets.Dataset): [description]
+        cal_df (pandas.DataFrame): [description]
+        conc_range (tuple of (int, float)): [description]
         num_steps (int): [description]
         scale (str, optional): [description]. Defaults to "logarithmic".
 

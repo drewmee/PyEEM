@@ -2,7 +2,13 @@ import pandas as pd
 
 from . import agilent, horiba
 
-def _get_supported_instruments():
+
+def get_supported_instruments():
+    """[summary]
+
+    Returns:
+        [type]: [description]
+    """
     manuf_instruments = {
         agilent.name: agilent.instruments,
         horiba.name: horiba.instruments,
@@ -25,7 +31,7 @@ def _get_supported_instruments():
     return df_display, df
 
 
-supported, _supported = _get_supported_instruments()
+supported, _supported = get_supported_instruments()
 
 
 def _get_dataset_instruments_df(

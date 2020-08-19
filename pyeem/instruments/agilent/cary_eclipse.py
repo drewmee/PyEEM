@@ -11,10 +11,21 @@ class CaryEclipse:
     """
 
     manufacturer = "Agilent"
+    """Docstring for class attribute CaryEclipse.manufacturer."""
+
     name = "cary_eclipse"
+    """Docstring for class attribute CaryEclipse.name."""
+
     supported_models = ["Cary Eclipse"]
+    """Docstring for class attribute CaryEclipse.supported_models."""
 
     def __init__(self, model, sn=None):
+        """[summary]
+
+        Args:
+            model (str): [description]
+            sn (str or int, optional): [description]. Defaults to None.
+        """
         self.model = model
         self.sn = sn
 
@@ -23,7 +34,7 @@ class CaryEclipse:
         """[summary]
 
         Args:
-            filepath ([type]): [description]
+            filepath (str): [description]
 
         Returns:
             DataFrame: [description]
@@ -90,8 +101,11 @@ class CaryEclipse:
     def load_absorbance(filepath):
         """[summary]
 
-        Raises:
-            NotImplementedError: [description]
+        Args:
+            filepath (str): [description]
+
+        Returns:
+            DataFrame: [description]
         """
         absorb_df = pd.read_csv(
             filepath,
@@ -113,7 +127,7 @@ class CaryEclipse:
         """[summary]
 
         Args:
-            filepath ([type]): [description]
+            filepath (str): [description]
 
         Raises:
             NotImplementedError: [description]

@@ -48,8 +48,8 @@ def create_metadata_template(filepath, calibration_sources=None):
     """[summary]
 
     Args:
-        filepath ([type]): [description]
-        calibration_sources ([type], optional): [description]. Defaults to None.
+        filepath (str): [description]
+        calibration_sources (dict of {str : str}, optional): [description]. Defaults to None.
 
     Returns:
         DataFrame: [description]
@@ -60,8 +60,8 @@ def create_metadata_template(filepath, calibration_sources=None):
     return meta_df
 
 
-class Load:
-    """Consider changing name to Dataset
+class Dataset:
+    """[summary]
     """
 
     def __init__(
@@ -77,6 +77,19 @@ class Load:
         progress_bar=False,
         **kwargs,
     ):
+        """[summary]
+
+        Args:
+            data_dir (str): [description]
+            raman_instrument (str, optional): [description]. Defaults to None.
+            absorbance_instrument (str, optional): [description]. Defaults to None.
+            eem_instrument (str, optional): [description]. Defaults to None.
+            scan_sets_subdir (str, optional): [description]. Defaults to "raw_sample_sets".
+            metadata_filename (str, optional): [description]. Defaults to "metadata.csv".
+            hdf_filename (str, optional): [description]. Defaults to "root.hdf5".
+            calibration_sources (dict of {str : str}, optional): [description]. Defaults to None.
+            progress_bar (bool, optional): [description]. Defaults to False.
+        """
         self.data_dir = os.path.abspath(data_dir)
         self.scan_sets_subdir = os.path.join(self.data_dir, scan_sets_subdir)
         self.metadata_path = os.path.join(self.data_dir, metadata_filename)

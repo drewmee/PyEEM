@@ -5,11 +5,11 @@ def fluorescence_regional_integration(eem_df, region_bounds=None):
     """[summary]
 
     Args:
-        eem_df (DataFrame): [description]
-        region_bounds ([type], optional): [description]. Defaults to None.
+        eem_df (pandas.DataFrame): [description]
+        region_bounds (dict of {str : tuple of (int or float)}, optional): [description]. Defaults to None.
 
     Returns:
-        [type]: [description]
+        float: [description]
     """
     # Fluorescence Excitation−Emission Matrix Regional
     # Integration to Quantify Spectra for Dissolved Organic Matter

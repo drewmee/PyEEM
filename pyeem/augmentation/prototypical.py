@@ -11,9 +11,9 @@ def prototypical_spectrum(dataset, source_df, aug_steps_df):
     assigned weights between 0 and 1.
 
     Args:
-        dataset ([type]): [description]
-        source_df (DataFrame): [description]
-        aug_steps_df (DataFrame): [description]
+        dataset (pyeem.datasets.Dataset): [description]
+        source_df (pandas.DataFrame): [description]
+        aug_steps_df (pandas.DataFrame): [description]
 
     Returns:
         DataFrame: [description]
@@ -73,11 +73,11 @@ def single_source(dataset, source_df, cal_df, aug_steps_df, conc_range, num_spec
     """[summary]
 
     Args:
-        dataset ([type]): [description]
-        source_df (DataFrame): [description]
-        cal_df (DataFrame): [description]
-        aug_steps_df (DataFrame): [description]
-        conc_range (tuple of int or float): [description]
+        dataset (pyeem.datasets.Dataset): [description]
+        source_df (pandas.DataFrame): [description]
+        cal_df (pandas.DataFrame): [description]
+        aug_steps_df (pandas.DataFrame): [description]
+        conc_range (tuple of (int or float)): [description]
         num_spectra (int): [description]
 
     Returns:

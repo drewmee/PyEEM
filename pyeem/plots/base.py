@@ -12,10 +12,10 @@ def _get_subplot_dims(n):
     """[summary]
 
     Args:
-        n ([type]): [description]
+        n (int): [description]
 
     Returns:
-        [type]: [description]
+        tuple of int: [description]
     """
     ncols = 4
     if n % ncols:
@@ -31,13 +31,14 @@ def _colorbar(mappable, units, cbar_kws={}):
     """[summary]
 
     Args:
-        mappable ([type]): [description]
-        units ([type]): [description]
+        mappable (AxesImage or QuadContourSet): [description]
+        units (str): [description]
         cbar_kws (dict, optional): [description]. Defaults to {}.
 
     Returns:
-        [type]: [description]
+        matplotlib.colorbar.Colorbar: [description]
     """
+    # https://joseph-long.com/writing/colorbars/
     last_axes = plt.gca()
     ax = mappable.axes
     fig = ax.figure
@@ -65,15 +66,15 @@ def _eem_contour(
     """[summary]
 
     Args:
-        eem ([type]): [description]
-        ax ([type]): [description]
-        intensity_units ([type]): [description]
-        include_cbar ([type]): [description]
+        eem (pandas.DataFrame): [description]
+        ax (matplotlib.axes.Axes): [description]
+        intensity_units (str): [description]
+        include_cbar (bool): [description]
         plot_kws (dict, optional): [description]. Defaults to {}.
         cbar_kws (dict, optional): [description]. Defaults to {}.
 
     Returns:
-        [type]: [description]
+        QuadContourSet: [description]
     """
     # Set the default plot kws.
     # contourf doesn't take aspect as a kwarg...
@@ -105,15 +106,15 @@ def _eem_imshow(
     """[summary]
 
     Args:
-        eem ([type]): [description]
-        ax ([type]): [description]
-        intensity_units ([type]): [description]
-        include_cbar ([type]): [description]
+        eem (pandas.DataFrame): [description]
+        ax (matplotlib.axes.Axes): [description]
+        intensity_units (str): [description]
+        include_cbar (bool): [description]
         plot_kws (dict, optional): [description]. Defaults to {}.
         cbar_kws (dict, optional): [description]. Defaults to {}.
 
     Returns:
-        [type]: [description]
+        AxesImage: [description]
     """
     excitation = eem.columns.to_numpy()
     emission = eem.index.to_numpy()
@@ -144,17 +145,17 @@ def _eem_surface_contour(
     """[summary]
 
     Args:
-        eem ([type]): [description]
-        ax ([type]): [description]
-        intensity_units ([type]): [description]
-        include_cbar ([type]): [description]
+        eem (pandas.DataFrame): [description]
+        ax (matplotlib.axes.Axes): [description]
+        intensity_units (str): [description]
+        include_cbar (bool): [description]
         plot_type (str, optional): [description]. Defaults to "surface".
         surface_plot_kws (dict, optional): [description]. Defaults to {}.
         contour_plot_kws (dict, optional): [description]. Defaults to {}.
         cbar_kws (dict, optional): [description]. Defaults to {}.
 
     Returns:
-        [type]: [description]
+        mpl_toolkits.mplot3d.art3d.Poly3DCollection: [description]
     """
     excitation = eem.columns.to_numpy()
     emission = eem.index.to_numpy()
@@ -257,8 +258,8 @@ def eem_plot(
     """[summary]
 
     Args:
-        eem_df (DataFrame): [description]
-        ax ([type], optional): [description]. Defaults to None.
+        eem_df (pandas.DataFrame): [description]
+        ax (matplotlib.axes.Axes, optional): [description]. Defaults to None.
         plot_type (str, optional): [description]. Defaults to "imshow".
         intensity_units (str, optional): [description]. Defaults to "unspecified".
         wavelength_units (str, optional): [description]. Defaults to "nm".
@@ -272,7 +273,7 @@ def eem_plot(
         ValueError: [description]
 
     Returns:
-        [type]: [description]
+        QuadContourSet, AxesImage, or mpl_toolkits.mplot3d.art3d.Poly3DCollection: [description]
     """
 
     # Set the default figure kws

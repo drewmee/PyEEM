@@ -12,10 +12,21 @@ class Fluorolog:
     """
 
     manufacturer = "Horiba"
+    """Docstring for class attribute Fluorolog.manufacturer."""
+
     name = "fluorolog"
+    """Docstring for class attribute Fluorolog.name."""
+
     supported_models = ["SPEX Fluorolog-3"]
+    """Docstring for class attribute Fluorolog.supported_models."""
 
     def __init__(self, model, sn=None):
+        """[summary]
+
+        Args:
+            model (str): [description]
+            sn (str or int, optional): [description]. Defaults to None.
+        """
         self.model = model
         self.sn = sn
 
@@ -24,7 +35,7 @@ class Fluorolog:
         """[summary]
 
         Args:
-            filepath ([type]): [description]
+            filepath (str): [description]
 
         Returns:
             DataFrame: [description]
@@ -62,7 +73,7 @@ class Fluorolog:
         """[summary]
 
         Args:
-            filepath ([type]): [description]
+            filepath (str): [description]
 
         Returns:
             DataFrame: [description]

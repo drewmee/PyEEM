@@ -22,10 +22,10 @@ def plot_preprocessing(
     """[summary]
 
     Args:
-        dataset ([type]): [description]
-        routine_results_df (DataFrame): [description]
-        sample_set ([type]): [description]
-        sample_name ([type], optional): [description]. Defaults to None.
+        dataset (pyeem.datasets.Dataset): [description]
+        routine_results_df (pandas.DataFrame): [description]
+        sample_set (int): [description]
+        sample_name (str, optional): [description]. Defaults to None.
         include_complete (bool, optional): [description]. Defaults to False.
         plot_type (str, optional): [description]. Defaults to "imshow".
         fig (matplotlib.pyplot.figure, optional): [description]. Defaults to None.
@@ -141,8 +141,8 @@ def plot_calibration_curves(dataset, cal_df, subplots=False, fig_kws={}, **kwarg
     """[summary]
 
     Args:
-        dataset ([type]): [description]
-        cal_df (DataFrame): [description]
+        dataset (pyeem.datasets.Dataset): [description]
+        cal_df (pandas.DataFrame): [description]
         subplots (bool, optional): [description]. Defaults to False.
         fig_kws (dict, optional): [description]. Defaults to {}.
 

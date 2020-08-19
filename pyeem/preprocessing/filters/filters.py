@@ -51,7 +51,7 @@ def crop(eem_df, crop_dims):
 
     Args:
         eem_df (~pandas.DataFrame): [description]
-        crop_dims (dict of {str : tuple of int or float}): [description]
+        crop_dims (dict of {str : tuple of (int, float)}): [description]
 
     Returns:
         DataFrame: [description]

@@ -1,14 +1,12 @@
+import os  # isort:skip
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from tensorflow.keras.layers import (
-    Activation,
-    Conv2D,
-    Dense,
-    Dropout,
-    Flatten,
-    MaxPooling2D,
-)
+from tensorflow.keras.layers import (Activation, Conv2D, Dense, Dropout,
+                                     Flatten, MaxPooling2D)
 from tensorflow.keras.models import Sequential
 
 
@@ -17,6 +15,8 @@ class RutherfordNet:
     """
 
     def __init__(self):
+        """[summary]
+        """
         self.model = self.create_model()
 
     def create_model(self, name="rutherfordnet", compile_kws={}):
@@ -74,12 +74,12 @@ class RutherfordNet:
         """[summary]
 
         Args:
-            dataset ([type]): [description]
-            ss_results_df (DataFrame): [description]
-            mix_results_df (DataFrame): [description]
+            dataset (pyeem.datasets.Dataset): [description]
+            ss_results_df (pandas.DataFrame): [description]
+            mix_results_df (pandas.DataFrame): [description]
 
         Returns:
-            [type]: [description]
+            tuple of numpy.ndarray: [description]
         """
         sources = list(dataset.calibration_sources.keys())
         aug_results_df = pd.concat([ss_results_df, mix_results_df])
@@ -184,11 +184,11 @@ class RutherfordNet:
         """[summary]
 
         Args:
-            dataset ([type]): [description]
-            routine_results_df (DataFrame): [description]
+            dataset (pyeem.datasets.Dataset): [description]
+            routine_results_df (pandas.DataFrame): [description]
 
         Returns:
-            [type]: [description]
+            tuple of numpy.ndarray: [description]
         """
         test_samples_df = self._isolate_test_samples(dataset, routine_results_df)
 
@@ -213,13 +213,13 @@ class RutherfordNet:
         """[summary]
 
         Args:
-            dataset ([type]): [description]
-            ss_results_df (DataFrame): [description]
-            mix_results_df (DataFrame): [description]
-            routine_results_df (DataFrame): [description]
+            dataset (pyeem.datasets.Dataset): [description]
+            ss_results_df (pandas.DataFrame): [description]
+            mix_results_df (pandas.DataFrame): [description]
+            routine_results_df (pandas.DataFrame): [description]
 
         Returns:
-            [type]: [description]
+            tuple of (tuple of numpy.ndarray): [description]
         """
         x_train, y_train = self.get_training_data(
             dataset, ss_results_df, mix_results_df
@@ -231,12 +231,12 @@ class RutherfordNet:
         """[summary]
 
         Args:
-            X ([type]): [description]
-            y ([type]): [description]
+            X (numpy.ndarray): [description]
+            y (numpy.ndarray): [description]
             fit_kws (dict, optional): [description]. Defaults to {}.
 
         Returns:
-            [type]: [description]
+            tensorflow.python.keras.callbacks.History: [description]
         """
         default_fit_kws = dict(
             batch_size=32, epochs=5, validation_split=0.5, shuffle=True
