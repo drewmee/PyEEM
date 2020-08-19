@@ -7,7 +7,7 @@
 <!--- Badge for PyPI package https://img.shields.io/pypi/v/pyeem -->
 <!--- Badge for codecov -->
 
-Python library for the preprocessing, analysis, and visualization of Excitation Emission Matrices (EEMs). Full documentation can be found [here](https://www.youtube.com/watch?v=oHg5SJYRHA0).
+Python library for the preprocessing, analysis, and visualization of Excitation Emission Matrices (EEMs).
 
 ## Installation
 
