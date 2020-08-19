@@ -1,6 +1,4 @@
-from ._load import Load
-from ._load import load_dreem
-from ._load import load_rutherford
-from ._load import download_S3_dir
+from .demo import demos, download_demo
+from .load import Dataset, create_metadata_template
 
-__all__ = ["Load", "load_dreem", "load_rutherford"]
+__all__ = ["demos", "download_demo", "Dataset", "create_metadata_template"]

@@ -1,6 +1,9 @@
-from ._base import Aqualog
-from ._base import Fluorolog
-from ._base import Cary
-from ._base import supported, _supported
+from . import agilent, horiba
+from .base import (
+    _get_dataset_instruments_df,
+    _supported,
+    get_supported_instruments,
+    supported,
+)
 
-__all__ = ["Aqualog", "Fluorolog", "Cary"]
+__all__ = ["agilent", "horiba", "get_supported_instruments"]

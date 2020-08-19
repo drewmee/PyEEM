@@ -1,15 +1,13 @@
-from . import datasets
-from . import instruments
-from . import preprocessing
-from . import augmentation
-from . import visualization
+from pkg_resources import get_distribution
+
+from . import augmentation, datasets, instruments, plots, preprocessing
 
 __all__ = [
     "datasets",
     "instruments",
     "preprocessing",
     "augmentation",
-    "visualization",
+    "plots",
 ]
 
-__version__ = "1.0.0"
+__version__ = get_distribution("pyeem").version

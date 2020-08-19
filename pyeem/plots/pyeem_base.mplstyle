@@ -1,0 +1,54 @@
+# Consider something like:
+# https://gitlab.com/ing_rpaa/ing_theme_matplotlib/-/tree/master/
+
+# Font properties
+font.family: serif
+
+# Figure properties
+figure.figsize: 4.0, 4.0
+figure.titlesize: 20
+figure.titleweight: bold
+
+# Axes properties
+axes.titlesize : 20
+axes.titlepad: 10   # vertical offset of the axes title
+axes.labelsize: 20  # fontsize of the x any y labels
+axes.labelpad: 10     # space between label and axis
+axes.formatter.use_mathtext: True
+axes.formatter.limits : -2, 3
+axes.formatter.useoffset: False    ## If True, the tick label formatter
+                                         ## will default to labeling ticks relative
+                                         ## to an offset when the data range is
+                                         ## small compared to the minimum absolute
+                                         ## value of the data.
+
+# axes.autolimit_mode?
+# axes.spines
+
+# Tick properties
+# x-axis
+xtick.labelsize: 14
+xtick.minor.visible: True
+
+# y-axis
+ytick.labelsize: 14
+ytick.minor.visible: True
+
+# Legend
+legend.frameon: True
+legend.fontsize: 10
+legend.shadow : False
+legend.framealpha : 1
+
+# Colormap
+image.cmap : viridis
+
+# mplot3d
+# z-axis padding
+# grid false
+# edge color black
+# pane fill false
+axes3d.grid: False ## display grid on 3d axes
+
+# Saving figures
+path.simplify : True

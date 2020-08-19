@@ -1,32 +1,27 @@
-import pytest
 import os
+
+import pytest
+
 import pyeem
 
 
-class TestLoad:
+class TestDataset:
     def testInsufficientArgs(self):
-        data_dir = None
         with pytest.raises(Exception):
-            pyeem.datasets.Load(data_dir)
+            pyeem.datasets.Dataset()
 
     def testNonExistentDataDirPath(self):
         data_dir = "some non-existent path"
         with pytest.raises(FileNotFoundError):
-            pyeem.datasets.Load(data_dir)
+            pyeem.datasets.Dataset(data_dir)
 
     """
     def testValidDataDirPath(self):
         try:
             data_dir = "data/mock/"
-            pyeem.datasets.Load(data_dir)
+            pyeem.datasets.Dataset(data_dir)
         except Exception:
-            self.fail("Load() raised Exception unexpectedly!")
-    
-    def testHdf5Creation(self):
-        data_dir = "data/mock/"
-        load = pyeem.datasets.Load(data_dir)
-        required_subdirs = ['corrections', 'processed', 'raw_sample_sets']
-        assert set(list(load.hdf5_root.keys())) == set(required_subdirs)
+            self.fail("Dataset() raised Exception unexpectedly!")
     """
 
     def testNonExistentMetadataPath(self):

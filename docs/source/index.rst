@@ -1,58 +1,42 @@
+:github_url: https://github.com/drewmee/PyEEM
 
-==================================================================
-PyEEM - Fluorescence Excitation-Emission Matrix (EEM) Spectroscopy
-==================================================================
+PyEEM
+=====
 
-PyEEM is a Python library for the preprocessing, filtering, correction, deconvolution and 
-analysis of Excitation Emission Matrices (EEMs). Currently, PyEEM has the 
-following main features - please check out the IPython Tutorials for examples:
-
-* Feature #1
-
-Technical features:
-
-* Code is implemented in Python (supports 3.5/3.6 and 3.7).
-* Runs on Linux (64 bit), Windows (32 or 64 bit) or MacOS (64 bit).
-* Code is hosted at `GitHub <https://github.com/drewmee/PyEEM/>`_ under the MIT license.
-  Please post issues or reports there.
-
-Installation
-============
+PyEEM is a Python library for the preprocessing, analysis, and 
+visualization of Excitation Emission Matrices (EEMs).
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 1
+    :caption: Getting Started
 
-   INSTALL
+    overview
+    installation
+    examples
+    why
 
-Documentation
-=============
+.. toctree::
+    :maxdepth: 1
+    :caption: User Guide
+
+    api
+    changelog
+    contributing
 
 .. toctree::
    :maxdepth: 1
+   :caption: Useful links
 
-   subpackages/datasets/index
-   subpackages/instruments/index
-   subpackages/preprocessing/index
-   subpackages/preprocessing/corrections/index
-   subpackages/preprocessing/filters/index
-   subpackages/augmentation/index
-   subpackages/visualization/index
+   PyEEM @ GitHub <https://github.com/drewmee/PyEEM>
+   PyEEM @ PyPI <https://pypi.org/project/pyeem/>
+   Issue Tracker <https://github.com/drewmee/PyEEM/issues>
 
-Tutorials
-=========
+Questions & Bug Reports
+-----------------------
 
-.. toctree::
-   :maxdepth: 2
-
-   tutorial
-
-Development
-===========
-.. toctree::
-   :maxdepth: 2
-
-   CHANGELOG
-   DEVELOPMENT
+PyEEM is an open-source project and contributions are always welcome from anyone. If you have a
+question, would like to propose a new feature, or submit a bug report, feel free to open up an issue
+on our `issue tracker on GitHub <https://github.com/drewmee/PyEEM/issues>`_.
 
 Indices and tables
 ==================

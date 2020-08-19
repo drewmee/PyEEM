@@ -1,3 +1,0 @@
-Visualization subpackage (pyeem.visualization)
-==============================================
-The *visualization* package provides...

@@ -1,3 +1,0 @@
-
-Jupyter notebook tutorials
-==========================

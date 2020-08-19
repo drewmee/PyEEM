@@ -36,7 +36,7 @@ Fluorescence Excitation and Emission Matrix Spectroscopy (EEMs) is a popular ana
 
 In addition to the implementation of the preprocessing and correction steps, PyEEM also provides researchers with the ability to create augmented mixture and single source training data from a small set of calibration EEM measurements. The augmentation technique relies on the fact that fluorescnce spectra are linearly additive in mixtures, according to Beer's law [source]. This augmentation technique was first described in Rutherford et al., in which it was used to train a CNN to predict the concentration of single sources of pollutants in spectral mixtures [@Rutherford2020]. Additionally, augmented and synthetic data has shown promise in improving the performace of deep learning models in several fields [@Nikolenko2019]. 
 
-PyEEM provides the first open source implementation of such an augmentation technique for EEMs. PyEEM also provides visualization toolbox useful in the interpretation of EEMs... [@Hansen2018]
+PyEEM provides the first open source implementation of such an augmentation technique for EEMs. PyEEM also provides plots toolbox useful in the interpretation of EEMs... [@Hansen2018]
 
 # Summary
 
@@ -56,7 +56,7 @@ PyEEM is a python library for the preprocessing, correction, deconvolution and a
   - Inner-filter effect correction [@Ohno2002;@Kothawala2013]
   - Raman normalization [@Lawaetz2009;@Murphy2011]
 - Augmentation [@Rutherford2020]
-- Visualization [@Hansen2018]
+- plots [@Hansen2018]
 
 # Acknowledgements
 

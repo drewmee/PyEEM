@@ -142,3 +142,4 @@ cython_debug/
 
 # Temporary data for demo datasets
 examples/demo_data/
+demo_data/
