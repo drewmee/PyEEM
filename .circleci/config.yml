@@ -6,7 +6,9 @@ orbs:
 jobs:
   job1:
     working_directory: ~/PyEEM
-    executor: win/default # executor type
+    executor: 
+      name: win/default # executor type
+      shell: powershell.exe
     steps:
       - checkout
       - run: tox
