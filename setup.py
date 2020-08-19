@@ -39,7 +39,6 @@ setuptools.setup(
         "tqdm>=4.48.0",
         "scipy>=1.4.1",
         "tensorflow>=2.2.0",
-        "tensorboard>=2.2.1",
     ],
     extras_require={
         "docs": [
