@@ -9,5 +9,5 @@ Examples
 .. toctree::
     :maxdepth: 1
 
-    tutorials/notebooks/00-drEEM
-    tutorials/notebooks/pyeem_tutorial
+    tutorials/notebooks/tutorial_1
+    tutorials/notebooks/tutorial_2
