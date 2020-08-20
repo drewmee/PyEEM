@@ -19,14 +19,14 @@ setuptools.setup(
     license="MIT",
     packages=setuptools.find_packages(exclude=["tests*", "paper", "docs"]),
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Intended Audience :: Science/Research",
         "Topic :: Scientific/Engineering :: Chemistry",
     ],
     test_suite="tests",
-    python_requires='>3.5, <3.8',
     install_requires=[
         "numpy<1.19.0,>=1.18.5",
         "pandas>=1.0.5",
