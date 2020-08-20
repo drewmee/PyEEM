@@ -141,6 +141,5 @@ cython_debug/
 .vscode
 
 # Temporary data for demo datasets
-examples/demo_data/
-
+docs/source/tutorials/notebooks/demo_data/
 !.gitkeep
