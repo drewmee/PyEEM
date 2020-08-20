@@ -4,6 +4,7 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyeem.svg)](https://pypi.org/project/pyeem/)
 [![CircleCI](https://circleci.com/gh/drewmee/PyEEM.svg?style=shield&circle-token=ccdb16078dcb8ee4e4c9b923f547fc7cb2742aae)](https://app.circleci.com/pipelines/github/drewmee/PyEEM)
 [![Read the Docs](https://readthedocs.org/projects/drewmee-demo/badge/?version=latest)](https://pyeem.readthedocs.io/)
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/drewmee/PyEEM/develop?filepath=docs%2Fsource%2Ftutorials%2Fnotebooks)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/drewmee/PyEEM/blob/master/LICENSE)
 <!--- Badge for codecov -->
 
