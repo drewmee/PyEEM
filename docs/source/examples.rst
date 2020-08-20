@@ -19,4 +19,4 @@ These example notebooks can also be launched on a live notebook server using
 `Binder <https://mybinder.org/>`_. To launch a notebook server click the badge below
 
 .. image:: https://mybinder.org/badge.svg
-    :target: https://mybinder.org/v2/gh/drewmee/PyEEM/develop?filepath=docs%2Fsource%2Ftutorials%2Fnotebooks
+    :target: https://mybinder.org/v2/gh/drewmee/PyEEM/master?filepath=docs%2Fsource%2Ftutorials%2Fnotebooks
