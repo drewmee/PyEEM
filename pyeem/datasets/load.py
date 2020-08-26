@@ -166,24 +166,6 @@ class Dataset:
         yes_list = ["y", "yes", "ye"]
         # Convert calibration sample type columns to boolean
         meta_df[cal_sample_types] = meta_df[cal_sample_types].isin(yes_list)
-
-        """
-        # TODO - Is this correct?
-        # Create prototypical_source column
-        cols = meta_df[cal_source_names].columns
-        ps = meta_df[cols].astype(bool)
-        meta_df["prototypical_source"] = ps.apply(
-            lambda x: "" if x.sum() != 1 else cols[x.values].item(), axis=1,
-        )
-
-        # TODO - Is this really needed?
-        # Also, it seems to be broken at the moment...
-        # Create test_sources column
-        ts = meta_df[cols].astype(bool)
-        meta_df["test_sources"] = ts.apply(
-            lambda x: [] if x.sum() <= 1 else cols[x.values].to_list(), axis=1,
-        )
-        """
         return meta_df
 
     def _qc_metadata(self, meta_df, meta_df_cols):
@@ -266,18 +248,12 @@ class Dataset:
         Returns:
             DataFrame: [description]
         """
-        # self.summary_info["metadata"] = meta_summary_df
-        # self.metadata_summary_info = {}
-
-        date_range = (
-            self.meta_df["datetime_utc"].min(),
-            self.meta_df["datetime_utc"].max(),
-        )
         num_sample_sets = self.meta_df.groupby(level="sample_set").ngroups
 
         summary_dict = {
-            "Date Range": str(date_range),
-            "Number of Sample Sets": str(num_sample_sets),
+            "Start datetime (UTC)": self.meta_df["datetime_utc"].min(),
+            "End datetime (UTC)": self.meta_df["datetime_utc"].max(),
+            "Number of sample sets": num_sample_sets,
         }
 
         scan_types = {
