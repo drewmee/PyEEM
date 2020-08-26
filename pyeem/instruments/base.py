@@ -7,7 +7,7 @@ def get_supported_instruments():
     """[summary]
 
     Returns:
-        [type]: [description]
+        tuple of pandas.DataFrame: [description]
     """
     manuf_instruments = {
         agilent.name: agilent.instruments,
@@ -31,13 +31,10 @@ def get_supported_instruments():
     return df_display, df
 
 
-supported, _supported = get_supported_instruments()
-
-
 def _get_dataset_instruments_df(
     raman_instrument, absorbance_instrument, eem_instrument
 ):
-    global _supported
+    _, _supported = get_supported_instruments()
     if eem_instrument not in _supported["name"].values:
         raise Exception("EEM scans collected by unsupported instrument.")
     if absorbance_instrument not in _supported["name"].values:

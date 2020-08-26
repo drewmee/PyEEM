@@ -143,3 +143,4 @@ cython_debug/
 # Temporary data for demo datasets
 docs/source/tutorials/notebooks/demo_data/
 !.gitkeep
+local_test_data/

@@ -24,9 +24,9 @@ def plot_prototypical_spectra(
         results_df (pandas.DataFrame): [description]
         plot_type (str, optional): [description]. Defaults to "imshow".
         fig (matplotlib.pyplot.figure, optional): [description]. Defaults to None.
-        fig_kws (dict, optional): [description]. Defaults to {}.
-        plot_kws (dict, optional): [description]. Defaults to {}.
-        cbar_kws (dict, optional): [description]. Defaults to {}.
+        fig_kws (dict, optional): Optional keyword arguments to include for the figure. Defaults to {}.
+        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument to the matplotlib plot call. Defaults to {}.
+        cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
 
     Returns:
         matplotlib.axes.Axes: [description]
@@ -121,9 +121,9 @@ def single_source_animation(
         ss_results_df (pandas.DataFrame): [description]
         source (str): [description]
         plot_type (str, optional): [description]. Defaults to "imshow".
-        fig_kws (dict, optional): [description]. Defaults to {}.
-        cbar_kws (dict, optional): [description]. Defaults to {}.
-        animate_kws (dict, optional): [description]. Defaults to {}.
+        fig_kws (dict, optional): Optional keyword arguments to include for the figure. Defaults to {}.
+        cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
+        animate_kws (dict, optional): Optional keyword arguments to include for the animation. Defaults to {}.
 
     Returns:
         matplotlib.animation.ArtistAnimation: [description]
@@ -224,9 +224,9 @@ def mixture_animation(
         dataset (pyeem.datasets.Dataset): [description]
         mix_results_df (pandas.DataFrame): [description]
         plot_type (str, optional): [description]. Defaults to "imshow".
-        fig_kws (dict, optional): [description]. Defaults to {}.
-        cbar_kws (dict, optional): [description]. Defaults to {}.
-        animate_kws (dict, optional): [description]. Defaults to {}.
+        fig_kws (dict, optional): Optional keyword arguments to include for the figure. Defaults to {}.
+        cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
+        animate_kws (dict, optional): Optional keyword arguments to include for the animation. Defaults to {}.
 
     Returns:
         matplotlib.animation.ArtistAnimation: [description]

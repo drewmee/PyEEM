@@ -29,9 +29,9 @@ def plot_preprocessing(
         include_complete (bool, optional): [description]. Defaults to False.
         plot_type (str, optional): [description]. Defaults to "imshow".
         fig (matplotlib.pyplot.figure, optional): [description]. Defaults to None.
-        fig_kws (dict, optional): [description]. Defaults to {}.
-        plot_kws (dict, optional): [description]. Defaults to {}.
-        cbar_kws (dict, optional): [description]. Defaults to {}.
+        fig_kws (dict, optional): Optional keyword arguments to include for the figure. Defaults to {}.
+        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument to the matplotlib plot call. Defaults to {}.
+        cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
 
     Returns:
         matplotlib.axes.Axes: [description]
@@ -144,7 +144,7 @@ def plot_calibration_curves(dataset, cal_df, subplots=False, fig_kws={}, **kwarg
         dataset (pyeem.datasets.Dataset): [description]
         cal_df (pandas.DataFrame): [description]
         subplots (bool, optional): [description]. Defaults to False.
-        fig_kws (dict, optional): [description]. Defaults to {}.
+        fig_kws (dict, optional): Optional keyword arguments to include for the figure. Defaults to {}.
 
     Returns:
         matplotlib.axes.Axes: [description]

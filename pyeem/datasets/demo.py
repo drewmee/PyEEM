@@ -38,11 +38,14 @@ def _get_demo_dataset_info():
     return pd.DataFrame.from_records(demos)
 
 
-demos = _get_demo_dataset_info()
-
-
 # from pathlib import Path
 # Path("/my/directory").mkdir(parents=True, exist_ok=True)
+
+
+def _get_bucket_file_list(bucket_name, bucket_dir):
+    s3_resource = boto3.resource("s3", config=Config(signature_version=UNSIGNED))
+    bucket = s3_resource.Bucket(bucket_name)
+    return [i.key for i in bucket.objects.filter(Prefix=bucket_dir)]
 
 
 def _download_S3_dir(demo_data_dir, bucket_dir, overwrite):
@@ -52,15 +55,14 @@ def _download_S3_dir(demo_data_dir, bucket_dir, overwrite):
     bucket_name = "pyeem-demo-datasets"
     s3_resource = boto3.resource("s3", config=Config(signature_version=UNSIGNED))
     bucket = s3_resource.Bucket(bucket_name)
-    for obj in tqdm(
-        bucket.objects.filter(Prefix=bucket_dir), desc="Download Demo Dataset from S3"
-    ):
-        path = os.path.join(demo_data_dir, obj.key)
+    file_list = [i.key for i in bucket.objects.filter(Prefix=bucket_dir)]
+    for f in tqdm(file_list, desc="Download Demo Dataset from S3"):
+        path = os.path.join(demo_data_dir, f)
         if os.path.exists(path) and overwrite == False:
             continue
         if not os.path.exists(os.path.dirname(path)):
             os.makedirs(os.path.dirname(path))
-        bucket.download_file(obj.key, path)
+        bucket.download_file(f, path)
 
 
 def download_demo(data_dir, demo_name, overwrite=False):
@@ -74,7 +76,7 @@ def download_demo(data_dir, demo_name, overwrite=False):
     Returns:
         str: [description]
     """
-    global demos
+    demos = _get_demo_dataset_info()
     if demo_name not in demos["demo_name"]:
         ValueError("%s does not exist in demos['demo_name']" % demo_name)
 
