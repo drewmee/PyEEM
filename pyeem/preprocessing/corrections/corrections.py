@@ -156,13 +156,13 @@ def raman_normalization(eem_df, raman_source_type, raman_source, method="gradien
 def scatter_bands():
     # pd.DataFrame
     data = [
-        {"band": "Raleigh", "order": "first", "poly1d": np.poly1d([0, 1.0000, 0])},
+        {"band": "Rayleigh", "order": "first", "poly1d": np.poly1d([0, 1.0000, 0])},
         {
             "band": "Raman",
             "order": "first",
             "poly1d": np.poly1d([0.0006, 0.8711, 18.7770]),
         },
-        {"band": "Raleigh", "order": "second", "poly1d": np.poly1d([0, 2.0000, 0])},
+        {"band": "Rayleigh", "order": "second", "poly1d": np.poly1d([0, 2.0000, 0])},
         {
             "band": "Raman",
             "order": "second",
@@ -175,7 +175,7 @@ def scatter_bands():
 def scatter_removal(
     eem_df, band="both", order="both", excision_width=20, fill="interp", truncate=None
 ):
-    """Function for removing Raleigh and Raman scatter by excising values
+    """Function for removing Rayleigh and Raman scatter by excising values
     in the areas where scatter is expected and replacing the missing
     values using 2d interpolation. This function is based on the
     following publication: Zepp et al. Dissolved organic fluorophores
@@ -185,14 +185,14 @@ def scatter_removal(
 
     Args:
         eem_df (pandas.DataFrame): Excitation Emission Matrix
-        band (str, optional): The scatter band (Raleigh/Raman) to be removed. Defaults to "both".
+        band (str, optional): The scatter band (Rayleigh/Raman) to be removed. Defaults to "both".
         order (str, optional): The scatter band order (first/second) to be removed. Defaults to "both".
         excision_width (int, optional): The width of excision that each band will be removed with. Defaults to 20.
         fill (str, optional): The values which will fill the excised scatter region. Defaults to "interp".
         truncate (str, optional): The option to remove all values above and/or below the excised bands. Defaults to None.
 
     Returns:
-        DataFrame: EEM with Raleigh/Raman scatter bands removed.
+        DataFrame: EEM with Rayleigh/Raman scatter bands removed.
     """
     fl = eem_df.to_numpy()
     em = eem_df.index.values
@@ -205,7 +205,7 @@ def scatter_removal(
     bands_df["above"], bands_df["below"] = [r, r]
 
     band = band.lower()
-    if band in ["raleigh", "raman"]:
+    if band in ["rayleigh", "raman"]:
         bands_df = bands_df[bands_df["band"].str.lower() == band]
 
     order = order.lower()
