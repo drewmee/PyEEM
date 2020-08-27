@@ -5,6 +5,14 @@ from .base import _get_subplot_dims
 
 
 def model_history(history):
+    """[summary]
+
+    Args:
+        history ([type]): [description]
+
+    Returns:
+        [type]: [description]
+    """
     fig, axes = plt.subplots(figsize=(8, 4), ncols=2, sharex=True)
     for i, metric in enumerate(["accuracy", "loss"]):
         ax = axes[i]
@@ -22,6 +30,18 @@ def model_history(history):
 def prediction_parity_plots(
     dataset, test_df, train_df=None, subplots=False, fig_kws={}, **kwargs
 ):
+    """[summary]
+
+    Args:
+        dataset ([type]): [description]
+        test_df ([type]): [description]
+        train_df ([type], optional): [description]. Defaults to None.
+        subplots (bool, optional): [description]. Defaults to False.
+        fig_kws (dict, optional): [description]. Defaults to {}.
+
+    Returns:
+        [type]: [description]
+    """
     colors = plt.rcParams["axes.prop_cycle"]()
     sources = dataset.calibration_sources
 
