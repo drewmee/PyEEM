@@ -5,8 +5,15 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from tensorflow.keras.layers import (Activation, Conv2D, Dense, Dropout,
-                                     Flatten, MaxPooling2D)
+from scipy import stats
+from tensorflow.keras.layers import (
+    Activation,
+    Conv2D,
+    Dense,
+    Dropout,
+    Flatten,
+    MaxPooling2D,
+)
 from tensorflow.keras.models import Sequential
 
 
@@ -97,6 +104,8 @@ class RutherfordNet:
         X, y = [], []
 
         aug_df.index = aug_df.index.droplevel(drop_indices)
+        # shuffle
+        aug_df = aug_df.sample(frac=1)
         for concentrations, eem_df in aug_df.groupby(
             sources + ["source"], as_index=False
         ):
@@ -110,7 +119,15 @@ class RutherfordNet:
             X.append(eem_np)
             y.append(concentrations[:-1])
 
-        return np.asarray(X), np.asarray(y)
+        X = np.asarray(X)
+        y = np.asarray(y)
+
+        randomize = np.arange(len(X))
+        np.random.shuffle(randomize)
+        X = X[randomize]
+        y = y[randomize]
+
+        return X, y
 
     def _isolate_test_samples(self, dataset, routine_results_df):
         # Isolate test samples from the metadata
@@ -239,8 +256,41 @@ class RutherfordNet:
             tensorflow.python.keras.callbacks.History: [description]
         """
         default_fit_kws = dict(
-            batch_size=32, epochs=5, validation_split=0.5, shuffle=True
+            batch_size=32, epochs=5, validation_split=0.3, shuffle=True
         )
         fit_kws = dict(default_fit_kws, **fit_kws)
         history = self.model.fit(X, y, **fit_kws)
         return history
+
+    def get_prediction_results(self, dataset, predictions, y):
+        cal_sources = list(dataset.calibration_sources.keys())
+        true_df = pd.DataFrame(y, columns=cal_sources)
+        pred_df = pd.DataFrame(predictions, columns=cal_sources)
+
+        results_df = pd.DataFrame()
+        for source, units in dataset.calibration_sources.items():
+            tmp_df = pd.concat(
+                [
+                    true_df[source].to_frame(name="true_concentration"),
+                    pred_df[source].to_frame(name="predicted_concentration"),
+                ],
+                axis=1,
+            )
+            tmp_df[["source", "units"]] = source, units
+            (
+                tmp_df["slope"],
+                tmp_df["intercept"],
+                tmp_df["r_value"],
+                _,
+                _,
+            ) = stats.linregress(
+                tmp_df["true_concentration"], tmp_df["predicted_concentration"]
+            )
+            tmp_df["r_squared"] = tmp_df["r_value"] ** 2
+            tmp_df = tmp_df.set_index(
+                ["source", "units", "slope", "intercept", "r_squared"]
+            )
+            tmp_df = tmp_df.drop(columns="r_value")
+            results_df = pd.concat([results_df, tmp_df])
+
+        return results_df

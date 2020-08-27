@@ -144,4 +144,4 @@ class TestPreprocessing:
         ]
         assert isinstance(cal_summary_df, pd.DataFrame)
         assert sorted(required_columns) == sorted(cal_summary_df.columns.tolist())
-        # assert cal_summary_df["source"].values.tolist() == list(self.preprocessed_dataset.calibration_sources.keys())
+        assert cal_summary_df["source"].values.tolist() == list(self.preprocessed_dataset.calibration_sources.keys())

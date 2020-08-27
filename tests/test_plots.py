@@ -16,6 +16,7 @@ class TestPlots:
         demo_preprocessed_dataset,
         demo_calibration,
         demo_augmentation,
+        demo_rutherfordnet,
     ):
         self.demo_datasets = demo_datasets
         self.preprocessed_dataset, self.routine_results_df = demo_preprocessed_dataset
@@ -25,6 +26,7 @@ class TestPlots:
             self.ss_results_df,
             self.mix_results_df,
         ) = demo_augmentation
+        self.rutherfordnet = demo_rutherfordnet
 
     def testPlotEEM(self):
         dataset = self.demo_datasets["rutherford"]
@@ -191,6 +193,10 @@ class TestPlots:
         assert len(axes.flatten()) == len(cal_sources_list)
         for ax in axes.flatten():
             assert isinstance(ax, matplotlib.axes.Axes)
+            # assert ax.get_title()
+            # assert ax.get_xlabel()
+            # assert ax.get_ylabel()
+            # assert ax.get_legend().texts
 
     def testPlotPrototypicalSpectra(self):
         proto_results_df = pyeem.augmentation.create_prototypical_spectra(
@@ -229,3 +235,34 @@ class TestPlots:
             surface_plot_kws={"rstride": 10, "cstride": 10},
         )
         assert isinstance(anim, matplotlib.animation.ArtistAnimation)
+
+    def testPlotModelHistory(self):
+        history = self.rutherfordnet.model.history
+        axes = pyeem.plots.model_history(history)
+        assert isinstance(axes, np.ndarray)
+
+    def testPredictionParityPlots(self):
+        (x_train, y_train), (x_test, y_test) = self.rutherfordnet.prepare_data(
+            self.preprocessed_dataset,
+            self.ss_results_df,
+            self.mix_results_df,
+            self.routine_results_df,
+        )
+
+        train_predictions = self.rutherfordnet.model.predict(x_train)
+        test_predictions = self.rutherfordnet.model.predict(x_test)
+
+        train_pred_results_df = self.rutherfordnet.get_prediction_results(
+            self.preprocessed_dataset, train_predictions, y_train
+        )
+        test_pred_results_df = self.rutherfordnet.get_prediction_results(
+            self.preprocessed_dataset, test_predictions, y_test
+        )
+
+        axes = pyeem.plots.prediction_parity_plots(
+            self.preprocessed_dataset,
+            test_pred_results_df,
+            train_df=train_pred_results_df,
+        )
+
+        assert isinstance(axes, np.ndarray)
