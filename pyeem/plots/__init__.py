@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from pkg_resources import resource_filename
 
+from .analysis import model_history, prediction_parity_plots
 from .augmentations import (
     mixture_animation,
     plot_prototypical_spectra,
@@ -18,5 +19,5 @@ __all__ = [
     "single_source_animation",
     "eem_plot",
     "plot_calibration_curves",
-    "plot_preprocessing"
+    "plot_preprocessing",
 ]

@@ -219,7 +219,10 @@ def plot_calibration_curves(dataset, cal_df, subplots=False, fig_kws={}, **kwarg
         ax_line, ax_label = axes.flat[ax_idx].get_legend_handles_labels()
         lines.extend(ax_line)
         labels.extend(ax_label)
-        axes.flat[ax_idx].legend(loc="upper left", fontsize=11)
+        #axes.flat[ax_idx].legend(loc="upper left", fontsize=11)
+        axes.flat[ax_idx].legend(
+            loc="upper center", bbox_to_anchor=(0.5, -0.25), ncol=2, fontsize=11
+        )
         ax_idx += 1
 
     hspace = kwargs.get("subplot_hspace", 0)

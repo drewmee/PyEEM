@@ -8,8 +8,8 @@ import pyeem
 @pytest.fixture(scope="session", autouse=True)
 def tmp_dir_fixture(tmpdir_factory):
     # setup section
-    tmp_data_dir = tmpdir_factory.mktemp("demo_data")
-    # tmp_data_dir = "local_test_data"
+    #tmp_data_dir = tmpdir_factory.mktemp("demo_data")
+    tmp_data_dir = "local_test_data"
     yield tmp_data_dir
     # teardown section
     if tmp_data_dir != "local_test_data":
@@ -102,3 +102,19 @@ def demo_augmentation(tmp_dir_fixture, demo_preprocessed_dataset, demo_calibrati
         dataset, cal_df, conc_range=(0.01, 6.3), num_steps=5
     )
     return proto_results_df, ss_results_df, mix_results_df
+
+
+@pytest.fixture(scope="session", autouse=True)
+def demo_rutherfordnet(
+    tmp_dir_fixture, demo_preprocessed_dataset, demo_calibration, demo_augmentation
+):
+    dataset, routine_results_df = demo_preprocessed_dataset
+    cal_df = demo_calibration
+    (_, ss_results_df, mix_results_df,) = demo_augmentation
+
+    rutherfordnet = pyeem.analysis.models.RutherfordNet()
+    (x_train, y_train), (x_test, y_test) = rutherfordnet.prepare_data(
+        dataset, ss_results_df, mix_results_df, routine_results_df
+    )
+    rutherfordnet.train(x_train, y_train)
+    return rutherfordnet

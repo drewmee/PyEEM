@@ -133,6 +133,8 @@ def raman_normalization(eem_df, raman_source_type, raman_source, method="gradien
     # peak boundary definition (Murphy and others, 2011)
     # raman_sources = ['water_raman', 'blank', 'metadata']
 
+    # This really oughta be refactored ASAP
+
     if raman_source_type in ["blank", "water_raman"]:
         a = 371  # lower limit
         b = 428  # upper limit
