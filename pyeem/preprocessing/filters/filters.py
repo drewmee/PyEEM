@@ -5,10 +5,40 @@ from scipy.ndimage import gaussian_filter
 
 def _get_steps():
     hdf_subdir = "preprocessing/filters/"
-    steps = {"step_name": ["crop", "discrete_wavelengths", "gaussian_smoothing"]}
+    steps = {
+        "step_name": [
+            "crop",
+            "fill_missing_values",
+            "discrete_wavelengths",
+            "gaussian_smoothing",
+        ]
+    }
     steps_df = pd.DataFrame(steps)
     steps_df["hdf_path"] = hdf_subdir + steps_df["step_name"]
     return steps_df
+
+
+def fill_missing_values(eem_df, fill):
+    """Fills NA/NAN values within an excitation-emission matrix with a user-selectable value.
+
+    Args:
+        eem_df (pandas.DataFrame): An excitation-emission matrix.
+        fill (str): The value to replace NA/NAN values with. 
+
+    Raises:
+        ValueError: Raised if fill passed value other than "zeros" or "interp".
+
+    Returns:
+        pandas.DataFrame: An excitation-emission matrix with missing values filled in.
+    """
+    valid_fill = {"zeros", "interp"}
+    if fill not in valid_fill:
+        raise ValueError("fill_missing_values: fill must be one of %r." % valid_fill)
+    if fill == "zeros":
+        eem_df.fillna(0, inplace=True)
+    elif fill == "interp":
+        eem_df = eem_df.interpolate(method="linear", axis=0).ffill().bfill()
+    return eem_df
 
 
 def _QC_crop_dims(crop_dims):
@@ -47,16 +77,19 @@ def _QC_crop_dims(crop_dims):
 
 
 def crop(eem_df, crop_dims):
-    """[summary]
+    """Crops an excitation-emission matrix to user-selectable dimensions.
 
     Args:
-        eem_df (~pandas.DataFrame): [description]
-        crop_dims (dict of {str : tuple of (int, float)}): [description]
+        eem_df (pandas.DataFrame): An excitation-emission matrix.
+        crop_dims (dict of {str : tuple of (int, float)}): A dictionary containing the 
+            upper and lower bounds for both the excitation and emission wavelengths for
+            the EEM region that you would like to keep. These bounds are inclusive.
 
     Returns:
-        DataFrame: [description]
+        pandas.DataFrame: The cropped excitation-emission matrix.
     """
 
+    # TODO - rethink if this is necessary...
     _QC_crop_dims(crop_dims)
 
     #  Rows (axis=0) are Emission wavelengths
@@ -80,11 +113,11 @@ def discrete_excitations(eem_df, selected_wavelengths):
     """[summary]
 
     Args:
-        eem_df (~pandas.DataFrame): [description]
+        eem_df (pandas.DataFrame): An excitation-emission matrix.
         ex_wl (list of int or float): [description]
 
     Returns:
-        DataFrame: [description]
+        pandas.DataFrame:[description]
     """
     eem_tdf = eem_df.transpose()
     ilocs = []
@@ -95,19 +128,19 @@ def discrete_excitations(eem_df, selected_wavelengths):
 
 
 def gaussian_smoothing(eem_df, sigma, truncate):
-    """This function does a gaussian_blurr on the 2D spectra image from
-    the input sigma and truncation sigma.
+    """Performs gaussian smooothing on the excitation-emission matrix from the input
+    sigma and truncation sigma.
 
     Args:
-        eem_df (~pandas.DataFrame): [description]
-        sig (int): Sigma of the gaussian distribution weight for
-        the data smoothing.
+        eem_df (pandas.DataFrame): An excitation-emission matrix.
+        sig (int): Sigma of the gaussian distribution weight for the data smoothing.
         trun (int): Truncate in 'sigmas' the gaussian distribution.
 
     Returns:
-        DataFrame: [description]
+        pandas.DataFrame: A guassian smoothed excitation-emission matrix.
     """
 
     # smooth the data with the gaussian filter
-    eem_blurred = gaussian_filter(eem_df.to_numpy(), sigma=sigma, truncate=truncate)
-    return eem_blurred
+    eem_blurred = gaussian_filter(eem_df, sigma=sigma, truncate=truncate)
+    eem_df[:] = eem_blurred
+    return eem_df

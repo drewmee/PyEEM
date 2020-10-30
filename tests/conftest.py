@@ -1,14 +1,13 @@
 import shutil
 
-import pytest
-
 import pyeem
+import pytest
 
 
 @pytest.fixture(scope="session", autouse=True)
 def tmp_dir_fixture(tmpdir_factory):
     # setup section
-    #tmp_data_dir = tmpdir_factory.mktemp("demo_data")
+    # tmp_data_dir = tmpdir_factory.mktemp("demo_data")
     tmp_data_dir = "local_test_data"
     yield tmp_data_dir
     # teardown section
@@ -98,7 +97,7 @@ def demo_augmentation(tmp_dir_fixture, demo_preprocessed_dataset, demo_calibrati
     ss_results_df = pyeem.augmentation.create_single_source_spectra(
         dataset, cal_df, conc_range=(0, 5), num_spectra=10
     )
-    mix_results_df = pyeem.augmentation.create_mixtures(
+    mix_results_df = pyeem.augmentation.create_mixture_spectra(
         dataset, cal_df, conc_range=(0.01, 6.3), num_steps=5
     )
     return proto_results_df, ss_results_df, mix_results_df
@@ -110,7 +109,7 @@ def demo_rutherfordnet(
 ):
     dataset, routine_results_df = demo_preprocessed_dataset
     cal_df = demo_calibration
-    (_, ss_results_df, mix_results_df,) = demo_augmentation
+    (_, ss_results_df, mix_results_df) = demo_augmentation
 
     rutherfordnet = pyeem.analysis.models.RutherfordNet()
     (x_train, y_train), (x_test, y_test) = rutherfordnet.prepare_data(
@@ -118,3 +117,4 @@ def demo_rutherfordnet(
     )
     rutherfordnet.train(x_train, y_train)
     return rutherfordnet
+

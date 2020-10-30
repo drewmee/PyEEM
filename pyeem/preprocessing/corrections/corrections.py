@@ -9,9 +9,11 @@ from ..filters import crop
 
 
 def _get_steps():
-    # Step names are human readable/interpretable and are to be used in figures, reporting, etc.
-    # Step aliases must correspond to functions and will be used to link arguments in
-    # preprocessing.routine() to their corresponding preprocessing function.
+    """
+    Step names are human readable/interpretable and are to be used in figures, reporting, etc.
+    Step aliases must correspond to functions and will be used to link arguments in
+    preprocessing.routine() to their corresponding preprocessing function.
+    """
     hdf_subdir = "preprocessing/corrections/"
     steps = {
         "step_name": [
@@ -28,19 +30,22 @@ def _get_steps():
 
 
 def blank_subtraction(sample_df, blank_df):
-    """[summary]
+    """Subtract the blank Excitation Emission Matrix (EEM) signal from a sample EEM. This step helps to 
+    reduce the effect of Raman and Rayleigh scattering.
 
     Args:
-        sample_df (~pandas.DataFrame): [description]
-        blank_df (~pandas.DataFrame): [description]
+        sample_df (pandas.DataFrame): Excitation Emission Matrix of a sample.
+        blank_df (pandas.DataFrame): Excitation Emission Matrix of a blank.
+
+    Raises:
+        ValueError: Raised if the sample EEM and the blank EEM have no overlapping Excitation-Emission pairs.
 
     Returns:
-        DataFrame: [description]
+        pandas.DataFrame: Blank subtracted Excitation Emission Matrix of sample.
     """
     if sample_df.shape != blank_df.shape:
         # warnings.warn("Sample EEM and blank EEM have different dimensions, attempting to crop the sample to the size of the blank.")
-
-        # check if bounds overlap at all
+        # Check if bounds overlap at all
         emission_overlap = blank_df.index.intersection(sample_df.index)
         excitation_overlap = blank_df.T.index.intersection(sample_df.T.index)
 
@@ -58,16 +63,15 @@ def blank_subtraction(sample_df, blank_df):
 
     sample_df = sample_df.subtract(blank_df, axis=1)
     sample_df.clip(lower=0, inplace=True)
-    # Just in case
+    # Just in case, drop rows and columns with only nan values
     sample_df.dropna(how="all", axis=1, inplace=True)
     sample_df.dropna(how="all", axis=0, inplace=True)
     return sample_df
 
 
-def inner_filter_effect(
-    eem_df, absorb_df, pathlength=1, unit="absorbance", threshold=0.03
-):
-    """Based on Kothawala, D. N., Murphy, K. R., Stedmon, C. A., Weyhenmeyer,
+def inner_filter_effect(eem_df, absorb_df, pathlength=1, threshold=0.03, limit=1.5):
+    """Uses an absorbance measurement to correct the Excitation Emission matrix for the inner-filter effect.
+    Based on Kothawala, D. N., Murphy, K. R., Stedmon, C. A., Weyhenmeyer,
     G. A., & Tranvik, L. J. (2013). Inner filter correction of dissolved
     organic matter fluorescence. Limnology and Oceanography: Methods, 11(12),
     616-630. http://doi.org/10.4319/lom.2013.11.616
@@ -78,14 +82,19 @@ def inner_filter_effect(
         \sum_{i=1}^{\\infty} x_{i}
 
     Args:
-        eem_df (~pandas.DataFrame): [description]
-        abs_df (~pandas.DataFrame): [description]
-        pathlength (int or float): [description]
-        unit (str, optional): [description]. Defaults to "absorbance".
-
+        eem_df (pandas.DataFrame): Excitation Emission Matrix of a sample.
+        abs_df (pandas.DataFrame): Absorbance spectrum of a sample
+        pathlength (int or float): Pathlength of the cuvette with which the sample was measured.
+        threshold (float, optional): The threshold of total absorbance after which IFE correction 
+            will be applied. Defaults to 0.03.
+        limit (float, optional): The total absorbance level at which IFE correction can no longer be effective.
+            If this level of total absorbance is measured, it is reccomended to perform a 2-fold dilution of 
+            the sample and perform measurements again.
+    
     Returns:
-        DataFrame: [description]
+        pandas.DataFrame: Inner-filter Effect corrected Excitation Emission Matrix.
     """
+
     # "From the ABA algorithm, the onset of significant IFE (>5%)
     # occurs when absorbance exceeds 0.042"
 
@@ -96,65 +105,83 @@ def inner_filter_effect(
     # Fcorr = Fobs * 10**((Aex + Aem)/pathlength*2)
     # ife_correction_factor = 10^(total_absorbance * pathlength/2)
 
-    def _process(row):
+    tmp_df_list = []
+    for index, row in eem_df.iterrows():
         row_df = pd.DataFrame(row)
         excitation_wavelength = row.name
         excitation_absorbance = absorb_df.iloc[
             absorb_df.index.get_loc(excitation_wavelength, method="nearest")
         ]["absorbance"]
-        merged_df = pd.merge_asof(
+        tmp_df = pd.merge_asof(
             row_df, absorb_df, left_index=True, right_index=True, direction="nearest"
         )
-        merged_df["a_total"] = merged_df["absorbance"] + [excitation_absorbance]
-        merged_df["f_corr"] = merged_df[excitation_wavelength] * 10 ** (
-            merged_df["a_total"] / (pathlength * 2)
+        tmp_df["a_total"] = tmp_df["absorbance"] + [excitation_absorbance]
+        tmp_df = tmp_df.drop(columns=[excitation_wavelength, "absorbance"])
+        tmp_df = tmp_df.rename(columns={"a_total": excitation_wavelength})
+        tmp_df_list.append(tmp_df)
+
+    a_total_df = pd.concat(tmp_df_list, axis=1).T
+    if a_total_df.to_numpy().max() >= limit:
+        raise ValueError(
+            "Found absorbance total greater than 1.5, a 2-fold dilution is reccomended. Inner-filter effect correction will not be applied to this sample."
         )
-        return merged_df["f_corr"]
+    elif (a_total_df.values > threshold).any():
+        corr_df = a_total_df.applymap(lambda x: 10 ** (x / (pathlength * 2)))
+        eem_df = eem_df * corr_df
+    else:
+        # All absorbance total values below threshold, no need to perform IFE correction
+        pass
 
-    return eem_df.apply(_process, axis=0)
+    return eem_df
 
 
-def raman_normalization(eem_df, raman_source_type, raman_source, method="gradient"):
-    """Element-wise division of the EEM spectra by area under the
-    ramam peak. See reference Murphy et al. Measurement of Dissolved
-    Organic Matter Fluorescence in Aquatic Environments:
-    An Interlaboratory Comparison" 2010 Environmental Science and
-    Technology.
+def _get_peak_position(excitation_wavelength):
+    peak_position = 1e7 / ((1e7 / excitation_wavelength) - 3400)
+    return peak_position
+
+
+def _calculate_raman_peak_area(raman_source, excitation_wavelength):
+    peak_position = _get_peak_position(excitation_wavelength)
+    peak_width = 55.6
+    a = peak_position - peak_width / 2
+    b = peak_position + peak_width / 2
+    raman_peak_area = trapz(raman_source.loc[a:b, raman_source.columns[0]])
+    return raman_peak_area, (peak_position, a, b)
+
+
+def raman_normalization(eem_df, raman_source_type, raman_source, excitation_wavelength):
+    """Element-wise division of the EEM spectra by area under the Raman peak. See 
+    reference Murphy et al. Measurement of Dissolved Organic Matter Fluorescence 
+    in Aquatic Environments: An Interlaboratory Comparison" 2010 Environmental 
+    Science and Technology.
 
     Args:
-        eem_df (pandas.DataFrame): [description]
-        blank_df (pandas.DataFrame): [description]
-        method (str, optional): [description]. Defaults to "gradient".
+        eem_df (pandas.DataFrame): Excitation Emission matrix of a sample.
+        raman_source_type ([type]): [description]
+        raman_source ([type]): [description]
+        excitation_wavelength ([type]): [description]
+
+    Raises:
+        ValueError: [description]
 
     Returns:
-        DataFrame: Raman normalized EEM spectrum in Raman Units (R.U.)
+        pandas.DataFrame: Raman normalized Excitation Emission Matrix in Raman Units (R.U.).
     """
-    # TODO - The Raman area is calculated using the  baseline-corrected
-    # peak boundary definition (Murphy and others, 2011)
-    # raman_sources = ['water_raman', 'blank', 'metadata']
-
-    # This really oughta be refactored ASAP
-
     if raman_source_type in ["blank", "water_raman"]:
-        a = 371  # lower limit
-        b = 428  # upper limit
-        raman_peak_area = trapz(raman_source[350].loc[a:b])
-
+        raman_peak_area, (peak_position, a, b) = _calculate_raman_peak_area(
+            raman_source, excitation_wavelength
+        )
     elif raman_source_type == "metadata":
         # Raise warning
         raman_peak_area = raman_source
-
     else:
-        # raise Exception
         raise ValueError(
             "Invalid input for raman_source_type. Must be 'metadata', 'water_raman', or 'blank'"
         )
-
     return eem_df / raman_peak_area
 
 
-def scatter_bands():
-    # pd.DataFrame
+def _scatter_bands():
     data = [
         {"band": "Rayleigh", "order": "first", "poly1d": np.poly1d([0, 1.0000, 0])},
         {
@@ -175,16 +202,15 @@ def scatter_bands():
 def scatter_removal(
     eem_df, band="both", order="both", excision_width=20, fill="interp", truncate=None
 ):
-    """Function for removing Rayleigh and Raman scatter by excising values
-    in the areas where scatter is expected and replacing the missing
-    values using 2d interpolation. This function is based on the
-    following publication: Zepp et al. Dissolved organic fluorophores
-    in southeastern US coastal waters: correction method for eliminating
-    Rayleigh and Raman scattering peaks in excitation–emission matrices.
-    Marine Chemistry. 2004
+    """Removal of Rayleigh and Raman scatter by excising values in the areas where
+    scatter is expected and replacing the excised values with a user-selectable 
+    value. This function is based on the following publication: Zepp et al., 
+    Dissolved organic fluorophores in southeastern US coastal waters: correction 
+    method for eliminating Rayleigh and Raman scattering peaks in excitation–emission
+    matrices. Marine Chemistry. 2004
 
     Args:
-        eem_df (pandas.DataFrame): Excitation Emission Matrix
+        eem_df (pandas.DataFrame): Excitation Emission Matrix of a sample.
         band (str, optional): The scatter band (Rayleigh/Raman) to be removed. Defaults to "both".
         order (str, optional): The scatter band order (first/second) to be removed. Defaults to "both".
         excision_width (int, optional): The width of excision that each band will be removed with. Defaults to 20.
@@ -192,7 +218,7 @@ def scatter_removal(
         truncate (str, optional): The option to remove all values above and/or below the excised bands. Defaults to None.
 
     Returns:
-        DataFrame: EEM with Rayleigh/Raman scatter bands removed.
+        pandas.DataFrame: Excitation Emission Matrix with Rayleigh/Raman scatter bands removed.
     """
     fl = eem_df.to_numpy()
     em = eem_df.index.values
@@ -200,7 +226,7 @@ def scatter_removal(
     grid_ex, grid_em = np.meshgrid(ex, em)
     values_to_excise = np.zeros(eem_df.shape, dtype=bool)
 
-    bands_df = scatter_bands()
+    bands_df = _scatter_bands()
     r = excision_width / 2
     bands_df["above"], bands_df["below"] = [r, r]
 
@@ -249,9 +275,11 @@ def scatter_removal(
         # Create an array with 'nan' in the place of values where scatter
         # is located. This may be used for vizualizing the locations of
         # scatter removal.
-        fl_NaN = np.array(fl)
-        fl_NaN[values_to_excise] = np.nan
-        eem_df = pd.DataFrame(data=fl_NaN, index=em, columns=ex)
+        fl_nan = np.array(fl)
+        fl_nan = fl_nan.astype(object)
+        fl_nan[values_to_excise] = fl_nan[values_to_excise].astype("float64")
+        fl_nan[values_to_excise] = np.nan
+        eem_df = pd.DataFrame(data=fl_nan, index=em, columns=ex)
 
     elif fill == "zeros":
         fl_zeros = np.array(fl)
@@ -287,52 +315,15 @@ def scatter_removal(
 
 
 def dilution(eem_df, dilution_factor):
-    """[summary]
+    """Corrects for sample dilution. Samples can be diluted for a variety of reasons,
+    for example for total absorbance values greater than X, N et al. states that a
+    two-factor dilution is necessary.
 
     Args:
-        eem_df (~pandas.DataFrame): [description]
-        dilution_factor (int or float): [description]
+        eem_df (pandas.DataFrame): Excitation Emission Matrix of a sample.
+        dilution_factor (int or float): Dilution of factor of original sample, (0, 1].
 
     Returns:
-        DataFrame: [description]
+        pandas.DataFrame: Dilution corrected Excitation Emission Matrix.
     """
     return eem_df * dilution_factor
-
-
-def pseudo_pivot(meta_df):
-    """Think about using melt()
-
-    DataFrame.pivot_table
-    Generalization of pivot that can handle duplicate values for one index/column pair.
-    """
-    m = []
-    for name, group in meta_df.groupby(level="sample_set"):
-        blank_name = group.xs("blank", level="scan_type")["filename"].item()
-        blank_abs = blank_name.rsplit(".dat", 1)[0] + "_abs.dat"
-
-        if blank_abs in group["filename"].values:
-            blank_abs = group[group["filename"] == blank_abs]["filename"].item()
-        else:
-            blank_abs = np.nan
-
-        for index, row in group[
-            group.index.get_level_values("scan_type") == "sample"
-        ].iterrows():
-            sample_name = row["filename"]
-            sample_abs = row["filename"].rsplit(".dat", 1)[0] + "_abs.dat"
-            if sample_abs in group["filename"].values:
-                sample_abs = group[group["filename"] == sample_abs]["filename"].item()
-            else:
-                sample_abs = np.nan
-
-            m.append(
-                {
-                    "sample_set": name,
-                    "blank": blank_name,
-                    "blank_abso": blank_abs,
-                    "sample": sample_name,
-                    "sample_abs": sample_abs,
-                }
-            )
-
-    return pd.DataFrame(m)

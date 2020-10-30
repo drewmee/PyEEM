@@ -1,14 +1,10 @@
 import pandas as pd
-import pytest
-
 import pyeem
+import pytest
 
 
 class TestInstruments:
-    manufacturers = [
-        "Agilent",
-        "Horiba",
-    ]
+    manufacturers = ["Agilent", "Horiba", "Tecan"]
     """
     manuf_instruments = {
         pyeem.instruments.agilent.name: pyeem.instruments.agilent.instruments,

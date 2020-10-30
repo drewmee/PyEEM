@@ -18,23 +18,37 @@ from tensorflow.keras.models import Sequential
 
 
 class RutherfordNet:
-    """[summary]
+    """The convolutional neural network (CNN) described in Rutherford et al. 2020.
     """
 
-    def __init__(self):
-        """[summary]
-        """
-        self.model = self.create_model()
+    def __init__(self, **kwargs):
+        self.name = kwargs.get("name", None)
+        self.input_shape = kwargs.get("input_shape", [142, 139, 1])
+        self.output_dense_units = kwargs.get("output_dense_units", 3)
+        self.compile_kws = kwargs.get("compile_kws", {})
+        self.model = self.create_model(
+            name=self.name,
+            input_shape=self.input_shape,
+            output_dense_units=self.output_dense_units,
+            compile_kws=self.compile_kws,
+        )
 
-    def create_model(self, name="rutherfordnet", compile_kws={}):
-        """[summary]
+    def create_model(
+        self,
+        name="rutherfordnet",
+        input_shape=[142, 139, 1],
+        output_dense_units=3,
+        compile_kws={},
+    ):
+        """Builds and compiles the CNN.
 
         Args:
-            name (str, optional): [description]. Defaults to "rutherfordnet".
-            compile_kws (dict, optional): [description]. Defaults to {}.
+            name (str, optional): The name of the model. Defaults to "rutherfordnet".
+            compile_kws (dict, optional): Additional keyword arguments which 
+                will be passed to tensorflow.keras.Model.compile(). Defaults to {}.
 
         Returns:
-            tensorflow.keras.Model: [description]
+            tensorflow.keras.Model: The compiled CNN model.
         """
         model = Sequential(name=name)
 
@@ -42,7 +56,7 @@ class RutherfordNet:
         # first layer
         model.add(
             Conv2D(
-                20, (5, 5), padding="same", input_shape=[142, 139, 1], activation="elu"
+                20, (5, 5), padding="same", input_shape=input_shape, activation="elu"
             )
         )
         model.add(MaxPooling2D(pool_size=(3, 3)))
@@ -68,7 +82,7 @@ class RutherfordNet:
 
         # Output layer
         model.add(Dropout(0.2))
-        model.add(Dense(3, activation="linear"))
+        model.add(Dense(output_dense_units, activation="linear"))
 
         default_compile_kws = dict(
             loss="mean_squared_error", optimizer="adam", metrics=["accuracy"]
@@ -78,15 +92,18 @@ class RutherfordNet:
         return model
 
     def get_training_data(self, dataset, ss_results_df, mix_results_df):
-        """[summary]
+        """Assembles a training data in a format that is able to be ingested by the
+        Keras CNN model.
 
         Args:
-            dataset (pyeem.datasets.Dataset): [description]
-            ss_results_df (pandas.DataFrame): [description]
-            mix_results_df (pandas.DataFrame): [description]
+            dataset (pyeem.datasets.Dataset): The PyEEM dataset being used to 
+                generate training data.
+            ss_results_df (pandas.DataFrame): The augmented single source spectra results.
+            mix_results_df (pandas.DataFrame): The augmented mixture spectra results.
 
         Returns:
-            tuple of numpy.ndarray: [description]
+            tuple of numpy.ndarray: The formatted training data to be used in 
+            pyeem.analysis.models.RutherfordNet.train()
         """
         sources = list(dataset.calibration_sources.keys())
         aug_results_df = pd.concat([ss_results_df, mix_results_df])
@@ -178,7 +195,7 @@ class RutherfordNet:
             row_df = row.to_frame().T[sources]
             test_sources = row_df.columns[row_df[sources].any()].values
 
-            source = np.NaN
+            source = np.nan
             if len(test_sources) == 1:
                 source = test_sources[0]
             elif len(test_sources) > 1:
@@ -198,14 +215,18 @@ class RutherfordNet:
         return test_samples_df
 
     def get_test_data(self, dataset, routine_results_df):
-        """[summary]
+        """Assembles the test data in a format that is able to be ingested by the
+        Keras CNN model. This data will be fed into the trained CNN for it to 
+        make predictions with.
 
         Args:
-            dataset (pyeem.datasets.Dataset): [description]
-            routine_results_df (pandas.DataFrame): [description]
+            dataset (pyeem.datasets.Dataset): The PyEEM dataset being used to 
+                generate test data.
+            routine_results_df (pandas.DataFrame): The results of the preprocessing routine.
 
         Returns:
-            tuple of numpy.ndarray: [description]
+            tuple of numpy.ndarray: The formatted test data to be used in 
+            pyeem.analysis.models.RutherfordNet.model.predict()
         """
         test_samples_df = self._isolate_test_samples(dataset, routine_results_df)
 
@@ -227,16 +248,17 @@ class RutherfordNet:
         return np.asarray(X), np.asarray(y)
 
     def prepare_data(self, dataset, ss_results_df, mix_results_df, routine_results_df):
-        """[summary]
+        """Assembles both training and test data in a format that is able to be ingested by the
+        Keras CNN model.
 
         Args:
-            dataset (pyeem.datasets.Dataset): [description]
-            ss_results_df (pandas.DataFrame): [description]
-            mix_results_df (pandas.DataFrame): [description]
-            routine_results_df (pandas.DataFrame): [description]
+            dataset (pyeem.datasets.Dataset): A PyEEM dataset
+            ss_results_df (pandas.DataFrame): The augmented single source spectra results.
+            mix_results_df (pandas.DataFrame): The augmented mixture spectra results.
+            routine_results_df (pandas.DataFrame): The results of the preprocessing routine.
 
         Returns:
-            tuple of (tuple of numpy.ndarray): [description]
+            tuple of (tuple of numpy.ndarray): Training and test data.
         """
         x_train, y_train = self.get_training_data(
             dataset, ss_results_df, mix_results_df
@@ -245,15 +267,17 @@ class RutherfordNet:
         return (x_train, y_train), (x_test, y_test)
 
     def train(self, X, y, fit_kws={}):
-        """[summary]
+        """Train the CNN model with a call to Keras' fit().
 
         Args:
-            X (numpy.ndarray): [description]
-            y (numpy.ndarray): [description]
-            fit_kws (dict, optional): [description]. Defaults to {}.
+            X (numpy.ndarray): Training Spectra.
+            y (numpy.ndarray): Concentration labels.
+            fit_kws (dict, optional): Additional key word arguments which will be used in the
+                call to Kera's fit(). Defaults to {}.
 
         Returns:
-            tensorflow.python.keras.callbacks.History: [description]
+            tensorflow.python.keras.callbacks.History: The model's training history which contains information
+            about model accuracy and loss across training epochs.
         """
         default_fit_kws = dict(
             batch_size=32, epochs=5, validation_split=0.3, shuffle=True

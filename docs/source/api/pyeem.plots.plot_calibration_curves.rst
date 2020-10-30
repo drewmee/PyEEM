@@ -1,6 +1,6 @@
-plot_calibration_curves
+calibration_curves_plot
 =======================
 
 .. currentmodule:: pyeem.plots
 
-.. autofunction:: plot_calibration_curves
+.. autofunction:: calibration_curves_plot

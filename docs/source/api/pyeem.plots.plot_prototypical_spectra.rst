@@ -1,6 +1,6 @@
-plot_prototypical_spectra
+prototypical_spectra_plot
 =========================
 
 .. currentmodule:: pyeem.plots
 
-.. autofunction:: plot_prototypical_spectra
+.. autofunction:: prototypical_spectra_plot
