@@ -424,4 +424,3 @@ def perform_routine(dataset, routine_df, progress_bar=False, **kwargs):
             _process_sample_set, dataset, routine_df, **kwargs
         )
     return results_df
-

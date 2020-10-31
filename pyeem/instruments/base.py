@@ -44,9 +44,9 @@ def _get_dataset_instruments_df(
     passed_instruments = {
         "Water Raman": raman_instrument,
         "Absorbance": absorbance_instrument,
-        "EEM": eem_instrument
+        "EEM": eem_instrument,
     }
-    
+
     dataset_instruments = {}
     for key, value in passed_instruments.items():
         if (value not in _supported["name"].values) and (value is not None):
@@ -58,8 +58,8 @@ def _get_dataset_instruments_df(
             )
         else:
             instrument_obj = None
-        
+
         dataset_instruments[key.lower().replace(" ", "_")] = instrument_obj
-    
+
     dataset_instruments_df = pd.DataFrame(dataset_instruments, index=[0])
     return dataset_instruments_df
