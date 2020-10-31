@@ -57,7 +57,7 @@ setuptools.setup(
         ],
         "tests": ["pytest>=6.0.1", "tox>=3.16.1"],
         "develop": ["twine>=3.2.0", "pre-commit>=2.8.2"],
-        "jupyter": ["jupyter>=1.0.0", "jupyterlab>=2.2.2"],
+        "jupyter": ["ipython>=7.16.1", "jupyter>=1.0.0", "jupyterlab>=2.2.2"],
     },
     package_data={"pyeem": ["plots/pyeem_base.mplstyle"]},
 )

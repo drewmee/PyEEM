@@ -28,6 +28,6 @@ jobs:
         run: |
           sudo apt-get install pandoc
           python -m pip install --upgrade pip setuptools wheel
-          pip install -e .[docs]
+          pip install -e ".[docs, jupyter]"
       - name: Build documentation
         run: sphinx-build -a -b html -W docs/source/ docs/build/
