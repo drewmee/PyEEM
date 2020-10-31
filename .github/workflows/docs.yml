@@ -1,4 +1,4 @@
-name: Documentation Build
+name: Documentation
 
 on:
   push:
@@ -26,6 +26,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt install pandoc
           python -m pip install --upgrade pip setuptools wheel
           pip install -e .[docs]
       - name: Build documentation
