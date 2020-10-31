@@ -39,7 +39,7 @@ def _get_demo_dataset_info():
 
 
 # from pathlib import Path
-# Path("/my/directory").mkdir(parents=True, exist_ok=True)
+# Path(os.path.dirname(path)).mkdir(parents=True, exist_ok=True)
 
 
 def _get_bucket_file_list(bucket_name, bucket_dir):
@@ -49,19 +49,25 @@ def _get_bucket_file_list(bucket_name, bucket_dir):
 
 
 def _download_S3_dir(demo_data_dir, bucket_dir, overwrite):
-    # TODO change to zip files for each demo dataset
+    # TODO consider changing to zip files for each demo dataset
     # Download zip file and unzip instead of downloading
     # each file one by one.
     bucket_name = "pyeem-demo-datasets"
     s3_resource = boto3.resource("s3", config=Config(signature_version=UNSIGNED))
     bucket = s3_resource.Bucket(bucket_name)
+
     file_list = [i.key for i in bucket.objects.filter(Prefix=bucket_dir)]
     for f in tqdm(file_list, desc="Download Demo Dataset from S3"):
         path = os.path.join(demo_data_dir, f)
         if os.path.exists(path) and overwrite == False:
             continue
+
+        if os.path.normpath(f) == bucket_dir:
+            continue
+
         if not os.path.exists(os.path.dirname(path)):
             os.makedirs(os.path.dirname(path))
+
         bucket.download_file(f, path)
 
 
