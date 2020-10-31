@@ -6,21 +6,21 @@
 Contributing
 ************
 
-PyEEM is an open-source project and contributions are always welcome from anyone. Feel free to open a pull request on `GitHub <https://github.com/drewmee/PyEEM>`_ or file a new feature request or bug report on our `issue tracker <https://github.com/drewmee/PyEEM/issues>`_.
+PyEEM is an open-source project and contributions are always welcome from anyone. Feel free to open a pull request on `GitHub <https://github.com/drewmee/PyEEM>`__ or file a new feature request or bug report on our `issue tracker <https://github.com/drewmee/PyEEM/issues>`__.
 
 
 ==================
 Contributing guide
 ==================
 
-If you are new to working with forks, check out `GitHub's working with forks article <https://help.github.com/articles/working-with-forks/>`_.
+If you are new to working with forks, check out `GitHub's working with forks article <https://help.github.com/articles/working-with-forks/>`__.
 
 
 Step 1: Creating a new issue
 ============================
 
-- If you don't already have a `GitHub <http://www.github.com>`_ account, create one
-- Go to the `PyEEM GitHub page <https://github.com/drewmee/PyEEM>`_ and create a new issue by clicking on the "Issues" tab and then the "New issue" button
+- If you don't already have a `GitHub <http://www.github.com>`__ account, create one
+- Go to the `PyEEM GitHub page <https://github.com/drewmee/PyEEM>`__ and create a new issue by clicking on the "Issues" tab and then the "New issue" button
 
 .. image:: _static/open-new-issue.png
 
@@ -139,7 +139,7 @@ The output should be
 Step 6: Install local copy of PyEEM
 ======================================
 
-Next, you'll want to make sure that Python imports your local version of PyEEM. This can be done by ``pip`` installing your local PyEEM repository in `editable mode <https://pip.pypa.io/en/stable/reference/pip_install/#editable-installs>`_
+Next, you'll want to make sure that Python imports your local version of PyEEM. This can be done by ``pip`` installing your local PyEEM repository in `editable mode <https://pip.pypa.io/en/stable/reference/pip_install/#editable-installs>`__
 
 .. code-block:: bash
 
@@ -219,7 +219,7 @@ Finally, you can go to your copy of PyEEM on GitHub and submit a pull
 request by clicking the "Compare & pull request" button!
 
 If you're new to writing pull requests, see GitHub's `How to write the perfect
-pull request <https://blog.github.com/2015-01-21-how-to-write-the-perfect-pull-request/>`_
+pull request <https://blog.github.com/2015-01-21-how-to-write-the-perfect-pull-request/>`__
 article for a list of some best practices.
 
 .. image:: _static/pull-request-button.png
