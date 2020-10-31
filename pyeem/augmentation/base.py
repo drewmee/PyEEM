@@ -87,12 +87,12 @@ def prototypical_spectrum(dataset, source_df):
 
 
 def create_prototypical_spectra(dataset, cal_df):
-    """Creates a protoypical spectrum for each calibration source in the PyEEM 
-    dataset. 
+    """Creates a protoypical spectrum for each calibration source in the PyEEM
+    dataset.
 
     Args:
         dataset (pyeem.datasets.Dataset): Your PyEEM dataset.
-        cal_df (pandas.DataFrame): Calibration information for your dataset 
+        cal_df (pandas.DataFrame): Calibration information for your dataset
             returned from :meth:`pyeem.preprocessing.calibration()`
 
     Returns:
@@ -119,7 +119,7 @@ def single_source(dataset, source_df, conc_range, num_spectra):
     Args:
         dataset (pyeem.datasets.Dataset): Your PyEEM dataset.
         source_df (pandas.DataFrame): Calibration information for a single source.
-        conc_range (tuple of (int, float)): The concentration range which the 
+        conc_range (tuple of (int, float)): The concentration range which the
             augmented single source spectra will occupy.
         num_spectra (int): The number of augmented single source spectra to create.
 
@@ -216,9 +216,9 @@ def create_single_source_spectra(dataset, cal_df, conc_range, num_spectra):
 
     Args:
         dataset (pyeem.datasets.Dataset): Your PyEEM dataset.
-        cal_df (pandas.DataFrame): Calibration information for your dataset 
+        cal_df (pandas.DataFrame): Calibration information for your dataset
             returned from :meth:`pyeem.preprocessing.calibration()`
-        conc_range (tuple of (int, float)): The concentration range which the 
+        conc_range (tuple of (int, float)): The concentration range which the
             augmented single source spectra will occupy.
         num_spectra (int): The number of augmented single source spectra for each
             calibration source.
@@ -260,9 +260,9 @@ def create_mixture_spectra(dataset, cal_df, conc_range, num_steps, scale="logari
 
     Args:
         dataset (pyeem.datasets.Dataset): Your PyEEM dataset.
-        cal_df (pandas.DataFrame): Calibration information for your dataset 
+        cal_df (pandas.DataFrame): Calibration information for your dataset
             returned from :meth:`pyeem.preprocessing.calibration()`
-        conc_range (tuple of (int, float)): The concentration range which the 
+        conc_range (tuple of (int, float)): The concentration range which the
             augmented spectra mixtures will occupy.
         num_steps (int): The number of intervals within the concentration range.
         scale (str, optional): Determines how the concentrations will be spaced along

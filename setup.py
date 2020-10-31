@@ -51,7 +51,7 @@ setuptools.setup(
             "msmb_theme>=1.2.0",
             "nbsphinx>=0.7.1",
             "sphinx-copybutton>=0.3.0",
-            "black>=18.9b0",
+            "black>=20.8b1",
             "isort>=5.4.2",
             "rstcheck>=3.3.1",
         ],

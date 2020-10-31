@@ -18,8 +18,7 @@ from tensorflow.keras.models import Sequential
 
 
 class RutherfordNet:
-    """The convolutional neural network (CNN) described in Rutherford et al. 2020.
-    """
+    """The convolutional neural network (CNN) described in Rutherford et al. 2020."""
 
     def __init__(self, **kwargs):
         self.name = kwargs.get("name", None)
@@ -44,7 +43,7 @@ class RutherfordNet:
 
         Args:
             name (str, optional): The name of the model. Defaults to "rutherfordnet".
-            compile_kws (dict, optional): Additional keyword arguments which 
+            compile_kws (dict, optional): Additional keyword arguments which
                 will be passed to tensorflow.keras.Model.compile(). Defaults to {}.
 
         Returns:
@@ -96,13 +95,13 @@ class RutherfordNet:
         Keras CNN model.
 
         Args:
-            dataset (pyeem.datasets.Dataset): The PyEEM dataset being used to 
+            dataset (pyeem.datasets.Dataset): The PyEEM dataset being used to
                 generate training data.
             ss_results_df (pandas.DataFrame): The augmented single source spectra results.
             mix_results_df (pandas.DataFrame): The augmented mixture spectra results.
 
         Returns:
-            tuple of numpy.ndarray: The formatted training data to be used in 
+            tuple of numpy.ndarray: The formatted training data to be used in
             pyeem.analysis.models.RutherfordNet.train()
         """
         sources = list(dataset.calibration_sources.keys())
@@ -216,16 +215,16 @@ class RutherfordNet:
 
     def get_test_data(self, dataset, routine_results_df):
         """Assembles the test data in a format that is able to be ingested by the
-        Keras CNN model. This data will be fed into the trained CNN for it to 
+        Keras CNN model. This data will be fed into the trained CNN for it to
         make predictions with.
 
         Args:
-            dataset (pyeem.datasets.Dataset): The PyEEM dataset being used to 
+            dataset (pyeem.datasets.Dataset): The PyEEM dataset being used to
                 generate test data.
             routine_results_df (pandas.DataFrame): The results of the preprocessing routine.
 
         Returns:
-            tuple of numpy.ndarray: The formatted test data to be used in 
+            tuple of numpy.ndarray: The formatted test data to be used in
             pyeem.analysis.models.RutherfordNet.model.predict()
         """
         test_samples_df = self._isolate_test_samples(dataset, routine_results_df)

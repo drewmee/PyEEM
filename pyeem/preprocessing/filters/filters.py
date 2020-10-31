@@ -23,7 +23,7 @@ def fill_missing_values(eem_df, fill):
 
     Args:
         eem_df (pandas.DataFrame): An excitation-emission matrix.
-        fill (str): The value to replace NA/NAN values with. 
+        fill (str): The value to replace NA/NAN values with.
 
     Raises:
         ValueError: Raised if fill passed value other than "zeros" or "interp".
@@ -81,7 +81,7 @@ def crop(eem_df, crop_dims):
 
     Args:
         eem_df (pandas.DataFrame): An excitation-emission matrix.
-        crop_dims (dict of {str : tuple of (int, float)}): A dictionary containing the 
+        crop_dims (dict of {str : tuple of (int, float)}): A dictionary containing the
             upper and lower bounds for both the excitation and emission wavelengths for
             the EEM region that you would like to keep. These bounds are inclusive.
 

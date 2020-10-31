@@ -8,13 +8,13 @@ from pyeem.analysis.basic import fluorescence_regional_integration
 
 
 def calibration(dataset, routine_results_df, step="complete"):
-    """Perform a calibration with the samples marked as calibration sources 
+    """Perform a calibration with the samples marked as calibration sources
     in the dataset's metadata.
 
     Args:
         dataset (pyeem.datasets.Dataset): Your PyEEM dataset.
         routine_results_df (pandas.DataFrame): The results from the preprocessing routine.
-        step (str, optional): The step in the preprocessing routine you would like to 
+        step (str, optional): The step in the preprocessing routine you would like to
             use in the calibration. Defaults to "complete".
 
     Returns:
@@ -115,7 +115,7 @@ def calibration_summary_info(cal_df):
     """Summary information about completed calibration for each source in the dataset.
 
     Args:
-        cal_df (pandas.DataFrame): Calibration information for your dataset 
+        cal_df (pandas.DataFrame): Calibration information for your dataset
             returned from :meth:`~pyeem.preprocessing.calibration()`
 
     Returns:

@@ -33,7 +33,7 @@ def preprocessing_routine_plot(
         plot_type (str, optional): [description]. Defaults to "imshow".
         fig (matplotlib.pyplot.figure, optional): [description]. Defaults to None.
         fig_kws (dict, optional): Optional keyword arguments to include for the figure. Defaults to {}.
-        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument 
+        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument
             to the matplotlib plot call. Defaults to {}.
         cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
 
@@ -101,8 +101,10 @@ def preprocessing_routine_plot(
         ax = fig.add_subplot(nrows, ncols, i, projection=projection)
         axes.append(ax)
 
-    suptitle = "Results of Preprocessing Routine - Sample Set #{0}\nSample name: {1}".format(
-        sample_set, sample_name
+    suptitle = (
+        "Results of Preprocessing Routine - Sample Set #{0}\nSample name: {1}".format(
+            sample_set, sample_name
+        )
     )
     suptitle = kwargs.get("suptitle", suptitle)
     suptitle_fontsize = kwargs.get("suptitle_fontsize", 20)

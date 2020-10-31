@@ -155,9 +155,9 @@ def _eem_surface_contour(
         intensity_units (str): [description]
         include_cbar (bool): If true, colorbar will be included.
         plot_type (str, optional): [description]. Defaults to "surface".
-        surface_plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an 
+        surface_plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an
             argument to the matplotlib surface plot call. Defaults to {}.
-        contour_plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an 
+        contour_plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an
             argument to the matplotlib contour plot call. Defaults to {}.
         cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
 
@@ -266,7 +266,7 @@ def eem_plot(
 
     Args:
         eem_df (pandas.DataFrame): An Excitation Emission matrix.
-        ax (matplotlib.axes.Axes, optional): If an axis is provided, the EEM will be plotted on this 
+        ax (matplotlib.axes.Axes, optional): If an axis is provided, the EEM will be plotted on this
             axis. Otherwise, a new axis object will be created. Defaults to None.
         plot_type (str, optional): [description]. Defaults to "imshow".
         intensity_units (str, optional): [description]. Defaults to "unspecified".
@@ -274,7 +274,7 @@ def eem_plot(
         aspect (str, optional): [description]. Defaults to "equal".
         include_cbar (bool): If true, colorbar will be included.
         fig_kws (dict, optional): Optional keyword arguments to include for the figure. Defaults to {}.
-        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument 
+        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument
             to the matplotlib plot call. Defaults to {}.
         cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
 
@@ -282,7 +282,7 @@ def eem_plot(
         ValueError: [description]
 
     Returns:
-        matplotlib.contour.QuadContourSet, matplotlib.image.AxesImage, or 
+        matplotlib.contour.QuadContourSet, matplotlib.image.AxesImage, or
         mpl_toolkits.mplot3d.art3d.Poly3DCollection: [description]
     """
 

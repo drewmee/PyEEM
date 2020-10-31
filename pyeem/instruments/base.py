@@ -4,13 +4,13 @@ from . import agilent, horiba, tecan
 
 
 def get_supported_instruments():
-    """Gets list of instruments which are supported by PyEEM. These instruments 
+    """Gets list of instruments which are supported by PyEEM. These instruments
     can be passed as arguments to pyeem.datasets.Dataset to load raw data files.
 
     Returns:
-        tuple of pandas.DataFrame: Two tables of supported instruments. The first including 
-        only human-readable information. The second containing instances of each of the 
-        instrument classes which is eventually used in pyeem.datasets.Dataset to load 
+        tuple of pandas.DataFrame: Two tables of supported instruments. The first including
+        only human-readable information. The second containing instances of each of the
+        instrument classes which is eventually used in pyeem.datasets.Dataset to load
         raw data files.
     """
     manuf_instruments = {

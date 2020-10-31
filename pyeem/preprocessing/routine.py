@@ -50,7 +50,7 @@ def create_routine(
     """Create the preprocessing routine for correcting and filtering the data.
 
     Args:
-        crop (bool, optional): Determines whether or not to include 
+        crop (bool, optional): Determines whether or not to include
             :meth:`~pyeem.preprocessing.filters.crop` in the routine. Defaults to False.
         fill_missing_values (bool, optional): Determines whether or not to include
             :meth:`~pyeem.preprocessing.filters.fill_missing_values` in the routine. Defaults to False.
@@ -70,7 +70,7 @@ def create_routine(
             :meth:`~pyeem.preprocessing.corrections.dilution` in the routine. Defaults to False.
 
     Returns:
-        pandas.DataFrame: A table containing the steps of the preprocessing routine in the order 
+        pandas.DataFrame: A table containing the steps of the preprocessing routine in the order
         which they will be executed by pyeem.preprocessing.perform_routine().
     """
     raw = True

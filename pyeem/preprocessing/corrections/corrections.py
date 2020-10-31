@@ -30,7 +30,7 @@ def _get_steps():
 
 
 def blank_subtraction(sample_df, blank_df):
-    """Subtract the blank Excitation Emission Matrix (EEM) signal from a sample EEM. This step helps to 
+    """Subtract the blank Excitation Emission Matrix (EEM) signal from a sample EEM. This step helps to
     reduce the effect of Raman and Rayleigh scattering.
 
     Args:
@@ -75,9 +75,9 @@ def inner_filter_effect(eem_df, absorb_df, pathlength=1, threshold=0.03, limit=1
     G. A., & Tranvik, L. J. (2013). Inner filter correction of dissolved
     organic matter fluorescence. Limnology and Oceanography: Methods, 11(12),
     616-630. http://doi.org/10.4319/lom.2013.11.616
-    
+
     TODO - add the IFE correction formula in RST format
-    
+
     .. math::
         \sum_{i=1}^{\\infty} x_{i}
 
@@ -85,12 +85,12 @@ def inner_filter_effect(eem_df, absorb_df, pathlength=1, threshold=0.03, limit=1
         eem_df (pandas.DataFrame): Excitation Emission Matrix of a sample.
         abs_df (pandas.DataFrame): Absorbance spectrum of a sample
         pathlength (int or float): Pathlength of the cuvette with which the sample was measured.
-        threshold (float, optional): The threshold of total absorbance after which IFE correction 
+        threshold (float, optional): The threshold of total absorbance after which IFE correction
             will be applied. Defaults to 0.03.
         limit (float, optional): The total absorbance level at which IFE correction can no longer be effective.
-            If this level of total absorbance is measured, it is reccomended to perform a 2-fold dilution of 
+            If this level of total absorbance is measured, it is reccomended to perform a 2-fold dilution of
             the sample and perform measurements again.
-    
+
     Returns:
         pandas.DataFrame: Inner-filter Effect corrected Excitation Emission Matrix.
     """
@@ -150,9 +150,9 @@ def _calculate_raman_peak_area(raman_source, excitation_wavelength):
 
 
 def raman_normalization(eem_df, raman_source_type, raman_source, excitation_wavelength):
-    """Element-wise division of the EEM spectra by area under the Raman peak. See 
-    reference Murphy et al. Measurement of Dissolved Organic Matter Fluorescence 
-    in Aquatic Environments: An Interlaboratory Comparison" 2010 Environmental 
+    """Element-wise division of the EEM spectra by area under the Raman peak. See
+    reference Murphy et al. Measurement of Dissolved Organic Matter Fluorescence
+    in Aquatic Environments: An Interlaboratory Comparison" 2010 Environmental
     Science and Technology.
 
     Args:
@@ -203,9 +203,9 @@ def scatter_removal(
     eem_df, band="both", order="both", excision_width=20, fill="interp", truncate=None
 ):
     """Removal of Rayleigh and Raman scatter by excising values in the areas where
-    scatter is expected and replacing the excised values with a user-selectable 
-    value. This function is based on the following publication: Zepp et al., 
-    Dissolved organic fluorophores in southeastern US coastal waters: correction 
+    scatter is expected and replacing the excised values with a user-selectable
+    value. This function is based on the following publication: Zepp et al.,
+    Dissolved organic fluorophores in southeastern US coastal waters: correction
     method for eliminating Rayleigh and Raman scattering peaks in excitation–emission
     matrices. Marine Chemistry. 2004
 

@@ -8,18 +8,18 @@ def fluorescence_regional_integration(
         "emission_bounds": (-float("inf"), float("inf")),
     },
 ):
-    """Fluorescence Excitation−Emission Matrix Regional Integration to 
+    """Fluorescence Excitation−Emission Matrix Regional Integration to
     Quantify Spectra for Dissolved Organic Matter. Chen et al. 2003
 
     Args:
         eem_df (pandas.DataFrame): An Excitation Emission matrix.
         region_bounds (dict of {str: tuple of (int or float)}, optional):
-            A dictionary containing the upper and lower wavelength integration 
-            bounds for both excitation and emission wavelengths. Defaults to 
+            A dictionary containing the upper and lower wavelength integration
+            bounds for both excitation and emission wavelengths. Defaults to
             { "excitation_bounds": (-float("inf"), float("inf")), "emission_bounds": (-float("inf"), float("inf")) }.
 
     Returns:
-        float: Integrated fluorescence intensity. 
+        float: Integrated fluorescence intensity.
     """
 
     fl = eem_df.to_numpy()

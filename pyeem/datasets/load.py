@@ -51,7 +51,7 @@ def create_metadata_template(filepath, calibration_sources=None):
 
     Args:
         filepath (str): A filepath with which the new template will be written to.
-        calibration_sources (dict of {str : str}, optional): The calibration sources 
+        calibration_sources (dict of {str : str}, optional): The calibration sources
         which will be measured in the future dataset. Defaults to None.
 
     Returns:
@@ -64,8 +64,7 @@ def create_metadata_template(filepath, calibration_sources=None):
 
 
 class Dataset:
-    """An EEM dataset which keeps track of measurement data and metadata.
-    """
+    """An EEM dataset which keeps track of measurement data and metadata."""
 
     def __init__(
         self,
@@ -427,8 +426,7 @@ class Dataset:
         )
 
     def load_sample_sets(self):
-        """Loads all sample sets which are tracked in the metadata from disk and write to the HDF5 file.
-        """
+        """Loads all sample sets which are tracked in the metadata from disk and write to the HDF5 file."""
         # Group by sample sets
         if self.progress_bar:
             with std_out_err_redirect_tqdm() as orig_stdout:
