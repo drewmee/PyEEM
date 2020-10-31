@@ -7,7 +7,7 @@ from celluloid import Camera
 from .base import _colorbar, _get_subplot_dims, eem_plot
 
 
-def plot_prototypical_spectra(
+def prototypical_spectra_plot(
     dataset,
     results_df,
     plot_type="imshow",

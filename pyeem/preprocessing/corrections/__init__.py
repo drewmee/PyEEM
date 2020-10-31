@@ -1,4 +1,5 @@
 from .corrections import (
+    _calculate_raman_peak_area,
     _get_steps,
     blank_subtraction,
     dilution,

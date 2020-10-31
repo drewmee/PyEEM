@@ -5,6 +5,7 @@ import warnings
 
 import numpy as np
 import pandas as pd
+import tables
 from pandas.errors import PerformanceWarning
 from tables.exceptions import NaturalNameWarning
 from tqdm import tqdm
@@ -35,8 +36,9 @@ def _metadata_template(calibration_sources=None):
         "description",
         "comments",
         "collected_by",
-        "dilution",
+        "dilution_factor",
     ]
+
     cal_cols = ["calibration_sample", "prototypical_sample", "test_sample"]
     if calibration_sources:
         meta_df_cols = meta_df_cols + calibration_sources + cal_cols
@@ -45,14 +47,15 @@ def _metadata_template(calibration_sources=None):
 
 
 def create_metadata_template(filepath, calibration_sources=None):
-    """[summary]
+    """Creates an empty metadata template for future data collection.
 
     Args:
-        filepath (str): [description]
-        calibration_sources (dict of {str : str}, optional): [description]. Defaults to None.
+        filepath (str): A filepath with which the new template will be written to.
+        calibration_sources (dict of {str : str}, optional): The calibration sources
+        which will be measured in the future dataset. Defaults to None.
 
     Returns:
-        DataFrame: [description]
+        pandas.DataFrame: The metadata template which was written to a CSV.
     """
     abs_filepath = os.path.abspath(filepath)
     meta_df = _metadata_template(calibration_sources=calibration_sources)
@@ -61,8 +64,7 @@ def create_metadata_template(filepath, calibration_sources=None):
 
 
 class Dataset:
-    """[summary]
-    """
+    """An EEM dataset which keeps track of measurement data and metadata."""
 
     def __init__(
         self,
@@ -77,30 +79,26 @@ class Dataset:
         progress_bar=False,
         **kwargs,
     ):
-        """[summary]
-
+        """
         Args:
-            data_dir (str): [description]
-            raman_instrument (str, optional): [description]. Defaults to None.
-            absorbance_instrument (str, optional): [description]. Defaults to None.
-            eem_instrument (str, optional): [description]. Defaults to None.
-            scan_sets_subdir (str, optional): [description]. Defaults to "raw_sample_sets".
-            metadata_filename (str, optional): [description]. Defaults to "metadata.csv".
-            hdf_filename (str, optional): [description]. Defaults to "root.hdf5".
-            calibration_sources (dict of {str : str}, optional): [description]. Defaults to None.
-            progress_bar (bool, optional): [description]. Defaults to False.
+            data_dir (str): The path for the directory which contains the raw data and metadata.
+            raman_instrument (str, optional): The type of instrument used to collect Raman scans. Defaults to None.
+            absorbance_instrument (str, optional): The type of instrument used to collect absorbance scans. Defaults to None.
+            eem_instrument (str, optional): The type of instrument used to collect EEM scans. Defaults to None.
+            scan_sets_subdir (str, optional): The path for subdirectory containing the sample sets. Defaults to "raw_sample_sets".
+            metadata_filename (str, optional): The filename of the metadata file which keeps track of all the sample sets.
+                Defaults to "metadata.csv".
+            hdf_filename (str, optional): The filename of the HDF5 file. Defaults to "root.hdf5".
+            calibration_sources (dict of {str : str}, optional): A dictionary of calibration sources measured in the dataset.
+                Each source must be specified with its units. Defaults to None.
+            progress_bar (bool, optional): Determines whether or not a progress bar will be displayed to show progress of
+                dataset loading. Defaults to False.
         """
         self.data_dir = os.path.abspath(data_dir)
         self.scan_sets_subdir = os.path.join(self.data_dir, scan_sets_subdir)
         self.metadata_path = os.path.join(self.data_dir, metadata_filename)
         self.hdf_path = os.path.join(self.data_dir, hdf_filename)
-        self.hdf = pd.HDFStore(
-            self.hdf_path,
-            mode=kwargs.get("mode", "a"),
-            complevel=kwargs.get("complevel", 0),
-            complib=kwargs.get("complib", None),
-            fletcher32=kwargs.get("fletcher32", False),
-        )
+        self.hdf = self._get_hdf_store(**kwargs)
         self.calibration_sources = calibration_sources
         self.progress_bar = progress_bar
         self.meta_df = self.load_metadata()
@@ -141,6 +139,35 @@ class Dataset:
 
         self._metadata_path = m
 
+    def _get_hdf_store(self, **kwargs):
+        mode = kwargs.get("mode", "a")
+
+        if mode == "w":
+            # Encountering weird issues with file locks on previously opened but never
+            # closed hdf5 files... So we'll close open HDF5 files somewhat forcefully.
+            # Please look at this issue on Github for more details:
+            # https://github.com/pandas-dev/pandas/issues/4409
+            hdf_store = pd.HDFStore(self.hdf_path)
+            if hdf_store.is_open:
+                hdf_store.close()
+
+            # .close() does not seem to actually close previously opened files...
+            # So we'll use the pytables api instead.
+            # This seems like an ugly hack but if you look at that github issue, it might
+            # make more sense. One of the maintainers said he usually just avoids opening
+            # HDF5 files with mode="w". He just manually deletes the file if he ever
+            # needs a fresh start...
+            if self.hdf_path in tables.file._open_files.filenames:
+                tables.file._open_files.close_all()
+
+        return pd.HDFStore(
+            self.hdf_path,
+            mode=mode,
+            complevel=kwargs.get("complevel", 0),
+            complib=kwargs.get("complib", None),
+            fletcher32=kwargs.get("fletcher32", False),
+        )
+
     def _calibration_metadata(self, meta_df):
         cal_source_names = list(self.calibration_sources)
         # Ensure the metadata file contains all of the source columns
@@ -161,7 +188,9 @@ class Dataset:
 
         cal_sample_types = ["calibration_sample", "prototypical_sample", "test_sample"]
         # Convert columns to lower case
-        meta_df[cal_sample_types].applymap(lambda s: s.lower() if type(s) == str else s)
+        meta_df[cal_sample_types] = meta_df[cal_sample_types].applymap(
+            lambda s: s.lower() if type(s) == str else s
+        )
 
         yes_list = ["y", "yes", "ye"]
         # Convert calibration sample type columns to boolean
@@ -205,10 +234,10 @@ class Dataset:
         """
 
     def load_metadata(self):
-        """[summary]
+        """Loads the metadata file which keeps track of all the sample sets.
 
         Returns:
-            DataFrame: [description]
+            pandas.DataFrame:The metadata which tracks samples and their associated info.
         """
         template = _metadata_template()
         meta_df_cols = list(template.columns)
@@ -218,7 +247,7 @@ class Dataset:
 
         meta_df["filepath"] = meta_df.apply(
             lambda row: os.path.join(
-                *[self.scan_sets_subdir, str(row["sample_set"]), row["filename"],]
+                *[self.scan_sets_subdir, str(row["sample_set"]), row["filename"]]
             ),
             axis=1,
         )
@@ -232,7 +261,7 @@ class Dataset:
         meta_df[nan_str_cols] = meta_df[nan_str_cols].fillna("")
 
         # set NaN values to 1.0 for the column dilution
-        meta_df["dilution"] = meta_df["dilution"].fillna(1)
+        meta_df["dilution_factor"] = meta_df["dilution_factor"].fillna(1)
 
         if self.calibration_sources:
             meta_df = self._calibration_metadata(meta_df)
@@ -243,10 +272,10 @@ class Dataset:
         return meta_df
 
     def metadata_summary_info(self):
-        """[summary]
+        """Summary information about the dataset which is stored in the metadata.
 
         Returns:
-            DataFrame: [description]
+            pandas.DataFrame:The summary table.
         """
         num_sample_sets = self.meta_df.groupby(level="sample_set").ngroups
 
@@ -397,8 +426,7 @@ class Dataset:
         )
 
     def load_sample_sets(self):
-        """[summary]
-        """
+        """Loads all sample sets which are tracked in the metadata from disk and write to the HDF5 file."""
         # Group by sample sets
         if self.progress_bar:
             with std_out_err_redirect_tqdm() as orig_stdout:

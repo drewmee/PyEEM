@@ -60,7 +60,7 @@ class TestBasic:
         self.demo_datasets = demo_datasets
 
     def testFluorescenceRegionalIntegration(self):
-        #eem_df = 
-        #integ_result = pyeem.analysis.basic.fluorescence_regional_integration(eem_df)
-        #assert integ_result == 
+        # eem_df =
+        # integ_result = pyeem.analysis.basic.fluorescence_regional_integration(eem_df)
+        # assert integ_result ==
         return

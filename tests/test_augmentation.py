@@ -23,7 +23,7 @@ class TestAugmentation:
         assert isinstance(ss_results_df, pd.DataFrame)
 
     def testCreateMixtures(self):
-        mix_results_df = pyeem.augmentation.create_mixtures(
+        mix_results_df = pyeem.augmentation.create_mixture_spectra(
             self.dataset, self.cal_df, conc_range=(0.01, 6.3), num_steps=5
         )
         assert isinstance(mix_results_df, pd.DataFrame)

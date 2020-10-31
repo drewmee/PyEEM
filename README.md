@@ -1,11 +1,12 @@
 # PyEEM
 
-[![pypi version](https://img.shields.io/pypi/v/pyeem.svg 'pypi version')](https://pypi.org/project/pyeem/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyeem.svg)](https://pypi.org/project/pyeem/)
-[![CircleCI](https://circleci.com/gh/drewmee/PyEEM.svg?style=shield&circle-token=ccdb16078dcb8ee4e4c9b923f547fc7cb2742aae)](https://app.circleci.com/pipelines/github/drewmee/PyEEM)
+![Test](https://github.com/drewmee/PyEEM/workflows/Test/badge.svg)
 [![Read the Docs](https://readthedocs.org/projects/pyeem/badge/?version=latest)](https://pyeem.readthedocs.io/)
+[![PyPi version](https://img.shields.io/pypi/v/pyeem.svg 'pypi version')](https://pypi.org/project/pyeem/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyeem.svg)](https://pypi.org/project/pyeem/)
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/drewmee/PyEEM/master?filepath=docs%2Fsource%2Ftutorials%2Fnotebooks)
-[![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/drewmee/PyEEM/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/drewmee/PyEEM/blob/master/LICENSE)
+[![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 <!--- Badge for codecov -->
 
 Python library for the preprocessing, analysis, and visualization of Excitation Emission Matrices (EEMs).

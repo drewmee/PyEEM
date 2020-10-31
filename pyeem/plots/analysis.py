@@ -4,7 +4,7 @@ import numpy as np
 from .base import _get_subplot_dims
 
 
-def model_history(history):
+def model_history_plot(history):
     """[summary]
 
     Args:
@@ -27,7 +27,7 @@ def model_history(history):
     return axes
 
 
-def prediction_parity_plots(
+def prediction_parity_plot(
     dataset, test_df, train_df=None, subplots=False, fig_kws={}, **kwargs
 ):
     """[summary]

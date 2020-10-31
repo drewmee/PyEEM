@@ -3,9 +3,8 @@ import matplotlib.pyplot as plt
 import mpl_toolkits
 import numpy as np
 import pandas as pd
-import pytest
-
 import pyeem
+import pytest
 
 
 class TestPlots:
@@ -28,7 +27,7 @@ class TestPlots:
         ) = demo_augmentation
         self.rutherfordnet = demo_rutherfordnet
 
-    def testPlotEEM(self):
+    def testEEMPlot(self):
         dataset = self.demo_datasets["rutherford"]
         hdf_path = dataset.meta_df.loc[1, "sample_eem"]["hdf_path"].iloc[0]
         eem_df = pd.read_hdf(dataset.hdf, key=hdf_path)
@@ -90,7 +89,7 @@ class TestPlots:
 
         include_cbar = False
         ax = pyeem.plots.eem_plot(
-            eem_df, plot_type="contour", include_cbar=include_cbar,
+            eem_df, plot_type="contour", include_cbar=include_cbar
         )
         assert isinstance(ax, matplotlib.contour.QuadContourSet)
         assert ax.colorbar is None
@@ -126,7 +125,7 @@ class TestPlots:
 
         include_cbar = False
         ax = pyeem.plots.eem_plot(
-            eem_df, plot_type="surface", include_cbar=include_cbar,
+            eem_df, plot_type="surface", include_cbar=include_cbar
         )
         assert isinstance(ax, mpl_toolkits.mplot3d.art3d.Poly3DCollection)
         assert ax.colorbar is None
@@ -162,15 +161,27 @@ class TestPlots:
 
         include_cbar = False
         ax = pyeem.plots.eem_plot(
-            eem_df, plot_type="surface_contour", include_cbar=include_cbar,
+            eem_df, plot_type="surface_contour", include_cbar=include_cbar
         )
         assert ax.colorbar is None
         assert isinstance(ax, mpl_toolkits.mplot3d.art3d.Poly3DCollection)
 
-    def testPlotPreprocessing(self):
+    def testAbsorbancePlot(self):
+        return
+
+    def testWaterRamanPeakPlot(self):
+        return
+
+    def testWaterRamanPeakAnimation(self):
+        return
+
+    def testWaterRamanTimeseries(self):
+        return
+
+    def testPreprocessingPlot(self):
         sample_set = 2
         sample_name = "sample_eem1"
-        axes = pyeem.plots.plot_preprocessing(
+        axes = pyeem.plots.preprocessing_routine_plot(
             self.preprocessed_dataset,
             self.routine_results_df,
             sample_set=sample_set,
@@ -182,8 +193,8 @@ class TestPlots:
             # assert isinstance(ax, matplotlib.axes._subplots.AxesSubplot)
             pass
 
-    def testPlotCalibrationCurves(self):
-        axes = pyeem.plots.plot_calibration_curves(
+    def testCalibrationCurvesPlot(self):
+        axes = pyeem.plots.calibration_curves_plot(
             self.preprocessed_dataset, self.cal_df
         )
         cal_sources_list = (
@@ -198,12 +209,12 @@ class TestPlots:
             # assert ax.get_ylabel()
             # assert ax.get_legend().texts
 
-    def testPlotPrototypicalSpectra(self):
+    def testPrototypicalSpectraPlot(self):
         proto_results_df = pyeem.augmentation.create_prototypical_spectra(
             self.preprocessed_dataset, self.cal_df
         )
 
-        axes = pyeem.plots.plot_prototypical_spectra(
+        axes = pyeem.plots.prototypical_spectra_plot(
             self.preprocessed_dataset, self.proto_results_df, plot_type="contour"
         )
 
@@ -212,7 +223,7 @@ class TestPlots:
             # assert isinstance(ax, matplotlib.axes._subplots.AxesSubplot)
             pass
 
-    def testPlotSingleSourceAnimation(self):
+    def testSingleSourceAnimation(self):
         source = "wood_smoke"
         anim = pyeem.plots.single_source_animation(
             self.preprocessed_dataset,
@@ -225,7 +236,7 @@ class TestPlots:
         )
         assert isinstance(anim, matplotlib.animation.ArtistAnimation)
 
-    def testPlotMixtureAnimation(self):
+    def testMixtureAnimation(self):
         anim = pyeem.plots.mixture_animation(
             self.preprocessed_dataset,
             self.mix_results_df,
@@ -236,9 +247,9 @@ class TestPlots:
         )
         assert isinstance(anim, matplotlib.animation.ArtistAnimation)
 
-    def testPlotModelHistory(self):
+    def testModelHistoryPlot(self):
         history = self.rutherfordnet.model.history
-        axes = pyeem.plots.model_history(history)
+        axes = pyeem.plots.model_history_plot(history)
         assert isinstance(axes, np.ndarray)
 
     def testPredictionParityPlots(self):
@@ -259,7 +270,7 @@ class TestPlots:
             self.preprocessed_dataset, test_predictions, y_test
         )
 
-        axes = pyeem.plots.prediction_parity_plots(
+        axes = pyeem.plots.prediction_parity_plot(
             self.preprocessed_dataset,
             test_pred_results_df,
             train_df=train_pred_results_df,

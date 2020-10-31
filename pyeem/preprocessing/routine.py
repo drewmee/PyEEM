@@ -21,6 +21,7 @@ def _get_steps():
         [
             "raw",
             "crop",
+            "fill_missing_values",
             "blank_subtraction",
             "inner_filter_effect",
             "raman_normalization",
@@ -36,29 +37,41 @@ def _get_steps():
 
 
 def create_routine(
-    crop=True,
+    crop=False,
+    fill_missing_values=False,
     discrete_wavelengths=False,
     gaussian_smoothing=False,
-    blank_subtraction=True,
-    inner_filter_effect=True,
-    raman_normalization=True,
-    scatter_removal=True,
-    dilution=True,
+    blank_subtraction=False,
+    inner_filter_effect=False,
+    raman_normalization=False,
+    scatter_removal=False,
+    dilution=False,
 ):
-    """[summary]
+    """Create the preprocessing routine for correcting and filtering the data.
 
     Args:
-        crop (bool, optional): [description]. Defaults to True.
-        discrete_wavelengths (bool, optional): [description]. Defaults to False.
-        gaussian_smoothing (bool, optional): [description]. Defaults to False.
-        blank_subtraction (bool, optional): [description]. Defaults to True.
-        inner_filter_effect (bool, optional): [description]. Defaults to True.
-        raman_normalization (bool, optional): [description]. Defaults to True.
-        scatter_removal (bool, optional): [description]. Defaults to True.
-        dilution (bool, optional): [description]. Defaults to True.
+        crop (bool, optional): Determines whether or not to include
+            :meth:`~pyeem.preprocessing.filters.crop` in the routine. Defaults to False.
+        fill_missing_values (bool, optional): Determines whether or not to include
+            :meth:`~pyeem.preprocessing.filters.fill_missing_values` in the routine. Defaults to False.
+        discrete_wavelengths (bool, optional): Determines whether or not to include
+            :meth:`~pyeem.preprocessing.filters.filter_wavelengths` in the routine. Defaults to False.
+        gaussian_smoothing (bool, optional): Determines whether or not to include
+            :meth:`~pyeem.preprocessing.filters.gaussian_smoothing` in the routine. Defaults to False.
+        blank_subtraction (bool, optional): Determines whether or not to include
+            :meth:`~pyeem.preprocessing.corrections.blank_subtraction` in the routine. Defaults to False.
+        inner_filter_effect (bool, optional): Determines whether or not to include
+            :meth:`~pyeem.preprocessing.corrections.inner_filter_effect` in the routine. Defaults to False.
+        raman_normalization (bool, optional): Determines whether or not to include
+            :meth:`~pyeem.preprocessing.corrections.raman_normalization` in the routine. Defaults to False.
+        scatter_removal (bool, optional): Determines whether or not to include
+            :meth:`~pyeem.preprocessing.corrections.scatter_removal` in the routine. Defaults to False.
+        dilution (bool, optional): Determines whether or not to include
+            :meth:`~pyeem.preprocessing.corrections.dilution` in the routine. Defaults to False.
 
     Returns:
-        DataFrame: [description]
+        pandas.DataFrame: A table containing the steps of the preprocessing routine in the order
+        which they will be executed by pyeem.preprocessing.perform_routine().
     """
     raw = True
     complete = True
@@ -150,6 +163,15 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
             "name"
         ].unique()[0]
 
+    if "water_raman" in sample_set_group.index.get_level_values("scan_type"):
+        water_raman_wavelength = kwargs.get("water_raman_wavelength", None)
+        water_raman_scans = sample_set_group.xs("water_raman", level="scan_type")
+        water_raman_scans = water_raman_scans[
+            water_raman_scans["water_raman_wavelength"] == water_raman_wavelength
+        ]
+        if not water_raman_scans.empty:
+            water_raman_name = water_raman_scans["name"].unique()[0]
+
     # Perform loading of blank EEM
     step_name = "raw"
     try:
@@ -165,7 +187,7 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
         hdf_path = None
 
     results_row = _generate_result_row(
-        "blank_eem", blank_name, step_name, step_completed, step_exception, hdf_path,
+        "blank_eem", blank_name, step_name, step_completed, step_exception, hdf_path
     )
     row_df = pd.DataFrame([results_row])
     row_df.set_index(results_indices, inplace=True)
@@ -190,12 +212,35 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
             hdf_path = None
 
         results_row = _generate_result_row(
-            "blank_eem",
-            blank_name,
-            step_name,
-            step_completed,
-            step_exception,
-            hdf_path,
+            "blank_eem", blank_name, step_name, step_completed, step_exception, hdf_path
+        )
+
+        row_df = pd.DataFrame([results_row])
+        row_df.set_index(results_indices, inplace=True)
+        results_df = pd.concat([results_df, row_df])
+
+    # Perform filling of missing values
+    step_name = "fill_missing_values"
+    if step_name in routine_df["step_name"].values:
+        try:
+            hdf_path = routine_df[routine_df["step_name"] == "fill_missing_values"][
+                "hdf_path"
+            ].item()
+            hdf_path = os.path.join(*[hdf_path, str(sample_set), blank_name])
+            fill = kwargs.get("fill", None)
+            blank_df = filters.fill_missing_values(blank_df, fill)
+            blank_df.to_hdf(dataset.hdf, key=hdf_path)
+            step_completed = True
+            step_exception = None
+
+        except Exception as e:
+            blank_df = None
+            step_completed = False
+            step_exception = e
+            hdf_path = None
+
+        results_row = _generate_result_row(
+            "blank_eem", blank_name, step_name, step_completed, step_exception, hdf_path
         )
 
         row_df = pd.DataFrame([results_row])
@@ -206,10 +251,14 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
     if step_name in routine_df["step_name"].values:
         raman_source_type = kwargs.get("raman_source_type", None)
         raman_source = None
-        method = kwargs.get("method", "gradient")
         if raman_source_type == "water_raman":
-            # use water raman scan
-            raman_source = None
+            try:
+                hdf_path = os.path.join(
+                    *["raw_sample_sets", str(sample_set), water_raman_name]
+                )
+                raman_source = pd.read_hdf(dataset.hdf, key=hdf_path)
+            except Exception as e:
+                pass
 
         elif raman_source_type == "blank":
             raman_source = blank_df
@@ -224,8 +273,10 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
 
     # TODO - Refactor to use groupby/apply or just break it out into another function
     results_rows = []
-    for index, row in sample_set_group.xs("sample_eem", level="scan_type").iterrows():
-        sample_name = row["name"]
+    for sample_index, sample_row in sample_set_group.xs(
+        "sample_eem", level="scan_type"
+    ).iterrows():
+        sample_name = sample_row["name"]
         step_name = "raw"
         hdf_path = routine_df[routine_df["step_name"] == step_name]["hdf_path"].item()
         hdf_path = os.path.join(*[hdf_path, str(sample_set), sample_name])
@@ -238,10 +289,10 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
             hdf_path = None
 
         # TODO - consider using apply or breaking out into another function.
-        for i, r in routine_df.iterrows():
+        for routine_index, routine_row in routine_df.iterrows():
             try:
-                step_name = r["step_name"]
-                hdf_path = r["hdf_path"]
+                step_name = routine_row["step_name"]
+                hdf_path = routine_row["hdf_path"]
                 hdf_path = os.path.join(*[hdf_path, str(sample_set), sample_name])
 
                 if step_name == "raw":
@@ -253,6 +304,10 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
                 elif step_name == "crop":
                     crop_dims = kwargs.get("crop_dims", None)
                     eem_df = filters.crop(eem_df, crop_dims)
+
+                elif step_name == "fill_missing_values":
+                    fill = kwargs.get("fill", None)
+                    eem_df = filters.fill_missing_values(eem_df, fill)
 
                 elif step_name == "blank_subtraction":
                     eem_df = corrections.blank_subtraction(eem_df, blank_df)
@@ -270,15 +325,17 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
                         eem_df,
                         abs_df,
                         pathlength=kwargs.get("pathlength", 1),
-                        unit=kwargs.get("unit", "absorbance"),
+                        threshold=kwargs.get("threshold", 0.03),
+                        limit=kwargs.get("limit", 1.5),
                     )
 
                 elif step_name == "raman_normalization":
                     if raman_source_type == "metadata":
-                        raman_source = row["Raman_Area"]
+                        raman_source = sample_row["water_raman_area"]
+                        water_raman_wavelength = None
 
                     eem_df = corrections.raman_normalization(
-                        eem_df, raman_source_type, raman_source, method
+                        eem_df, raman_source_type, raman_source, water_raman_wavelength
                     )
 
                 elif step_name == "scatter_removal":
@@ -292,15 +349,15 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
                     )
 
                 elif step_name == "dilution":
-                    dilution_factor = dataset.meta_df["dilution_factor"]
+                    dilution_factor = sample_row["dilution_factor"]
                     eem_df = corrections.dilution(eem_df, dilution_factor)
 
                 elif step_name == "gaussian_smoothing":
                     # TODO get default values of sigma and truncate
                     eem_df = filters.gaussian_smoothing(
                         eem_df,
-                        sigma=kwargs.get("sigma", None),
-                        truncate=kwargs.get("truncate", None),
+                        sigma=kwargs.get("sigma", 2),
+                        truncate=kwargs.get("truncate", 4),
                     )
 
                 elif step_name == "discrete_wavelengths":
@@ -336,20 +393,16 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
 
 
 def perform_routine(dataset, routine_df, progress_bar=False, **kwargs):
-    """[summary]
+    """Perform the data preprocessing routine which was created by
+    pyeem.preprocessing.create_routine()
 
     Args:
-        crop_dims (dict of {str : tuple of (int, float)}, optional): [description]. Defaults to None.
-        blank_sub (bool, optional): [description]. Defaults to True.
-        ife_corr (bool, optional): [description]. Defaults to True.
-        scatter_rem (str, optional): [description]. Defaults to "interp".
-        raman_norm (str, optional): [description]. Defaults to "water_raman".
-        smooth (bool, optional): [description]. Defaults to False.
+        dataset ([type]): [description]
+        routine_df ([type]): [description]
+        progress_bar (bool, optional): [description]. Defaults to False.
 
-    Raises:
-        exception: [description]
-        exception: [description]
-        exception: [description]
+    Returns:
+        [type]: [description]
     """
     if progress_bar:
         tqdm.pandas(desc="Preprocessing scan sets")

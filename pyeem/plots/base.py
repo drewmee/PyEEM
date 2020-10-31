@@ -67,10 +67,12 @@ def _eem_contour(
 
     Args:
         eem (pandas.DataFrame): [description]
-        ax (matplotlib.axes.Axes): If an axis is provided, the contour will be plotted on this axis. Otherwise, a new axis object will be created.
+        ax (matplotlib.axes.Axes): If an axis is provided, the contour will be plotted on this axis.
+            Otherwise, a new axis object will be created.
         intensity_units (str): [description]
         include_cbar (bool): If true, colorbar will be included.
-        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument to the matplotlib plot call. Defaults to {}.
+        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument
+            to the matplotlib plot call. Defaults to {}.
         cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
 
     Returns:
@@ -107,10 +109,12 @@ def _eem_imshow(
 
     Args:
         eem (pandas.DataFrame): [description]
-        ax (matplotlib.axes.Axes): If an axis is provided, the imshow will be plotted on this axis. Otherwise, a new axis object will be created.
+        ax (matplotlib.axes.Axes): If an axis is provided, the imshow will be plotted on this axis.
+            Otherwise, a new axis object will be created.
         intensity_units (str): [description]
         include_cbar (bool): If true, colorbar will be included.
-        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument to the matplotlib plot call. Defaults to {}.
+        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument
+            to the matplotlib plot call. Defaults to {}.
         cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
 
     Returns:
@@ -146,12 +150,15 @@ def _eem_surface_contour(
 
     Args:
         eem (pandas.DataFrame): [description]
-        ax (matplotlib.axes.Axes): If an axis is provided, the surface will be plotted on this axis. Otherwise, a new axis object will be created.
+        ax (matplotlib.axes.Axes): If an axis is provided, the surface will be plotted on this axis.
+            Otherwise, a new axis object will be created.
         intensity_units (str): [description]
         include_cbar (bool): If true, colorbar will be included.
         plot_type (str, optional): [description]. Defaults to "surface".
-        surface_plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument to the matplotlib surface plot call. Defaults to {}.
-        contour_plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument to the matplotlib contour plot call. Defaults to {}.
+        surface_plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an
+            argument to the matplotlib surface plot call. Defaults to {}.
+        contour_plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an
+            argument to the matplotlib contour plot call. Defaults to {}.
         cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
 
     Returns:
@@ -163,7 +170,7 @@ def _eem_surface_contour(
     excitation, emission = np.meshgrid(excitation, emission)
 
     default_surface_plot_kws = dict(
-        rstride=1, cstride=1, alpha=0.75, cmap="viridis", shade=False,
+        rstride=1, cstride=1, alpha=0.75, cmap="viridis", shade=False
     )
     surface_plot_kws = dict(default_surface_plot_kws, **surface_plot_kws)
 
@@ -174,7 +181,7 @@ def _eem_surface_contour(
     z_offset = zlim_max * -2
 
     default_contour_plot_kws = dict(
-        zdir="z", offset=z_offset, vmin=zlim_min, vmax=zlim_max,
+        zdir="z", offset=z_offset, vmin=zlim_min, vmax=zlim_max
     )
     contour_plot_kws = dict(default_contour_plot_kws, **contour_plot_kws)
 
@@ -258,22 +265,25 @@ def eem_plot(
     """[summary]
 
     Args:
-        eem_df (pandas.DataFrame): [description]
-        ax (matplotlib.axes.Axes, optional): If an axis is provided, the EEM will be plotted on this axis. Otherwise, a new axis object will be created. Defaults to None.
+        eem_df (pandas.DataFrame): An Excitation Emission matrix.
+        ax (matplotlib.axes.Axes, optional): If an axis is provided, the EEM will be plotted on this
+            axis. Otherwise, a new axis object will be created. Defaults to None.
         plot_type (str, optional): [description]. Defaults to "imshow".
         intensity_units (str, optional): [description]. Defaults to "unspecified".
         wavelength_units (str, optional): [description]. Defaults to "nm".
         aspect (str, optional): [description]. Defaults to "equal".
         include_cbar (bool): If true, colorbar will be included.
         fig_kws (dict, optional): Optional keyword arguments to include for the figure. Defaults to {}.
-        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument to the matplotlib plot call. Defaults to {}.
+        plot_kws (dict, optional): Optional keyword arguments to include. They are sent as an argument
+            to the matplotlib plot call. Defaults to {}.
         cbar_kws (dict, optional): Optional keyword arguments to include for the colorbar. Defaults to {}.
 
     Raises:
         ValueError: [description]
 
     Returns:
-        matplotlib.contour.QuadContourSet, matplotlib.image.AxesImage, or mpl_toolkits.mplot3d.art3d.Poly3DCollection: [description]
+        matplotlib.contour.QuadContourSet, matplotlib.image.AxesImage, or
+        mpl_toolkits.mplot3d.art3d.Poly3DCollection: [description]
     """
 
     # Set the default figure kws

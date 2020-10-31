@@ -7,6 +7,7 @@ The *instruments* subpackage provides functions to load demo and custom datasets
    
    agilent/index
    horiba/index
+   tecan/index
 
 .. automodapi:: pyeem.instruments
    :no-inheritance-diagram:

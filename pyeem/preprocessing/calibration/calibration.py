@@ -8,15 +8,17 @@ from pyeem.analysis.basic import fluorescence_regional_integration
 
 
 def calibration(dataset, routine_results_df, step="complete"):
-    """[summary]
+    """Perform a calibration with the samples marked as calibration sources
+    in the dataset's metadata.
 
     Args:
-        dataset (pyeem.datasets.Dataset): [description]
-        routine_results_df (pandas.DataFrame): [description]
-        step (str, optional): [description]. Defaults to "complete".
+        dataset (pyeem.datasets.Dataset): Your PyEEM dataset.
+        routine_results_df (pandas.DataFrame): The results from the preprocessing routine.
+        step (str, optional): The step in the preprocessing routine you would like to
+            use in the calibration. Defaults to "complete".
 
     Returns:
-        DataFrame: [description]
+        pandas.DataFrame: A table containing information about the calibration for each source.
     """
     cal_df = pd.DataFrame()
     for source, units in dataset.calibration_sources.items():
@@ -110,13 +112,14 @@ def calibration(dataset, routine_results_df, step="complete"):
 
 
 def calibration_summary_info(cal_df):
-    """[summary]
+    """Summary information about completed calibration for each source in the dataset.
 
     Args:
-        cal_df (pandas.DataFrame): [description]
+        cal_df (pandas.DataFrame): Calibration information for your dataset
+            returned from :meth:`~pyeem.preprocessing.calibration()`
 
     Returns:
-        DataFrame: [description]
+        pandas.DataFrame: A table containing summary information about the calibration for each source.
     """
     summary_df = pd.DataFrame(
         cal_df.index.unique().values.tolist(), columns=list(cal_df.index.unique().names)

@@ -1,9 +1,8 @@
 import os
 
 import pandas as pd
-import pytest
-
 import pyeem
+import pytest
 
 
 class TestDatasets:
@@ -14,7 +13,7 @@ class TestDatasets:
 
     def testDownloadDemo(self):
         bucket_name = "pyeem-demo-datasets"
-        bucket_dirs = ["rutherford", "dreem"]
+        bucket_dirs = ["rutherford", "drEEM"]
         for demo in bucket_dirs:
             # Get list of files in the bucket.
             file_list = pyeem.datasets._get_bucket_file_list(bucket_name, demo)
@@ -23,7 +22,8 @@ class TestDatasets:
             for f in file_list:
                 # Make sure each file that was in the bucket was
                 # Downloaded.
-                assert os.path.isfile(os.path.join(self.data_dir, f))
+                # assert os.path.isfile(os.path.join(self.data_dir, f))
+                assert os.path.exists(os.path.join(self.data_dir, f))
 
     def testCreateMetadataTemplate(self):
         meta_df_columns = [
@@ -34,7 +34,7 @@ class TestDatasets:
             "description",
             "comments",
             "collected_by",
-            "dilution",
+            "dilution_factor",
         ]
         cal_columns = ["calibration_sample", "prototypical_sample", "test_sample"]
 
