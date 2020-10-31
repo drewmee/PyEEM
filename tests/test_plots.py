@@ -89,7 +89,7 @@ class TestPlots:
 
         include_cbar = False
         ax = pyeem.plots.eem_plot(
-            eem_df, plot_type="contour", include_cbar=include_cbar,
+            eem_df, plot_type="contour", include_cbar=include_cbar
         )
         assert isinstance(ax, matplotlib.contour.QuadContourSet)
         assert ax.colorbar is None
@@ -125,7 +125,7 @@ class TestPlots:
 
         include_cbar = False
         ax = pyeem.plots.eem_plot(
-            eem_df, plot_type="surface", include_cbar=include_cbar,
+            eem_df, plot_type="surface", include_cbar=include_cbar
         )
         assert isinstance(ax, mpl_toolkits.mplot3d.art3d.Poly3DCollection)
         assert ax.colorbar is None
@@ -161,7 +161,7 @@ class TestPlots:
 
         include_cbar = False
         ax = pyeem.plots.eem_plot(
-            eem_df, plot_type="surface_contour", include_cbar=include_cbar,
+            eem_df, plot_type="surface_contour", include_cbar=include_cbar
         )
         assert ax.colorbar is None
         assert isinstance(ax, mpl_toolkits.mplot3d.art3d.Poly3DCollection)

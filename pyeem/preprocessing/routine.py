@@ -187,7 +187,7 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
         hdf_path = None
 
     results_row = _generate_result_row(
-        "blank_eem", blank_name, step_name, step_completed, step_exception, hdf_path,
+        "blank_eem", blank_name, step_name, step_completed, step_exception, hdf_path
     )
     row_df = pd.DataFrame([results_row])
     row_df.set_index(results_indices, inplace=True)
@@ -212,12 +212,7 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
             hdf_path = None
 
         results_row = _generate_result_row(
-            "blank_eem",
-            blank_name,
-            step_name,
-            step_completed,
-            step_exception,
-            hdf_path,
+            "blank_eem", blank_name, step_name, step_completed, step_exception, hdf_path
         )
 
         row_df = pd.DataFrame([results_row])
@@ -245,12 +240,7 @@ def _process_sample_set(sample_set_group, dataset, routine_df, **kwargs):
             hdf_path = None
 
         results_row = _generate_result_row(
-            "blank_eem",
-            blank_name,
-            step_name,
-            step_completed,
-            step_exception,
-            hdf_path,
+            "blank_eem", blank_name, step_name, step_completed, step_exception, hdf_path
         )
 
         row_df = pd.DataFrame([results_row])

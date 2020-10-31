@@ -14,7 +14,7 @@ def _get_steps():
     steps_df["hdf_path"] = hdf_subdir + steps_df["step_name"]
     # Impose order on the augmentation steps:
     steps_df["step_name"] = pd.Categorical(
-        steps_df["step_name"], ["prototypical", "single_sources", "mixtures"],
+        steps_df["step_name"], ["prototypical", "single_sources", "mixtures"]
     )
     steps_df.sort_values("step_name", inplace=True, ignore_index=True)
     return steps_df
@@ -231,7 +231,7 @@ def create_single_source_spectra(dataset, cal_df, conc_range, num_spectra):
     aug_ss_dfs = []
     for source_name, group in tqdm(cal_df.groupby(level="source", as_index=False)):
         ss_df = single_source(
-            dataset, group, conc_range=conc_range, num_spectra=num_spectra,
+            dataset, group, conc_range=conc_range, num_spectra=num_spectra
         )
         ss_df = (
             ss_df.index.droplevel(["emission_wavelength"])

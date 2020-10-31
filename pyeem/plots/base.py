@@ -170,7 +170,7 @@ def _eem_surface_contour(
     excitation, emission = np.meshgrid(excitation, emission)
 
     default_surface_plot_kws = dict(
-        rstride=1, cstride=1, alpha=0.75, cmap="viridis", shade=False,
+        rstride=1, cstride=1, alpha=0.75, cmap="viridis", shade=False
     )
     surface_plot_kws = dict(default_surface_plot_kws, **surface_plot_kws)
 
@@ -181,7 +181,7 @@ def _eem_surface_contour(
     z_offset = zlim_max * -2
 
     default_contour_plot_kws = dict(
-        zdir="z", offset=z_offset, vmin=zlim_min, vmax=zlim_max,
+        zdir="z", offset=z_offset, vmin=zlim_min, vmax=zlim_max
     )
     contour_plot_kws = dict(default_contour_plot_kws, **contour_plot_kws)
 

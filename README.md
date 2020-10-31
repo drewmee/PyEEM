@@ -1,9 +1,9 @@
 # PyEEM
 
-[![pypi version](https://img.shields.io/pypi/v/pyeem.svg 'pypi version')](https://pypi.org/project/pyeem/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyeem.svg)](https://pypi.org/project/pyeem/)
 ![Test](https://github.com/drewmee/PyEEM/workflows/Test/badge.svg)
 [![Read the Docs](https://readthedocs.org/projects/pyeem/badge/?version=latest)](https://pyeem.readthedocs.io/)
+[![pypi version](https://img.shields.io/pypi/v/pyeem.svg 'pypi version')](https://pypi.org/project/pyeem/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyeem.svg)](https://pypi.org/project/pyeem/)
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/drewmee/PyEEM/master?filepath=docs%2Fsource%2Ftutorials%2Fnotebooks)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/drewmee/PyEEM/blob/master/LICENSE)
 <!--- Badge for codecov -->

@@ -248,7 +248,7 @@ class Dataset:
 
         meta_df["filepath"] = meta_df.apply(
             lambda row: os.path.join(
-                *[self.scan_sets_subdir, str(row["sample_set"]), row["filename"],]
+                *[self.scan_sets_subdir, str(row["sample_set"]), row["filename"]]
             ),
             axis=1,
         )

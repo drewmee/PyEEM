@@ -59,7 +59,7 @@ class CaryEclipse:
         # wavelengths and column names which are excitation wavelengths.
 
         # We zip together excitation column names and the corresponding intensity columns
-        zipped = dict(zip(columns[1::2], columns[0::2],))
+        zipped = dict(zip(columns[1::2], columns[0::2]))
 
         # Force all columns to be numeric
         df[columns] = df[columns].apply(pd.to_numeric, errors="coerce")

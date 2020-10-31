@@ -354,7 +354,7 @@ def water_raman_timeseries(
     y = []
     for index, row in raman_meta_df.iterrows():
         raman_df = pd.read_hdf(dataset.hdf, key=row["hdf_path"])
-        (raman_peak_area, (peak_position, a, b),) = _calculate_raman_peak_area(
+        (raman_peak_area, (peak_position, a, b)) = _calculate_raman_peak_area(
             raman_df, excitation_wavelength
         )
         if metric == "area":
@@ -401,9 +401,7 @@ def water_raman_timeseries(
     x_minor_tick_labels_fontsize = kwargs.get("x_minor_tick_labels_fontsize", 14)
 
     metric_title_str = metric.replace("_", " ")
-    plt.setp(
-        ax.xaxis.get_minorticklabels(), fontsize=x_minor_tick_labels_fontsize,
-    )
+    plt.setp(ax.xaxis.get_minorticklabels(), fontsize=x_minor_tick_labels_fontsize)
     ax.set_ylabel("Water Raman %s (A.U.)" % metric_title_str, fontsize=ylabel_fontsize)
     ax.set_xlabel("Datetime (UTC)", fontsize=xlabel_fontsize)
     title_str = "Timeseries of water Raman %s\nExcitation wavelength: %d%s" % (

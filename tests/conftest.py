@@ -117,4 +117,3 @@ def demo_rutherfordnet(
     )
     rutherfordnet.train(x_train, y_train)
     return rutherfordnet
-

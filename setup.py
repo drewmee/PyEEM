@@ -21,6 +21,7 @@ setuptools.setup(
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Intended Audience :: Science/Research",
@@ -55,7 +56,7 @@ setuptools.setup(
             "rstcheck>=3.3.1",
         ],
         "tests": ["pytest>=6.0.1", "tox>=3.16.1"],
-        "develop": ["twine>=3.2.0"],
+        "develop": ["twine>=3.2.0", "pre-commit>=2.8.2"],
         "jupyter": ["jupyter>=1.0.0", "jupyterlab>=2.2.2"],
     },
     package_data={"pyeem": ["plots/pyeem_base.mplstyle"]},
