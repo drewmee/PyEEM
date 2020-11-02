@@ -167,16 +167,48 @@ class TestPlots:
         assert isinstance(ax, mpl_toolkits.mplot3d.art3d.Poly3DCollection)
 
     def testAbsorbancePlot(self):
-        return
+        dataset = self.demo_datasets["drEEM"]
+        hdf_path = dataset.meta_df.loc[1, "absorb"]["hdf_path"].iloc[0]
+        absorb_df = pd.read_hdf(dataset.hdf, key=hdf_path)
+        ax = pyeem.plots.absorbance_plot(absorb_df, excitation_wavelength=275)
+        assert isinstance(ax, matplotlib.axes._axes.Axes)
+        # could use some more
 
     def testWaterRamanPeakPlot(self):
-        return
+        dataset = self.demo_datasets["drEEM"]
+        hdf_path = dataset.meta_df.loc[1, "water_raman"]["hdf_path"].iloc[0]
+        raman_df = pd.read_hdf(dataset.hdf, key=hdf_path)
+        ax = pyeem.plots.water_raman_peak_plot(raman_df, excitation_wavelength=275)
+        assert isinstance(ax, matplotlib.axes._axes.Axes)
+        # could use some more
 
     def testWaterRamanPeakAnimation(self):
-        return
+        dataset = self.demo_datasets["drEEM"]
+        fig_kws = {"dpi": 200}
+        anim = pyeem.plots.water_raman_peak_animation(
+            dataset, excitation_wavelength=275, fig_kws=fig_kws
+        )
+        assert isinstance(anim, matplotlib.animation.ArtistAnimation)
+        assert fig_kws["dpi"] == plt.gcf().properties()["dpi"]
+        # could use some more
 
     def testWaterRamanTimeseries(self):
-        return
+        dataset = self.demo_datasets["drEEM"]
+        fig_kws = {"dpi": 95}
+        plot_kws = {"fmt": "o-"}
+        kwargs = {"byweekday": 0, "title_fontsize": 10}
+        ax = pyeem.plots.water_raman_timeseries(
+            dataset,
+            excitation_wavelength=275,
+            fig_kws=fig_kws,
+            plot_kws=plot_kws,
+            **kwargs
+        )
+        assert isinstance(ax, matplotlib.axes._axes.Axes)
+        assert fig_kws["dpi"] == plt.gcf().properties()["dpi"]
+        assert kwargs["title_fontsize"] == ax.axes.title.get_fontsize()
+        assert "\n%b\n%Y" == ax.xaxis.get_major_formatter().fmt
+        # could use some more
 
     def testPreprocessingPlot(self):
         sample_set = 2

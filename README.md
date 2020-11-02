@@ -1,6 +1,6 @@
 # PyEEM
 
-![Test](https://github.com/drewmee/PyEEM/workflows/Test/badge.svg)
+[![Test](https://github.com/drewmee/PyEEM/workflows/Test/badge.svg)](https://github.com/drewmee/PyEEM/actions?query=workflow%3ATest)
 [![Read the Docs](https://readthedocs.org/projects/pyeem/badge/?version=latest)](https://pyeem.readthedocs.io/)
 [![PyPi version](https://img.shields.io/pypi/v/pyeem.svg 'pypi version')](https://pypi.org/project/pyeem/)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyeem.svg)](https://pypi.org/project/pyeem/)
