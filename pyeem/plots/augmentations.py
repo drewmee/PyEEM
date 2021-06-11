@@ -157,7 +157,7 @@ def single_source_animation(
     max_val = ss_np.max()
 
     default_plot_kws = dict(vmin=min_val, vmax=max_val)
-    plot_kws = dict(default_fig_kws, **plot_kws)
+    plot_kws = dict(default_plot_kws, **plot_kws)
 
     default_kwargs = dict(zlim_min=min_val, zlim_max=max_val, title=None)
     kwargs = dict(default_kwargs, **kwargs)

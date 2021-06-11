@@ -32,7 +32,7 @@ setuptools.setup(
         "numpy<1.19.0,>=1.18.5",
         "pandas>=1.0.5",
         "xlrd >= 1.0.0",
-        "h5py>=2.10.0",
+        "h5py<2.11.0,>=2.10.0",
         "tables>=3.6.1",
         "matplotlib>=3.3.0",
         "celluloid>=0.2.0",

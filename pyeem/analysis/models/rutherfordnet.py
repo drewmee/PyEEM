@@ -16,6 +16,8 @@ from tensorflow.keras.layers import (
 )
 from tensorflow.keras.models import Sequential
 
+# from tensorflow.keras.optimizers import Adam
+
 
 class RutherfordNet:
     """The convolutional neural network (CNN) described in Rutherford et al. 2020."""
@@ -86,6 +88,12 @@ class RutherfordNet:
         default_compile_kws = dict(
             loss="mean_squared_error", optimizer="adam", metrics=["accuracy"]
         )
+        """
+        opt = Adam(learning_rate=0.0001)
+        default_compile_kws = dict(
+            loss="mean_squared_error", optimizer=opt, metrics=["accuracy"]
+        )
+        """
         compile_kws = dict(default_compile_kws, **compile_kws)
         model.compile(**compile_kws)
         return model
@@ -229,7 +237,9 @@ class RutherfordNet:
         """
         test_samples_df = self._isolate_test_samples(dataset, routine_results_df)
 
-        sources = test_samples_df.index.get_level_values("source").unique().values
+        sources = (
+            test_samples_df.index.get_level_values("source").unique().dropna().values
+        )
         sources = np.delete(sources, np.where(sources == "mixture"))
 
         X = []
