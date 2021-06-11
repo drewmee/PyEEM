@@ -4,7 +4,7 @@ import pytest
 
 
 class TestInstruments:
-    manufacturers = ["Agilent", "Horiba", "Tecan"]
+    manufacturers = ["Agilent", "Horiba", "Tecan", "MIT"]
     """
     manuf_instruments = {
         pyeem.instruments.agilent.name: pyeem.instruments.agilent.instruments,

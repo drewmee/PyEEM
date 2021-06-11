@@ -40,7 +40,7 @@ def prototypical_spectrum(dataset, source_df):
     )
 
     proto_eems = []
-    for index, row in source_df.iterrows():
+    for index, row in source_df[source_df["prototypical_sample"]].iterrows():
         eem_path = row["hdf_path"]
         eem = pd.read_hdf(dataset.hdf, key=eem_path)
         proto_eems.append(eem)
@@ -51,11 +51,13 @@ def prototypical_spectrum(dataset, source_df):
         "concentration"
     ].mean()
 
+    """
     weights = []
     for i in range(len(proto_eems)):
         weights.append(random.uniform(0, 1))
-
     proto_eem = np.average([eem.values for eem in proto_eems], axis=0, weights=weights)
+    """
+    proto_eem = np.average([eem.values for eem in proto_eems], axis=0)
 
     proto_eem = pd.DataFrame(
         data=proto_eem, index=proto_eems[0].index, columns=proto_eems[0].columns

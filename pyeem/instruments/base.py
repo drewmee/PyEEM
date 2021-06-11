@@ -1,6 +1,6 @@
 import pandas as pd
 
-from . import agilent, horiba, tecan
+from . import MIT, agilent, horiba, tecan
 
 
 def get_supported_instruments():
@@ -17,6 +17,7 @@ def get_supported_instruments():
         agilent.name: agilent.instruments,
         horiba.name: horiba.instruments,
         tecan.name: tecan.instruments,
+        MIT.name: MIT.instruments,
     }
     # instruments = [Aqualog, Fluorolog, Cary]
     df = pd.DataFrame()
